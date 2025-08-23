@@ -21,7 +21,7 @@ As cidades brasileiras enfrentam graves deficiências em acessibilidade urbana, 
 ## 2. DESCRIÇÃO DA SOLUÇÃO
 
 ### 2.1 Proposta de Valor
-Plataforma SaaS open-source que utiliza inteligência artificial e visão computacional para criar um mapa colaborativo e inteligente de barreiras de acessibilidade urbana, transformando fotos enviadas por cidadãos em dados estruturados e acionáveis para gestão pública.
+Plataforma open-source que utiliza tecnologias acessíveis para criar um mapa colaborativo e inteligente de barreiras de acessibilidade urbana, transformando dados enviados por cidadãos em dados estruturados e acionáveis para gestão pública.
 
 ### 2.2 Componentes Principais
 1. **Sistema de Coleta Colaborativa**
@@ -29,17 +29,12 @@ Plataforma SaaS open-source que utiliza inteligência artificial e visão comput
    - Interface web responsiva (PWA)
    - Captura automatizada de geolocalização e metadados
 
-2. **Motor de IA para Análise**
-   - Detecção automática de barreiras via visão computacional
-   - Classificação por tipo e severidade
-   - Estimativa de impacto social
-
-3. **Plataforma de Dados Abertos**
+2. **Plataforma de Dados Abertos**
    - Mapa interativo e pesquisável
    - APIs públicas para integração
    - Exportação em formatos padrão (GeoJSON, CSV)
 
-4. **Painel de Gestão**
+3. **Painel de Gestão**
    - Dashboard analítico para gestores
    - Sistema de priorização baseado em dados
    - Relatórios customizáveis
@@ -51,12 +46,10 @@ Plataforma SaaS open-source que utiliza inteligência artificial e visão comput
 
 
 ### 3.2 Stack Tecnológico Proposto
-- **Backend**: Node.js/Python (FastAPI)
+- **Backend**: Node.js (NestJS)
 - **Banco de Dados**: PostgreSQL com PostGIS
 - **Armazenamento**: S3 ou compatível
-- **IA/ML**: TensorFlow/PyTorch
-- **Frontend**: React + Leaflet/Mapbox
-- **Mobile**: React Native
+- **Frontend**: React + Next.js
 - **Infraestrutura**: Docker + Kubernetes
 
 ### 3.3 Categorias de Barreiras Detectáveis
@@ -77,43 +70,29 @@ Plataforma SaaS open-source que utiliza inteligência artificial e visão comput
    - Obras sem passagem alternativa
    - Comércio informal obstruindo passagem
 
-## 4. MODELO DE NEGÓCIO
-
-### 4.1 Estrutura de Receita
-- **Freemium para Cidadãos**: Uso gratuito para consulta e contribuição
-- **SaaS para Gestão Pública**: Planos mensais para prefeituras com funcionalidades avançadas
-- **API Premium**: Acesso a dados processados para empresas e pesquisadores
-- **Consultoria**: Implementação e treinamento para órgãos públicos
-
-### 4.2 Custos Operacionais
-- Infraestrutura cloud (estimativa: R$ 5-10k/mês inicial)
-- Equipe de desenvolvimento (4-6 pessoas)
-- Manutenção e evolução dos modelos de IA
-- Marketing e parcerias institucionais
-
 ## 5. IMPLEMENTAÇÃO
 
 ### 5.1 Fases do Projeto
 
-**Fase 1 - MVP (3 meses)**
+**Fase 1 - MVP**
 - App básico de captura de fotos
 - Detecção de 3 tipos principais de barreiras
 - Mapa web simples
 - API básica
 
-**Fase 2 - Validação (2 meses)**
+**Fase 2 - Validação**
 - Piloto com 1 cidade parceira
 - Ajuste de modelos com dados reais
 - Interface de validação humana
 - Métricas de acurácia
 
-**Fase 3 - Expansão (4 meses)**
+**Fase 3 - Expansão**
 - Dashboard completo para gestores
 - Detecção de 10+ tipos de barreiras
 - Sistema de priorização automática
 - Integrações com sistemas municipais
 
-**Fase 4 - Escala (contínuo)**
+**Fase 4 - Escala**
 - Expansão para múltiplas cidades
 - Marketplace de soluções
 - Gamificação e engajamento
@@ -123,7 +102,7 @@ Plataforma SaaS open-source que utiliza inteligência artificial e visão comput
 - **Técnicas**: Acurácia >85% na detecção, <5% falsos positivos
 - **Engajamento**: 1000+ usuários ativos/mês por cidade
 - **Impacto**: 30% das barreiras reportadas resolvidas em 6 meses
-- **Negócio**: 10 cidades contratantes no primeiro ano
+- **Negócio**: 1-2 bairros em uso
 
 ## 6. GOVERNANÇA E SUSTENTABILIDADE
 
