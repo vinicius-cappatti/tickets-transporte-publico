@@ -24,8 +24,7 @@ As cidades brasileiras enfrentam graves deficiências em acessibilidade urbana, 
 ## 2. DESCRIÇÃO DA SOLUÇÃO
 
 ### 2.1 Proposta de Valor
-
-Plataforma aberta e colaborativa que utiliza inteligência artificial e visão computacional para criar um mapa coletivo e inteligente de barreiras de acessibilidade urbana, transformando fotos enviadas por cidadãos em dados estruturados e úteis para a gestão pública e engajamento social.
+Plataforma open-source que utiliza tecnologias acessíveis para criar um mapa colaborativo e inteligente de barreiras de acessibilidade urbana, transformando dados enviados por cidadãos em dados estruturados e acionáveis para gestão pública.
 
 ### 2.2 Componentes Principais
 
@@ -34,18 +33,15 @@ Plataforma aberta e colaborativa que utiliza inteligência artificial e visão c
    - Interface web responsiva (PWA)
    - Captura automatizada de geolocalização e metadados
 
-2. **Motor de IA para Análise**
-   - Detecção automática de barreiras via visão computacional
-   - Classificação por tipo e severidade
-   - Estimativa de impacto social
-
-3. **Plataforma de Dados Abertos**
+2. **Plataforma de Dados Abertos**
    - Mapa interativo e pesquisável
    - APIs públicas para integração
    - Exportação em formatos padrão (GeoJSON, CSV)
 
 4. **Painel de Gestão**
    - Dashboard analítico para gestores e sociedade civil
+3. **Painel de Gestão**
+   - Dashboard analítico para gestores
    - Sistema de priorização baseado em dados
    - Relatórios customizáveis
 
@@ -118,13 +114,10 @@ end note
 ```
 
 ### 3.2 Stack Tecnológico Proposto
-
-- **Backend**: Node.js/Python (FastAPI)
+- **Backend**: Node.js (NestJS)
 - **Banco de Dados**: PostgreSQL com PostGIS
 - **Armazenamento**: S3 ou compatível
-- **IA/ML**: TensorFlow/PyTorch
-- **Frontend**: React + Leaflet/Mapbox
-- **Mobile**: React Native
+- **Frontend**: React + Next.js
 - **Infraestrutura**: Docker + Kubernetes
 
 ### 3.3 Categorias de Barreiras Detectáveis
@@ -146,49 +139,44 @@ end note
    - Obras sem passagem alternativa
    - Comércio informal obstruindo passagem
 
-## 4. PLANEJAMENTO DE IMPLEMENTAÇÃO
+## 5. IMPLEMENTAÇÃO
 
 ### 4.1 Fases do Projeto
 
 **Fase 1 - MVP**
-
-- Aplicativo básico de captura de fotos
+- App básico de captura de fotos
 - Detecção de 3 tipos principais de barreiras
 - Mapa web simples
 - API básica
 
 **Fase 2 - Validação**
-
 - Piloto com 1 cidade parceira
 - Ajuste dos modelos de IA com dados reais
 - Interface para validação humana
 - Métricas de acurácia
 
 **Fase 3 - Expansão**
-
-- Dashboard completo para gestores e usuários
-- Detecção ampliada de tipos de barreiras
+- Dashboard completo para gestores
+- Detecção de 10+ tipos de barreiras
 - Sistema de priorização automática
 - Integrações com sistemas municipais
 
 **Fase 4 - Escala**
-
 - Expansão para múltiplas cidades
 - Recursos de engajamento e gamificação
 - Evolução contínua da plataforma e dos modelos
 
-### 4.2 Métricas de Sucesso
+### 5.2 Métricas de Sucesso
+- **Técnicas**: Acurácia >85% na detecção, <5% falsos positivos
+- **Engajamento**: 1000+ usuários ativos/mês por cidade
+- **Impacto**: 30% das barreiras reportadas resolvidas em 6 meses
+- **Negócio**: 1-2 bairros em uso
 
-- **Técnicas**: Acurácia superior a 85% na detecção; menos de 5% de falsos positivos
-- **Engajamento**: Usuários ativos mensais por cidade e contribuições relevantes
-- **Impacto**: Proporção de barreiras reportadas encaminhadas e resolvidas
+## 6. GOVERNANÇA E SUSTENTABILIDADE
 
-## 5. GOVERNANÇA E SUSTENTABILIDADE
-
-### 5.1 Modelo Aberto e Colaborativo
-
-- Código fonte sob licença MIT
-- Documentação aberta e atualizada
+### 6.1 Modelo Open Source
+- Licença MIT para código base
+- Documentação completa e atualizada
 - Processo transparente de contribuição
 - Datasets públicos, respeitando a privacidade dos cidadãos
 
@@ -226,4 +214,4 @@ end note
 
 ---
 
-*Este documento é aberto a contribuições e será atualizado conforme o projeto evoluir. Feedback pode ser enviado via repositório público do projeto.*
+*Este documento é um trabalho em progresso e será atualizado conforme o projeto evolui. Contribuições e feedback são bem-vindos através do repositório do projeto.*
