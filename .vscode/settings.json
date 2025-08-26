@@ -4,5 +4,10 @@
     ],
     "files.associations": {
         "*.css": "tailwindcss"
+    },
+    "eslint.workingDirectories": [
+    {
+      "mode": "auto"
     }
+  ]
 }
