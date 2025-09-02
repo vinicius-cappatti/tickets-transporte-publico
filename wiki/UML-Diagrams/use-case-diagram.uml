@@ -1,0 +1,21 @@
+@startuml
+
+    left to right direction
+
+    package MoveFácil{
+        (Reportar problema) as Report
+        (Atualizar status problema) as Status
+        (Consultar mapa de problemas) as Mapa
+    }
+
+    :Passageiro:
+    :Administrador: as Adm
+
+    Passageiro --> Report
+    Passageiro --> Mapa
+
+    Adm --> Status
+
+
+
+@enduml

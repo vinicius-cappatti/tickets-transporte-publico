@@ -46,75 +46,13 @@ Plataforma open-source que utiliza tecnologias acessíveis para criar um mapa co
 
 ### 2.3 Diagrama de caso de uso
 
-![Diagrama de caso de uso](C:\Users\vinic\OneDrive\Documentos\ReposMackenzie\lab-enj-software\wiki\imgs\use-case-diagram.png)
+![Diagrama de Caso de Uso](wiki\imgs\use-case-diagram.png)
 
 ## 3. ESPECIFICAÇÕES TÉCNICAS
 
 ### 3.1 Arquitetura do Sistema
 
-```plantuml
-@startuml
-!define RECTANGLE class
-skinparam backgroundColor #FEFEFE
-skinparam component {
-    BackgroundColor #E1F5FE
-    BorderColor #0288D1
-    FontColor #01579B
-    ArrowColor #0288D1
-}
-skinparam database {
-    BackgroundColor #FFF3E0
-    BorderColor #E65100
-    FontColor #BF360C
-}
-skinparam cloud {
-    BackgroundColor #F3E5F5
-    BorderColor #6A1B9A
-    FontColor #4A148C
-}
-title Arquitetura da Plataforma de Acessibilidade Urbana
-
-package "Camada de Apresentação" {
-    component "App Móvel\n(React Native)" as AppMobile
-    component "Web App\n(React/PWA)" as WebApp
-    component "API Externa\n(Integrações)" as APIExterna
-}
-component "API Gateway\n(REST/GraphQL)" as APIGateway
-package "Camada de Serviços" {
-    component "Serviço de IA\n(Python/TensorFlow)" as ServicoIA
-    component "Serviço de\nGeolocalização\n(PostGIS)" as ServicoGeo
-    component "Serviço de\nAutenticação" as ServicoAuth
-}
-database "PostgreSQL\n+ PostGIS" as DB
-cloud "S3\n(Armazenamento\nde Imagens)" as S3
-
-AppMobile --> APIGateway
-WebApp --> APIGateway
-APIExterna --> APIGateway
-APIGateway --> ServicoIA
-APIGateway --> ServicoGeo
-APIGateway --> ServicoAuth
-ServicoGeo --> DB
-ServicoIA --> S3
-ServicoAuth --> DB
-
-note right of AppMobile
-    Upload de fotos
-    Geolocalização
-    Navegação no mapa
-end note
-note right of ServicoIA
-    Detecção de barreiras
-    Classificação
-    Análise de severidade
-end note
-note bottom of DB
-    Dados geoespaciais
-    Metadados das barreiras
-    Informações de usuários
-end note
-@enduml
-```
+![Diagrama de Arquitetura](wiki\imgs\system-design-diagram.png)
 
 ### 3.2 Stack Tecnológico Proposto
 - **Backend**: Node.js (NestJS)
