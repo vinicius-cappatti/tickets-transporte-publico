@@ -65,7 +65,7 @@ Os principais componentes incluem:
 4. **Escala:** expansão para múltiplas cidades, gamificação e engajamento comunitário.  
 
 ### 2.6 Critérios de Qualidade do Produto  
-- **Confiabilidade:** detecção de barreiras com acurácia superior a 85% e menos de 5% de falsos positivos.  
+- **Confiabilidade:** detecção de barreiras com acurácia superior a 85% e menos de 5% de falsos positivos.  (NÚMERO À SER DEFINIDO E PODE SER ALTERADO)
 - **Usabilidade:** interface simples, inclusiva e responsiva, acessível em múltiplos dispositivos.  
 - **Transparência:** algoritmos auditáveis e documentação pública.  
 - **Segurança e privacidade:** conformidade com a LGPD, anonimização de dados pessoais e armazenamento seguro.  
