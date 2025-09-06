@@ -1,0 +1,27 @@
+@startuml
+left to right direction
+
+package MoveFacil {
+
+    class Usuario
+    class Passageiro
+    class Administrador
+    class Problema
+    class Mapa
+    class Dashboard
+    class SistemaColeta
+    class PlataformaDados
+    class CategoriaBarreira
+
+    Usuario <|-- Passageiro
+    Usuario <|-- Administrador
+
+    Passageiro --> SistemaColeta
+    SistemaColeta --> Problema
+    Problema --> CategoriaBarreira
+    Problema --> Mapa
+    Administrador --> Dashboard
+    Dashboard --> Mapa
+    PlataformaDados --> Mapa
+}
+@enduml
