@@ -7,13 +7,17 @@
 * Thomaz Scopel
 * Vinícius Cappatti
 
-## 1. DEFINIÇÃO DO PROBLEMA
+## 1. Introdução
 
-### 1.1 Contexto
+
+
+## 2. DEFINIÇÃO DO PROBLEMA
+
+### 2.1 Contexto
 
 As cidades brasileiras enfrentam graves deficiências em acessibilidade urbana, impactando diretamente a qualidade de vida de pessoas com mobilidade reduzida, idosos, usuários de cadeiras de rodas, pessoas com deficiência visual e famílias com carrinhos de bebê.
 
-### 1.2 Problemas Identificados
+### 2.2 Problemas Identificados
 
 - **Falta de dados estruturados**: Inexistência de base de dados centralizada e atualizada sobre barreiras de acessibilidade
 - **Informações fragmentadas**: Denúncias dispersas em redes sociais e canais isolados sem sistematização
@@ -21,19 +25,19 @@ As cidades brasileiras enfrentam graves deficiências em acessibilidade urbana, 
 - **Invisibilidade do problema**: Barreiras não documentadas perpetuam exclusão social
 - **Alto custo de mapeamento manual**: Levantamentos tradicionais demandam recursos humanos e tempo excessivos
 
-### 1.3 Impacto do Problema
+### 2.3 Impacto do Problema
 
 - 17,2 milhões de brasileiros com dificuldade de locomoção (IBGE 2019)
 - Perda de autonomia e dignidade para população vulnerável
 - Má alocação de recursos públicos em intervenções não prioritárias
 - Descumprimento de legislação de acessibilidade (Lei 13.146/2015)
 
-## 2. DESCRIÇÃO DA SOLUÇÃO
+## 2.4. DESCRIÇÃO DA SOLUÇÃO
 
-### 2.1 Proposta de Valor
+### 2.4.1 Proposta de Valor
 Plataforma open-source que utiliza tecnologias acessíveis para criar um mapa colaborativo e inteligente de barreiras de acessibilidade urbana, transformando dados enviados por cidadãos em dados estruturados e acionáveis para gestão pública.
 
-### 2.2 Componentes Principais
+### 2.4.2 Componentes Principais
 
 1. **Sistema de Coleta Colaborativa**
    - Sistema de report de problemas
@@ -41,10 +45,10 @@ Plataforma open-source que utiliza tecnologias acessíveis para criar um mapa co
 2. **Plataforma de Dados Abertos**
    - Mapa interativo e pesquisável
 
-4. **Painel de Gestão**
+3. **Painel de Gestão**
    - Dashboard analítico para gestores e sociedade civil
 
-### 2.3 Diagrama de caso de uso
+### 2.5 Diagrama de caso de uso
 
 ![Diagrama de Caso de Uso](wiki\imgs\use-case-diagram.png)
 
