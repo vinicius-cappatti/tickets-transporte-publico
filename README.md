@@ -73,7 +73,7 @@ Os principais componentes incluem:
 - **Engajamento:** incentivo à participação cidadã com feedback claro sobre impacto dos reports.  
 
 
-### 2.3 Diagrama de caso de uso --------------
+### 2.X Diagrama de caso de uso --------------
 
 ![Diagrama de Caso de Uso](wiki\imgs\use-case-diagram.png)
 
