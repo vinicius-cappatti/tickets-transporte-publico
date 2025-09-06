@@ -28,23 +28,52 @@ As cidades brasileiras enfrentam graves deficiências em acessibilidade urbana, 
 - Má alocação de recursos públicos em intervenções não prioritárias
 - Descumprimento de legislação de acessibilidade (Lei 13.146/2015)
 
-## 2. DESCRIÇÃO DA SOLUÇÃO
+## 2. DEFINIÇÃO DA DEMANDA
 
-### 2.1 Proposta de Valor
-Plataforma open-source que utiliza tecnologias acessíveis para criar um mapa colaborativo e inteligente de barreiras de acessibilidade urbana, transformando dados enviados por cidadãos em dados estruturados e acionáveis para gestão pública.
+### 2.1 Problema ou Oportunidade Percebida  
+As cidades brasileiras apresentam deficiências significativas em acessibilidade urbana. Barreiras físicas, ausência de sinalização adequada e falta de infraestrutura comprometem diretamente a mobilidade de milhões de pessoas, incluindo idosos, pessoas com deficiência, famílias com carrinhos de bebê e demais cidadãos.  
+A ausência de dados estruturados sobre essas barreiras dificulta a priorização de investimentos públicos e perpetua a exclusão social. Por outro lado, existe a oportunidade de usar tecnologias digitais e colaborativas para transformar denúncias dispersas em informações organizadas e úteis para gestores e sociedade.  
 
-### 2.2 Componentes Principais
+### 2.2 Justificativa da Demanda  
+A demanda por uma solução tecnológica se justifica pelos seguintes fatores:  
+- **Social:** melhora na qualidade de vida de mais de 17 milhões de brasileiros com mobilidade reduzida (IBGE 2019).  
+- **Legal:** cumprimento da Lei Brasileira de Inclusão (Lei 13.146/2015), que estabelece diretrizes de acessibilidade.  
+- **Econômico:** redução de custos com levantamentos manuais extensos e otimização de recursos públicos por meio da priorização de intervenções mais urgentes.  
+- **Tecnológico:** possibilidade de usar inteligência artificial e participação cidadã para acelerar a coleta e análise de dados.  
 
-1. **Sistema de Coleta Colaborativa**
-   - Sistema de report de problemas
+### 2.3 Descrição do Produto de Software  
+Será desenvolvida uma **plataforma open-source** que cria um mapa colaborativo e inteligente de barreiras de acessibilidade urbana.  
+Os principais componentes incluem:  
+- **Sistema de Coleta Colaborativa:** cidadãos poderão reportar problemas com fotos e geolocalização.  
+- **Plataforma de Dados Abertos:** disponibilização pública dos dados para reutilização.  
+- **Mapa Interativo e Pesquisável:** visualização em tempo real das barreiras detectadas.  
+- **Painel de Gestão:** dashboard analítico para gestores públicos e sociedade civil acompanharem indicadores e priorizarem ações.  
 
-2. **Plataforma de Dados Abertos**
-   - Mapa interativo e pesquisável
+### 2.4 Clientes, Usuários e Envolvidos  
+- **Clientes diretos:** prefeituras, secretarias municipais/estaduais e órgãos públicos responsáveis por obras e mobilidade urbana.  
+- **Usuários finais:** cidadãos em geral, com destaque para pessoas com deficiência, idosos, famílias com carrinhos de bebê e ciclistas.  
+- **Envolvidos/impactados:**  
+  - Organizações da sociedade civil ligadas à acessibilidade.  
+  - Empresas de tecnologia assistiva.  
+  - Universidades e centros de pesquisa.  
+  - Movimentos sociais e conselhos municipais de acessibilidade.  
 
-4. **Painel de Gestão**
-   - Dashboard analítico para gestores e sociedade civil
+### 2.5 Principais Etapas de Construção do Produto  
+1. **MVP inicial:** aplicativo de captura de fotos e mapa web simples.  
+2. **Validação em piloto:** parceria com uma cidade para coleta de dados reais e ajustes nos modelos de IA.  
+3. **Expansão funcional:** criação de dashboard completo, detecção de múltiplos tipos de barreiras e sistema de priorização automática.  
+4. **Escala:** expansão para múltiplas cidades, gamificação e engajamento comunitário.  
 
-### 2.3 Diagrama de caso de uso
+### 2.6 Critérios de Qualidade do Produto  
+- **Confiabilidade:** detecção de barreiras com acurácia superior a 85% e menos de 5% de falsos positivos.  
+- **Usabilidade:** interface simples, inclusiva e responsiva, acessível em múltiplos dispositivos.  
+- **Transparência:** algoritmos auditáveis e documentação pública.  
+- **Segurança e privacidade:** conformidade com a LGPD, anonimização de dados pessoais e armazenamento seguro.  
+- **Escalabilidade:** capacidade de expansão para múltiplas cidades e grandes volumes de dados.  
+- **Engajamento:** incentivo à participação cidadã com feedback claro sobre impacto dos reports.  
+
+
+### 2.3 Diagrama de caso de uso --------------
 
 ![Diagrama de Caso de Uso](wiki\imgs\use-case-diagram.png)
 
