@@ -66,15 +66,33 @@ Principais componentes:
 
 ## Capítulo 3: Requisitos do Produto  
 
-A tabela abaixo organiza os requisitos do sistema.  
-*(Preencher com requisitos funcionais [RF] e não funcionais [RNF], ordenados por prioridade)*  
+As tabelas abaixo organizam os requisitos do sistema.  
+
+### Requisitos Funcionais
 
 | ID   | Tipo | Prioridade | Descrição do Requisito |
 |------|------|------------|-------------------------|
-| RF01 | RF   | Alta       | **[A definir]** |
-| RF02 | RF   | Média      | **[A definir]** |
-| RNF01| RNF  | Alta       | **[A definir]** |
-| RNF02| RNF  | Baixa      | **[A definir]** |
+| RF01 | RF   | Alta       | O sistema deve permitir o usuário de visualizar um mapa com geolocalização que demonstre sua localização assim como a localização de problemas de acessibilidade nos pontos de ônibus e estações de metro|
+| RF02 | RF   | Alta       | O usuário deve ser capaz de gerar um relatório com foto e descrição de um novo problema encontrado no mapa.|
+| RF03 | RF   | Alta       | O problema reportado pelo usuário deve ser demonstrado no mapa logo após dele gerar o relatório, associando sua geolocalização no momento em que entrou para criar o relatório. |
+| RF04 | RF   | Média      | O usuário pode filtrar no mapa uma região específica para ver se há problemas de acessibilidade. |
+| RF05 | RF   | Média      | O usuário deve ser capaz de marcar a entidade responsável para a resolução de um problema no relatório (ex: problema de acessibilidade na linha vermelha reportada a CPTM). |
+| RF06 | RF   | Alta       | O sistema deve notificar a entidade responsável para resolução do problema quando for marcada por um usuário. |
+| RF07 | RF   | Alta       | O sistema não deve permitir usuários de criar um relatório para um problema já existente em outro relatório. |
+| RF08 | RF   | Alta       | O sistema deve utilizar a IA para contribuir na validação de um relatório comparando foto, descrição do problema e localização do usuário. |
+
+### Requisitos Não-Funcionais
+
+| ID    | Tipo | Prioridade | Descrição do Requisito |
+|-------|----- |------------|-------------------------|
+| RNF01 | RNF  | Alta       | O sistema deve ter um tempo de resposta inferior a 2 segundos para carregar o mapa e os problemas de acessibilidade. |
+| RNF02 | RNF  | Baixa      | O sistema deve ser seguro, protegendo os dados pessoais dos usuários e as informações dos relatórios contra acessos não autorizados. |
+| RNF03 |	RNF  | Média      |	O aplicativo deve ser compatível com as versões mais recentes dos sistemas operacionais iOS e Android.|
+| RNF04 |	RNF  | Média      |	O sistema deve estar disponível 99% do tempo, garantindo a estabilidade e o acesso contínuo.|
+| RNF05 |	RNF  | Baixa      |	A interface do usuário deve ser intuitiva e fácil de usar, permitindo que qualquer pessoa, independentemente de sua familiaridade com tecnologia, possa reportar um problema.|
+| RNF06 |	RNF  | Média      |	O sistema deve ser escalável para suportar um aumento de 50% no número de usuários e relatórios sem comprometer o desempenho.|
+| RNF07 |	RNF  | Alta       |	O sistema deve ser capaz de processar e validar, via IA, até 1000 relatórios por hora.|
+| RNF08 |	RNF  | Média      |	As notificações para as entidades responsáveis devem ser entregues em tempo real.|
 
 ---
 
