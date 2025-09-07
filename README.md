@@ -106,6 +106,7 @@ As tabelas abaixo organizam os requisitos do sistema.
 
 ### 5.1 UML - Casos de Uso  
 
+<img width="410" height="270" alt="image" src="https://github.com/user-attachments/assets/59328def-1aca-4b1f-85ba-48c6754f89c2" />
 
 ### 5.2 UML - Diagrama de Classe de Domínio
 
