@@ -1,27 +1,64 @@
 @startuml
-left to right direction
-
-package MoveFacil {
-
-    class Usuario
-    class Passageiro
-    class Administrador
-    class Problema
-    class Mapa
-    class Dashboard
-    class SistemaColeta
-    class PlataformaDados
-    class CategoriaBarreira
-
-    Usuario <|-- Passageiro
-    Usuario <|-- Administrador
-
-    Passageiro --> SistemaColeta
-    SistemaColeta --> Problema
-    Problema --> CategoriaBarreira
-    Problema --> Mapa
-    Administrador --> Dashboard
-    Dashboard --> Mapa
-    PlataformaDados --> Mapa
+class Usuario {
+  +id: int
+  +nome: string
+  +email: string
 }
+
+class Passageiro {
+  +cpf: string
+}
+
+class Administrador {
+  +cargo: string
+}
+
+class Empresa {
+  +id: int
+  +nome: string
+  +cnpj: string
+}
+
+class TicketReporte {
+  +id: int
+  +descricao: string
+  +data: Date
+  +status: string
+}
+
+class PontoDeOnibus {
+  +id: int
+  +localizacao: string
+}
+
+class EstacaoDeMetro {
+  +id: int
+  +nome: string
+  +linha: string
+}
+
+class ProblemaDeAcessibilidade {
+  +id: int
+  +descricao: string
+  +gravidade: string
+}
+
+class TransicaoStatus {
+   +id: int
+   +String: statusInicial
+   +String: statusAtualizado
+   +TicketReporte: ticketAtualizado
+   +Admnistrador: admAtualizacao
+}
+
+Usuario <|-- Passageiro
+Usuario <|-- Administrador
+Empresa "1" -- "0..*" Usuario : contém
+Passageiro "1" -- "0..*" TicketReporte : cria
+Administrador "1" -- "0..*" TicketReporte : gerencia
+Administrador "1" -- "0..*" TransicaoStatus : realiza
+TransicaoStatus "*" -- "*" TicketReporte : atualiza 
+TicketReporte "1" -- "1" ProblemaDeAcessibilidade : descreve
+TicketReporte "1" -- "0..1" PontoDeOnibus : referencia
+TicketReporte "1" -- "0..1" EstacaoDeMetro : referencia
 @enduml
