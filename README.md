@@ -117,28 +117,31 @@ As tabelas abaixo organizam os requisitos do sistema.
 ### 3.2.2.6 Cancelar Serviço
 ---
 
-#### Caso de Uso – Cancelar Serviço
+#### Caso de Uso – Reportar Problema
 
 | **Identificador**      | UC001 – Reportar Problema                                                                               |
 |------------------------|----------------------------------------------------------------------------------------------------------|
-| **Nome**               | _                                                                                        |
-| **Atores**             | Primário: _                                      |
-| **Sumário**            | _ |
-| **Complexidade**       | _                                                                                                   |
-| **Regras de Negócio**  | _                                                                                            |
-| **Pré-condições**      | _          |
-| **Pós-condição**       | _               |
-| **Pontos de Inclusão** | —                                                                                                        |
+| **Nome**               | Reportar Problema                                                                                        |
+| **Atores**             | Primário: Pedestre utilizando o Sistema de Reportes de Acessibilidade. <br> Secundário: Administrador de um ponto registrado no Sistema      |
+| **Sumário**            | Um pedestre cria na plataforma um reporte para um problema de acessibilidade, visto em ponto de transporte público |
+| **Complexidade**       | Média                                                                                                   |
+| **Regras de Negócio**  | ????????                                                                                            |
+| **Pré-condições**      | O pedestre deve possuir informações do problema (foto, vídeo). <br> O pedestre deverá disponibiliza sua localização. <br> O pedestre deve ter um cadastro para registrar um reporte. <br>        |
+| **Pós-condição**       | O Sistema terá um reporte com todas as informações do problema registrado em seu banco de dados <br> O Sistema registrará o reporte e atualizará o mapa para que o reporte conste para a localização  |
+| **Pontos de Inclusão** |                                                                                                         |
 | **Pontos de Extensão** | —                                                                                                        |
 
 #### Fluxo Principal
 
 | **Ações do Ator**               | **Ações do Sistema**                                                                             |
 |--------------------------------|--------------------------------------------------------------------------------------------------|
-| 1.          | 2.           |
+| 1. O Pedestre seleciona que deseja reportar um problema na página principal        | 2. O Sistema exibe uma listagem dos pontos e estações e o mapa|
+| 3. Escolhe a localização através da busca pelo nome ou endereço, ou ainda através do mapa | 4. O Sistema retorna e solicita a confirmação do pedestre para que ele prossiga|
+| 5. O pedestre verifica as informações do local selecionado e confirma | 6. O Sistema exibe uma lista de categorias problemas e oferece outro passo de confirmação para o pedestre|
+| 7. O pedestre confirma a seleção da categoria e local | 8. O Sistema solicita informações sobre o problema e oferece dicas para que o reporte tenha boa qualidade|
+| 9. O Pedestre registra um título para o problema e uma descrição que dê mais detalhes sobre a natureza dele e ao checar as informações envia o reporte | 10. O Sistema informa o envio do reporte e solicita se o pedestre deseja criar um novo reporte ou visualizar o reporte publicado.|
 
-
-#### Fluxo Alternativo – 
+#### Fluxo Alternativo – Pedestre não está logado no sistema
 
 | **Ações do Ator**         | **Ações do Sistema**                           |
 |---------------------------|------------------------------------------------|
