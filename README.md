@@ -98,7 +98,37 @@ As tabelas abaixo organizam os requisitos do sistema.
 
 ## Capítulo 4: Wireframes  
 
-*(Reservado para inserção de prints e protótipos de baixa fidelidade do sistema)*  
+### 1. Página Principal  
+Resumo inicial do sistema com estatísticas de locais, reports ativos e categorias de problemas mais comuns.  
+![Página Principal](https://github.com/user-attachments/assets/a1aab998-f84f-45bc-a72e-4b7e6ddaa921)
+
+### 2. Área do Cliente (Login/Cadastro)  
+Tela de acesso ao sistema, onde o usuário entra com nome e e-mail para começar a reportar.  
+![Área do cliente](https://github.com/user-attachments/assets/35ab1283-e8d6-4de1-9609-f9ba5e1125cf)
+
+### 3. Selecionar Local  
+Etapa onde o usuário escolhe o ponto de ônibus ou estação onde identificou o problema.  
+![Adicionar um reports](https://github.com/user-attachments/assets/958eec39-176a-44b4-9cac-6150fbede392)
+
+### 4. Reportar Problema – Tipo  
+Seleção da categoria do problema (rampa, piso tátil, elevador, etc.).  
+![Reportar problema](https://github.com/user-attachments/assets/20296355-3ca5-4202-9c22-3f730bbbd4ff)
+
+### 5. Reportar Problema – Descrição  
+Formulário para detalhar o problema, com título e descrição completa.  
+![Descrição do report](https://github.com/user-attachments/assets/94aab9c7-9736-44fb-9c91-e843e2781ec3)
+
+### 6. Dashboard – Visão Geral  
+Painel com estatísticas globais: número de reports, status, categorias e taxa de resolução.  
+![Dashboards](https://github.com/user-attachments/assets/2f363496-38e3-4cb1-9d98-0fcea3134fce)
+
+### 7. Dashboard – Meus Reports  
+Lista dos problemas reportados pelo próprio usuário, com seus status.  
+![Dashboards -Meus reports](https://github.com/user-attachments/assets/52224af4-a5e6-4d60-b1a1-4cd93d7ee6e9)
+
+### 8. Dashboard – Todos os Reports  
+Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar pendências.    
+![Dashboards -All reports](https://github.com/user-attachments/assets/6585f785-17fa-48d1-ada5-48dcc66b2e6d)
 
 ---
 
