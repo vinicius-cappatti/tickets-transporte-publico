@@ -1,0 +1,37 @@
+@startuml
+!theme plain
+
+left to right direction
+
+actor "Cidadão" as Cidadao
+actor "Administrador" as Admin
+
+rectangle "Sistema de Acessibilidade Urbana" {
+    usecase "Consultar Mapa de Problemas" as UC_ConsultarMapa
+    usecase "Reportar Problema" as UC_ReportarProblema
+    usecase "Filtrar Problemas" as UC_Filtrar
+    usecase "Visualizar Detalhes do Problema" as UC_VerDetalhes
+    usecase "Atualizar Status de Problema" as UC_AtualizarStatus
+    usecase "Validar Reporte" as UC_ValidarReporte
+    usecase "Notificar Administrador" as UC_Notificar
+    usecase "Gerar Relatórios" as UC_GerarRelatorios
+    usecase "Confirmar Resolução" as UC_ConfirmarResolucao
+}
+
+' Relacionamentos do Cidadão
+Cidadao --> UC_ConsultarMapa
+Cidadao --> UC_ReportarProblema
+Cidadao --> UC_VerDetalhes
+Cidadao --> UC_ConfirmarResolucao
+
+' Relacionamentos do Administrador
+Admin --> UC_AtualizarStatus
+Admin --> UC_ValidarReporte
+Admin --> UC_GerarRelatorios
+Admin --> UC_ConsultarMapa
+Admin --> UC_VerDetalhes
+
+' Extends
+UC_ConsultarMapa <.. UC_Filtrar : <<extend>>
+
+@enduml

@@ -1,0 +1,799 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[portuguese]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage[unicode=false]{hyperref}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{enumitem}
+
+\usepackage{float}
+\usepackage{tikz}
+
+\geometry{
+    left=3cm,
+    right=2cm,
+    top=3cm,
+    bottom=2cm
+}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    citecolor=black
+}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    
+    \huge
+    \textbf{Laboratório de Engenharia de Software}
+    
+    \vspace{1.5cm}
+    \Large
+    \textbf{Projeto: Plataforma de Acessibilidade Urbana com IA}
+    
+    \vfill
+    
+    \large
+    \textbf{São Paulo}\\
+    \textbf{2025}
+    
+    \vspace{2cm}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Introdução}
+\label{sec:introducao}
+
+O Projeto em questão é uma aplicação Web que tem como ponto central a sistematização do processo de relato, monitoramento e divulgação das falhas de problemas de acessibilidade, na rede de transporte público de grandes centros urbanos. A proposta é inspirada pelo Objetivo de Desenvolvimento Sustentável (ODS) de número 11, sobre Cidades e Comunidades Sustentáveis, da Organização das Nações Unidas (ONU).
+
+A plataforma proposta utiliza tecnologias acessíveis para criar um mapa colaborativo de barreiras de acessibilidade urbana na rede pública de transporte, transformando dados enviados por cidadãos em informações estruturadas e acionáveis para gestão pública.
+
+\section{Definição da Demanda}
+\label{sec:definicao-demanda}
+
+\subsection{Problema/Oportunidade Percebida}
+\label{subsec:problema-oportunidade}
+
+As cidades brasileiras enfrentam graves deficiências em acessibilidade urbana, impactando diretamente a qualidade de vida de pessoas com mobilidade reduzida, idosos, usuários de cadeiras de rodas, pessoas com deficiência visual e famílias com carrinhos de bebê. Os principais problemas identificados incluem:
+
+\begin{itemize}
+    \item \textbf{Falta de dados estruturados}: inexistência de base centralizada e atualizada sobre barreiras de acessibilidade
+    \item \textbf{Informações fragmentadas}: relatos dispersos em redes sociais e canais isolados sem sistematização
+    \item \textbf{Ausência de priorização técnica}: gestores públicos tomam decisões sem dados concretos sobre impacto e urgência
+    \item \textbf{Invisibilidade do problema}: barreiras não documentadas perpetuam a exclusão social
+    \item \textbf{Alto custo de mapeamento manual}: levantamentos tradicionais demandam recursos humanos e tempo excessivos
+    \item \textbf{Baixa transparência social}: ausência de acesso público e acompanhamento das ações reduz a confiança e a participação cidadã
+\end{itemize}
+
+\subsection{Razão/Justificativa da Demanda}
+\label{subsec:razao-justificativa}
+
+A demanda por uma solução tecnológica de mapeamento de acessibilidade urbana se justifica pelos seguintes fatores:
+
+\begin{itemize}
+    \item \textbf{Impacto social}: 17,2 milhões de brasileiros com dificuldade de locomoção (IBGE 2019) enfrentam perda de autonomia e dignidade
+    \item \textbf{Conformidade legal}: Necessidade de cumprimento da Lei Brasileira de Inclusão (Lei 13.146/2015)
+    \item \textbf{Eficiência na gestão pública}: Má alocação de recursos públicos em intervenções não prioritárias devido à falta de dados
+    \item \textbf{Inclusão social}: Barreiras arquitetônicas perpetuam a exclusão de uma parcela significativa da população
+    \item \textbf{Sustentabilidade urbana}: Alinhamento com os Objetivos de Desenvolvimento Sustentável da ONU
+\end{itemize}
+
+\subsection{Descrição do Produto de Software}
+\label{subsec:descricao-produto}
+
+A solução proposta é uma plataforma open-source que utiliza tecnologias acessíveis para criar um mapa colaborativo e inteligente de barreiras de acessibilidade urbana. Os componentes principais incluem:
+
+Principais componentes:
+\begin{itemize}
+    \item \textbf{Sistema de Coleta Colaborativa:} cidadãos reportam problemas com fotos e geolocalização.
+    \item \textbf{Plataforma de Dados Abertos:} disponibilização pública dos dados.
+    \item \textbf{Mapa Interativo:} visualização em tempo real das barreiras.
+    \item \textbf{Painel de Gestão:} dashboard para gestores públicos e sociedade civil acompanharem indicadores.
+\end{itemize}
+
+\subsection{Clientes, Usuários e Demais Grupos de Interesse}
+\label{subsec:clientes-usuarios}
+
+\textbf{Usuários Primários:}
+\begin{itemize}
+    \item Pessoas com deficiência física, visual ou mobilidade reduzida
+    \item Idosos
+    \item Famílias com crianças pequenas (carrinhos de bebê)
+    \item Cidadãos engajados em causas de acessibilidade
+\end{itemize}
+
+\textbf{Clientes/Beneficiários:}
+\begin{itemize}
+    \item Prefeituras e órgãos de gestão urbana
+    \item Secretarias de mobilidade e acessibilidade
+    \item Organizações da sociedade civil
+    \item Pesquisadores e acadêmicos
+\end{itemize}
+
+\textbf{Grupos de Interesse:}
+\begin{itemize}
+    \item Conselhos municipais de pessoas com deficiência
+    \item Empresas de tecnologia assistiva
+    \item Mídia e formadores de opinião
+    \item Organismos internacionais (ONU, Banco Mundial)
+\end{itemize}
+
+\subsection{Etapas de Desenvolvimento}
+\label{subsec:etapas-desenvolvimento}
+
+Visão geral: o semestre (≈16 semanas) será dividido em fases iterativas com entregáveis claros para garantir validação contínua e integração entre front, back e dados.
+
+\begin{itemize}
+    \item \textbf{Fase 0 — Preparação (Semana 1)}
+    \begin{itemize}
+        \item Atividades: alinhamento de requisitos, definição do escopo do MVP e critérios de sucesso.
+        \item Entregáveis: backlog priorizado, cronograma detalhado e ambiente de desenvolvimento inicial.
+    \end{itemize}
+    
+    \item \textbf{Fase 1 — Protótipo Web Mockado (Semanas 2–4)}
+    \begin{itemize}
+        \item Atividades: criar protótipo PWA simples (mock de dados) para fluxos principais (cadastro de ocorrência, mapa, painel gestor).
+        \item Entregáveis: protótipo navegável (Figma/React básico) e roteiro de testes de usabilidade.
+    \end{itemize}
+    
+    \item \textbf{Fase 2 — Análise de Casos de Uso e Entidades (Semanas 4–6)}
+    \begin{itemize}
+        \item Atividades: mapear atores e casos de uso prioritários; identificar entidades, atributos e relacionamentos.
+        \item Entregáveis: lista de casos de uso, dicionário de dados e modelo conceitual (ER alto nível).
+    \end{itemize}
+    
+    \item \textbf{Fase 3 — Diagrama de Classes de Domínio e Modelagem (Semanas 6–8)}
+    \begin{itemize}
+        \item Atividades: construir diagrama de classes do domínio com responsabilidades e agregados; definir serviços de domínio.
+        \item Entregáveis: diagrama de classes e especificação de métodos principais por classe/domain service.
+    \end{itemize}
+    
+    \item \textbf{Fase 4 — Diagramas de Sequência e Identificação de Métodos (Semanas 8–9)}
+    \begin{itemize}
+        \item Atividades: criar diagramas de sequência para fluxos críticos (reportar barreira, validar, atualizar status); derivar APIs e métodos necessários.
+        \item Entregáveis: diagramas de sequência e lista de endpoints/métodos com contratos iniciais.
+    \end{itemize}
+    
+    \item \textbf{Fase 5 — Definição da Estrutura do Banco de Dados (Semanas 9–10)}
+    \begin{itemize}
+        \item Atividades: converter modelo conceitual em esquema físico (PostGIS), definir índices geoespaciais, políticas de privacidade/anonimização.
+        \item Entregáveis: script DDL inicial, diagrama ER físico e plano de migração.
+    \end{itemize}
+    
+    \item \textbf{Fase 6 — Implementação da API CRUD e Integração (Semanas 10–13)}
+    \begin{itemize}
+        \item Atividades: desenvolver API REST/GraphQL com endpoints CRUD para entidades principais; conectar ao banco; autenticação básica JWT.
+        \item Entregáveis: API funcional com testes automatizados, documentação OpenAPI e pipeline CI básico.
+    \end{itemize}
+    
+    \item \textbf{Fase 7 — Integração Frontend-Backend e Testes (Semanas 13–14)}
+    \begin{itemize}
+        \item Atividades: integrar protótipo web com APIs reais; validar fluxos fim-a-fim; testes de performance e acessibilidade (WCAG AA).
+        \item Entregáveis: versão integrada do MVP, relatórios de testes e correções prioritárias.
+    \end{itemize}
+    
+    \item \textbf{Fase 8 — Finalização, Documentação e Entrega (Semanas 15–16)}
+    \begin{itemize}
+        \item Atividades: documentação do projeto (arquitetura, API, como rodar), preparar demonstração para stakeholders, planejar próximos ciclos.
+        \item Entregáveis: release do MVP em ambiente de staging, guia de contribuição e lista de trabalhos futuros priorizados.
+    \end{itemize}
+\end{itemize}
+
+\textbf{Observações operacionais:}
+\begin{itemize}
+    \item Iterar com validação de usuários durante cada fase curta (sprints de 1 semana).
+    \item Deixar o projeto aberto para evolução: APIs versionadas, dados exportáveis e roadmap para IA e integrações externas.
+\end{itemize}
+
+\subsection{Critérios de Qualidade}
+\label{subsec:criterios-qualidade}
+
+\textbf{Confiabilidade:}
+\begin{itemize}
+    \item Detecção de barreiras com acurácia superior a 85\% e menos de 5\% de falsos positivos
+    \item Disponibilidade do sistema $>$ 99\%
+\end{itemize}
+
+\textbf{Usabilidade:}
+\begin{itemize}
+    \item Interface simples, inclusiva e responsiva
+    \item Interface acessível seguindo WCAG 2.1 nível AA
+    \item Compatibilidade com leitores de tela
+    \item Design responsivo para diversos dispositivos
+\end{itemize}
+
+\textbf{Performance:}
+\begin{itemize}
+    \item Tempo de resposta da API $<$ 2 segundos
+    \item Sistema deve processar e validar, via IA, até 1000 relatórios por hora
+\end{itemize}
+
+\textbf{Transparência:}
+\begin{itemize}
+    \item Algoritmos auditáveis e documentação pública
+\end{itemize}
+
+\textbf{Segurança e privacidade:}
+\begin{itemize}
+    \item Conformidade com a LGPD
+\end{itemize}
+
+\textbf{Escalabilidade:}
+\begin{itemize}
+    \item Suporte a múltiplas cidades e grandes volumes de dados
+    \item Sistema deve ser escalável para suportar um aumento de 50\% no número de usuários
+\end{itemize}
+
+\textbf{Engajamento:}
+\begin{itemize}
+    \item Incentivo à participação cidadã com feedback sobre impacto
+    \item Mínimo de 1000 usuários ativos/mês por cidade
+\end{itemize}
+
+\section{Requisitos do Produto}
+\label{sec:requisitos}
+
+\subsection{Requisitos Funcionais}
+
+\begin{longtable}{|p{1cm}|p{1cm}|p{2cm}|p{8cm}|}
+\hline
+\textbf{ID} & \textbf{Tipo} & \textbf{Prioridade} & \textbf{Descrição do Requisito} \\
+\hline
+\endfirsthead
+
+\hline
+\textbf{ID} & \textbf{Tipo} & \textbf{Prioridade} & \textbf{Descrição do Requisito} \\
+\hline
+\endhead
+
+RF01 & RF & Alta & O sistema deve permitir visualizar mapa com geolocalização de problemas de acessibilidade \\
+\hline
+RF02 & RF & Alta & O usuário deve gerar relatório com foto e descrição de novo problema \\
+\hline
+RF03 & RF & Alta & O problema deve aparecer no mapa após criação do relatório \\
+\hline
+RF04 & RF & Alta & O sistema deve notificar entidade responsável quando marcada \\
+\hline
+RF05 & RF & Alta & O sistema não deve permitir relatórios duplicados \\
+\hline
+RF06 & RF & Alta & O sistema deve usar IA para validar relatórios \\
+\hline
+RF07 & RF & Média & O usuário pode filtrar região específica no mapa \\
+\hline
+RF08 & RF & Média & O usuário deve marcar entidade responsável \\
+\hline
+RF09 & RF & Alta & Permitir cadastro com diferentes perfis (cidadão, gestor, validador) \\
+\hline
+RF10 & RF & Média & Gerar relatórios analíticos para gestores \\
+\hline
+RF11 & RF & Média & Permitir validação manual das classificações automáticas \\
+\hline
+RF12 & RF & Baixa & Exportar dados em formatos padrão (CSV, GeoJSON) \\
+\hline
+\end{longtable}
+
+\subsection{Requisitos Não-Funcionais}
+
+\begin{longtable}{|p{1.2cm}|p{1cm}|p{2cm}|p{7.8cm}|}
+\hline
+\textbf{ID} & \textbf{Tipo} & \textbf{Prioridade} & \textbf{Descrição do Requisito} \\
+\hline
+\endfirsthead
+
+\hline
+\textbf{ID} & \textbf{Tipo} & \textbf{Prioridade} & \textbf{Descrição do Requisito} \\
+\hline
+\endhead
+
+RNF01 & RNF & Alta & Tempo de resposta $<$2s para carregar mapa \\
+\hline
+RNF02 & RNF & Alta & Processar e validar até 1000 relatórios/hora via IA \\
+\hline
+RNF03 & RNF & Média & Compatível com iOS e Android recentes \\
+\hline
+RNF04 & RNF & Média & Disponibilidade 99\% do tempo \\
+\hline
+RNF05 & RNF & Média & Escalável para 50\% aumento de usuários \\
+\hline
+RNF06 & RNF & Média & Notificações em tempo real \\
+\hline
+RNF07 & RNF & Baixa & Segurança e proteção de dados \\
+\hline
+RNF08 & RNF & Baixa & Interface intuitiva e acessível \\
+\hline
+RNF09 & RNF & Alta & Conformidade WCAG 2.1 AA \\
+\hline
+RNF10 & RNF & Alta & Conformidade LGPD \\
+\hline
+\end{longtable}
+
+\subsection{Categorias de Barreiras Detectáveis}
+
+\begin{enumerate}
+    \item \textbf{Infraestrutura Física}
+    \begin{itemize}
+        \item Escadas sem alternativa acessível
+        \item Rampas fora de norma ($>$8,33\% inclinação)
+        \item Calçadas danificadas ou estreitas ($<$1,20m)
+        \item Desníveis e buracos
+    \end{itemize}
+    
+    \item \textbf{Sinalização e Orientação}
+    \begin{itemize}
+        \item Ausência de piso tátil
+        \item Falta de sinalização visual/sonora
+        \item Semáforos sem recurso sonoro
+    \end{itemize}
+    
+    \item \textbf{Obstáculos}
+    \begin{itemize}
+        \item Mobiliário urbano mal posicionado
+        \item Veículos estacionados irregularmente
+        \item Obras sem passagem alternativa
+        \item Comércio informal obstruindo passagem
+    \end{itemize}
+\end{enumerate}
+
+\section{Wireframes}
+\label{sec:wireframes}
+
+\subsection{Página Principal}
+Resumo inicial do sistema com estatísticas de locais, reports ativos e categorias de problemas mais comuns.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{../imgs/pagina_principal.png}
+\caption{Página Principal}
+\end{figure}
+
+\subsection{Área do Cliente (Login/Cadastro)}
+Tela de acesso ao sistema, onde o usuário entra com nome e e-mail para começar a reportar.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{../imgs/area_cliente.png}
+\caption{Área do cliente}
+\end{figure}
+
+\subsection{Selecionar Local}
+Etapa onde o usuário escolhe o ponto de ônibus ou estação onde identificou o problema.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{../imgs/selecionar_local.png}
+\caption{Adicionar um reports}
+\end{figure}
+
+\subsection{Reportar Problema – Tipo}
+Seleção da categoria do problema (rampa, piso tátil, elevador, etc.).
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{../imgs/reportar_tipo.png}
+\caption{Reportar problema}
+\end{figure}
+
+\subsection{Reportar Problema – Descrição}
+Formulário para detalhar o problema, com título e descrição completa.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{../imgs/reportar_descricao.png}
+\caption{Descrição do report}
+\end{figure}
+
+\subsection{Dashboard – Visão Geral}
+Painel com estatísticas globais: número de reports, status, categorias e taxa de resolução.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{../imgs/dashboard_geral.png}
+\caption{Dashboards}
+\end{figure}
+
+\subsection{Dashboard – Meus Reports}
+Lista dos problemas reportados pelo próprio usuário, com seus status.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{../imgs/dashboard_meus.png}
+\caption{Dashboards - Meus reports}
+\end{figure}
+
+\subsection{Dashboard – Todos os Reports}
+Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar pendências.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\textwidth]{../imgs/dashboard_todos.png}
+\caption{Dashboards - All reports}
+\end{figure}
+
+\section{Modelagem "Leve do Sistema"}
+\label{sec:modelagem}
+
+\subsection{UML - Casos de Uso}
+
+\begin{figure}[H]
+\centering
+\input{wiki/uml/casos_uso.tex}
+\caption{Diagrama de Casos de Uso}
+\end{figure}
+
+\subsubsection{Especificações dos Casos de Uso}
+
+\paragraph{5.1.1.1 Reportar Problema}
+
+\begin{longtable}{|p{3.5cm}|p{10cm}|}
+\hline
+\textbf{Identificador} & UC001 – Reportar Problema \\
+\hline
+\textbf{Nome} & Reportar Problema \\
+\hline
+\textbf{Atores} & Primário: Pedestre utilizando o Sistema de Reportes de Acessibilidade. \newline Secundário: Administrador de um ponto registrado no Sistema. \\
+\hline
+\textbf{Sumário} & Um pedestre cria na plataforma um reporte para um problema de acessibilidade, visto em ponto de transporte público \\
+\hline
+\textbf{Complexidade} & Média \\
+\hline
+\textbf{Regras de Negócio} & - RN001: Apenas usuários autenticados podem registrar reportes. \newline - RN002: Todo reporte deve estar vinculado a um local existente no sistema. \newline - RN003: O reporte deve conter obrigatoriamente um título e uma descrição mínima. \newline - RN004: O sistema deve registrar data, hora e usuário responsável pelo reporte. \newline - RN005: O reporte pode conter evidências (foto ou vídeo), mas estas não são obrigatórias. \newline - RN006: O reporte não pode exceder o limite máximo de caracteres definidos pelo sistema (para título e descrição). \\
+\hline
+\textbf{Pré-condições} & O pedestre deve possuir informações do problema (foto, vídeo). \newline O pedestre deverá disponibiliza sua localização. \newline O pedestre deve ter um cadastro para registrar um reporte. \\
+\hline
+\textbf{Pós-condição} & O Sistema terá um reporte com todas as informações do problema registrado em seu banco de dados \newline O Sistema registrará o reporte e atualizará o mapa para que o reporte conste para a localização \\
+\hline
+\textbf{Pontos de Inclusão} & UC004 – Autenticar Usuário (quando necessário). \\
+\hline
+\textbf{Pontos de Extensão} & UC005 – Notificar Administrador (para pontos monitorados). \\
+\hline
+\end{longtable}
+
+\textbf{Fluxo Principal}
+
+\begin{longtable}{|p{7cm}|p{7cm}|}
+\hline
+\textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
+\hline
+1. O Pedestre seleciona que deseja reportar um problema na página principal & 2. O Sistema exibe uma listagem dos pontos e estações e o mapa \\
+\hline
+3. Escolhe a localização através da busca pelo nome ou endereço, ou ainda através do mapa & 4. O Sistema retorna e solicita a confirmação do pedestre para que ele prossiga \\
+\hline
+5. O pedestre verifica as informações do local selecionado e confirma & 6. O Sistema exibe uma lista de categorias problemas e oferece outro passo de confirmação para o pedestre \\
+\hline
+7. O pedestre confirma a seleção da categoria e local & 8. O Sistema solicita informações sobre o problema e oferece dicas para que o reporte tenha boa qualidade \\
+\hline
+9. O Pedestre registra um título para o problema e uma descrição que dê mais detalhes sobre a natureza dele e ao checar as informações envia o reporte & 10. O Sistema informa o envio do reporte e solicita se o pedestre deseja criar um novo reporte ou visualizar o reporte publicado. \\
+\hline
+\end{longtable}
+
+\textbf{Fluxo Alternativo – Pedestre não está logado no sistema}
+
+\begin{longtable}{|p{7cm}|p{7cm}|}
+\hline
+\textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
+\hline
+1a. O pedestre seleciona a opção de reportar sem estar logado & 2a. O Sistema redireciona para a tela de login/cadastro (UC004 – Autenticar Usuário). \\
+\hline
+3a. Após login/cadastro concluído & 4a. O Sistema retorna ao ponto em que o fluxo principal estava, permitindo prosseguir do passo 3. \\
+\hline
+\end{longtable}
+
+\textbf{Fluxos de Exceção}
+
+\begin{longtable}{|p{7cm}|p{7cm}|}
+\hline
+\textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
+\hline
+1e. O pedestre seleciona uma localização inexistente ou inválida & 2e. O sistema exibe mensagem de erro e solicita nova seleção de localização. \\
+\hline
+2e. O pedestre não insere título ou descrição & 3e. O sistema informa que os campos são obrigatórios e impede o envio até que sejam preenchidos. \\
+\hline
+3e. O pedestre tenta anexar arquivo em formato não suportado & 4e. O sistema rejeita o upload e informa quais formatos são permitidos. \\
+\hline
+4e. O sistema encontra falha de conexão no envio do reporte & 5e. O sistema notifica falha técnica e oferece a opção de salvar localmente para tentar enviar depois. \\
+\hline
+\end{longtable}
+
+\paragraph{5.1.1.2 Consultar o Mapa de Problemas}
+
+\begin{longtable}{|p{3.5cm}|p{10cm}|}
+\hline
+\textbf{Identificador} & UC002 – Consultar Mapa de Problemas \\
+\hline
+\textbf{Nome} & Consultar Mapa de Problemas \\
+\hline
+\textbf{Atores} & Primário: Pedestre (usuário do sistema). \newline Secundário: Administrador (para análise de ocorrências). \\
+\hline
+\textbf{Sumário} & O pedestre acessa o sistema para visualizar, no mapa, os problemas de acessibilidade reportados em pontos de transporte público. \\
+\hline
+\textbf{Complexidade} & Baixa \\
+\hline
+\textbf{Regras de Negócio} & - RN007: O mapa deve exibir apenas problemas confirmados e devidamente registrados.\newline - RN008: O usuário pode aplicar filtros (categoria, data, status).\newline - RN009: Cada problema deve estar associado a uma localização válida.\newline - RN010: O sistema deve mostrar a data de registro e a situação do problema (pendente, em análise, resolvido).\newline - RN011: Problemas com mais de 1 ano podem ser arquivados, mas ainda disponíveis mediante filtro avançado. \\
+\hline
+\textbf{Pré-condições} & O sistema deve conter reportes cadastrados.\newline O pedestre precisa ter acesso à plataforma (não é obrigatório login apenas para consulta). \\
+\hline
+\textbf{Pós-condição} & O usuário terá acesso visual aos problemas existentes no mapa e poderá selecionar pontos para ver detalhes. \\
+\hline
+\textbf{Pontos de Inclusão} & UC006 – Visualizar Detalhes de Problema (quando o usuário seleciona um ponto específico). \\
+\hline
+\textbf{Pontos de Extensão} & UC001 – Reportar Problema (usuário pode criar um novo reporte a partir do mapa). \\
+\hline
+\end{longtable}
+
+\textbf{Fluxo Principal}
+
+\begin{longtable}{|p{7cm}|p{7cm}|}
+\hline
+\textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
+\hline
+1. O pedestre acessa a opção "Consultar mapa de problemas". & 2. O sistema carrega o mapa com todos os pontos e marcadores de problemas registrados. \\
+\hline
+3. O pedestre pode aplicar filtros (categoria, data, status). & 4. O sistema atualiza o mapa exibindo apenas os problemas que atendem ao filtro. \\
+\hline
+5. O pedestre navega pelo mapa e seleciona um marcador específico. & 6. O sistema exibe informações resumidas do problema e opção de ver detalhes (UC006). \\
+\hline
+\end{longtable}
+
+\textbf{Fluxo Alternativo – Sem problemas cadastrados}
+
+\begin{longtable}{|p{7cm}|p{7cm}|}
+\hline
+\textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
+\hline
+1a. O pedestre acessa o mapa sem que haja reportes cadastrados. & 2a. O sistema exibe mensagem "Nenhum problema cadastrado até o momento" e mostra apenas os pontos sem ocorrências. \\
+\hline
+\end{longtable}
+
+\textbf{Fluxos de Exceção}
+
+\begin{longtable}{|p{7cm}|p{7cm}|}
+\hline
+\textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
+\hline
+1e. O sistema não consegue carregar o mapa (falha na API de mapas ou conexão). & 2e. O sistema exibe mensagem de erro "Não foi possível carregar o mapa. Tente novamente mais tarde". \\
+\hline
+2e. O usuário aplica um filtro inválido ou inexistente. & 3e. O sistema exibe mensagem "Filtro inválido" e mantém a última visualização correta. \\
+\hline
+3e. O marcador selecionado não possui dados válidos (erro no registro). & 4e. O sistema exibe mensagem de inconsistência e oculta o marcador defeituoso. \\
+\hline
+\end{longtable}
+
+\paragraph{5.1.1.3 Atualizar Status de Problema}
+
+\begin{longtable}{|p{3.5cm}|p{10cm}|}
+\hline
+\textbf{Identificador} & UC003 – Atualizar Status de Problema \\
+\hline
+\textbf{Nome} & Atualizar Status de Problema \\
+\hline
+\textbf{Atores} & Primário: Administrador (responsável por um ponto de transporte público). \newline Secundário: Pedestre autor do reporte. \\
+\hline
+\textbf{Sumário} & O administrador acessa o sistema para alterar o status de um problema reportado, e o pedestre autor do reporte deve confirmar a resolução antes do status ser consolidado como "Resolvido". \\
+\hline
+\textbf{Complexidade} & Alta \\
+\hline
+\textbf{Regras de Negócio} & - RN012: Apenas administradores autenticados podem atualizar status.\newline - RN013: O status pode assumir: \textbf{Pendente}, \textbf{Em Análise}, \textbf{Resolvido Provisório}, \textbf{Resolvido Confirmado}, \textbf{Arquivado}.\newline - RN014: Toda atualização deve registrar data, hora e autor da alteração.\newline - RN015: Ao alterar para "Resolvido Provisório", o sistema notifica o pedestre autor para validação.\newline - RN016: O pedestre tem um prazo (ex.: 7 dias) para confirmar a resolução; se não houver resposta, o sistema automaticamente consolida como "Resolvido Confirmado".\newline - RN017: Caso o pedestre rejeite a resolução, o status volta para \textbf{Em Análise}. \\
+\hline
+\textbf{Pré-condições} & O administrador deve estar autenticado.\newline Deve existir pelo menos um problema reportado no ponto administrado.\newline O pedestre autor deve estar vinculado ao reporte. \\
+\hline
+\textbf{Pós-condição} & O status do problema será atualizado no sistema, refletindo tanto a ação do administrador quanto a validação do pedestre. \\
+\hline
+\textbf{Pontos de Inclusão} & UC002 – Consultar Mapa de Problemas (para localizar o problema). \\
+\hline
+\textbf{Pontos de Extensão} & UC006 – Visualizar Detalhes de Problema (para acompanhar histórico e status detalhado). \\
+\hline
+\end{longtable}
+
+\textbf{Fluxo Principal}
+
+\begin{longtable}{|p{7cm}|p{7cm}|}
+\hline
+\textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
+\hline
+1. O administrador acessa a lista/mapa de problemas reportados. & 2. O sistema exibe os problemas associados ao ponto. \\
+\hline
+3. O administrador seleciona um problema específico. & 4. O sistema exibe detalhes do problema e status atual. \\
+\hline
+5. O administrador escolhe a opção de atualizar status para "Resolvido Provisório". & 6. O sistema registra a alteração e envia notificação ao pedestre autor. \\
+\hline
+7. O pedestre recebe a notificação e abre o problema. & 8. O sistema exibe detalhes da resolução e opções de confirmar ou rejeitar. \\
+\hline
+9. O pedestre confirma a resolução. & 10. O sistema altera o status para "Resolvido Confirmado", registra histórico e atualiza o mapa. \\
+\hline
+\end{longtable}
+
+\textbf{Fluxo Alternativo - Pedestre rejeita a resolução}
+
+\begin{longtable}{|p{7cm}|p{7cm}|}
+\hline
+\textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
+\hline
+9a. O pedestre rejeita a resolução. & 10a. O sistema altera o status de volta para \textbf{Em Análise} e notifica o administrador. \\
+\hline
+\end{longtable}
+
+\textbf{Fluxo Alternativo – Pedestre não responde}
+
+\begin{longtable}{|p{7cm}|p{7cm}|}
+\hline
+\textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
+\hline
+9b. O pedestre não responde dentro do prazo (ex.: 7 dias). & 10b. O sistema consolida automaticamente o status como \textbf{Resolvido Confirmado} e registra no histórico. \\
+\hline
+\end{longtable}
+
+\textbf{Fluxo de Exceção}
+
+\begin{longtable}{|p{7cm}|p{7cm}|}
+\hline
+\textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
+\hline
+1e. O administrador não está autenticado. & 2e. O sistema bloqueia e redireciona para login. \\
+\hline
+2e. O pedestre não consegue abrir o reporte (erro técnico). & 3e. O sistema exibe mensagem de erro e orienta tentar novamente. \\
+\hline
+3e. O administrador tenta alterar status de problema fora de sua jurisdição. & 4e. O sistema impede a ação e informa falta de permissão. \\
+\hline
+\end{longtable}
+
+\subsection{UML - Diagrama de Classe de Domínio}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{../imgs/class_diagram.png}
+\caption{Diagrama de Classes}
+\end{figure}
+
+\subsection{UML - Diagrama de Sequência}
+
+\section{Descrição da Arquitetura e Ferramentas Utilizadas}
+\label{sec:arquitetura}
+
+\subsection{Stack Tecnológico}
+
+\textbf{Backend:}
+\begin{itemize}
+    \item Node.js com framework NestJS
+    \item PostgreSQL com extensão PostGIS para dados geoespaciais
+    \item Docker para containerização
+\end{itemize}
+
+\textbf{Frontend:}
+\begin{itemize}
+    \item React + Next.js para aplicação web
+    \item ShadcnUI para componentes de interface
+\end{itemize}
+
+\textbf{Infraestrutura:}
+\begin{itemize}
+    \item Kubernetes para orquestração
+    \item AWS S3 ou MinIO para armazenamento de objetos
+    \item GitHub Actions para CI/CD
+\end{itemize}
+
+\subsection{Padrões e Princípios}
+
+\begin{itemize}
+    \item Arquitetura de microsserviços
+    \item API RESTful seguindo OpenAPI 3.0
+    \item Autenticação via JWT
+    \item Princípios SOLID e Clean Architecture
+    \item Testes automatizados (unitários, integração, E2E)
+\end{itemize}
+
+\section{Plano de Desenvolvimento}
+\label{sec:desenvolvimento}
+
+\subsection{Cronograma Detalhado (16 semanas)}
+
+\textbf{Fase 0 — Preparação (Semana 1)}
+\begin{itemize}
+    \item Alinhamento de requisitos e definição do escopo MVP
+    \item Backlog priorizado e ambiente de desenvolvimento
+\end{itemize}
+
+\textbf{Fase 1 — Protótipo Web (Semanas 2–4)}
+\begin{itemize}
+    \item Protótipo PWA com mock de dados
+    \item Fluxos principais: cadastro, mapa, painel
+\end{itemize}
+
+\textbf{Fase 2 — Análise e Modelagem (Semanas 4–6)}
+\begin{itemize}
+    \item Casos de uso e entidades
+    \item Modelo conceitual e dicionário de dados
+\end{itemize}
+
+\textbf{Fase 3 — Design de Classes (Semanas 6–8)}
+\begin{itemize}
+    \item Diagrama de classes do domínio
+    \item Especificação de serviços
+\end{itemize}
+
+\textbf{Fase 4 — Diagramas de Sequência (Semanas 8–9)}
+\begin{itemize}
+    \item Fluxos críticos modelados
+    \item Definição de APIs e contratos
+\end{itemize}
+
+\textbf{Fase 5 — Banco de Dados (Semanas 9–10)}
+\begin{itemize}
+    \item Esquema físico PostGIS
+    \item Scripts DDL e migração
+\end{itemize}
+
+\textbf{Fase 6 — Implementação API (Semanas 10–13)}
+\begin{itemize}
+    \item API REST/GraphQL com CRUD
+    \item Testes automatizados e CI
+\end{itemize}
+
+\textbf{Fase 7 — Integração e Testes (Semanas 13–14)}
+\begin{itemize}
+    \item Integração frontend-backend
+    \item Testes E2E e acessibilidade
+\end{itemize}
+
+\textbf{Fase 8 — Finalização (Semanas 15–16)}
+\begin{itemize}
+    \item Documentação completa
+    \item Release MVP e roadmap futuro
+\end{itemize}
+
+\subsection{Métricas de Sucesso}
+\begin{itemize}
+    \item \textbf{Técnicas}: Acurácia >85\% na detecção
+    \item \textbf{Impacto}: Taxa de resolução de barreiras
+\end{itemize}
+
+\section{Resultados}
+\label{sec:resultados}
+
+\textit{[Esta seção será preenchida após a implementação, incluindo:}
+\begin{itemize}
+    \item \textit{Métricas de desempenho do sistema}
+    \item \textit{Estatísticas de uso e engajamento}
+    \item \textit{Casos de sucesso e impactos mensuráveis}
+    \item \textit{Feedback dos usuários e gestores}
+    \item \textit{Lições aprendidas]}
+\end{itemize}
+
+\section{Conclusão e Trabalhos Futuros}
+\label{sec:conclusao}
+
+\subsection{Conclusão Preliminar}
+
+O projeto visa criar uma solução tecnológica escalável e sustentável para o mapeamento colaborativo de barreiras de acessibilidade urbana, contribuindo diretamente para o cumprimento do ODS 11 e promovendo cidades mais inclusivas e acessíveis.
+
+\subsection{Próximos Passos}
+
+\begin{enumerate}
+    \item Formar equipe técnica multidisciplinar
+    \item Desenvolver prova de conceito
+    \item Estabelecer parceria com cidade piloto
+    \item Lançar MVP e coletar feedback
+    \item Iterar com base em dados reais
+\end{enumerate}
+
+\subsection{Trabalhos Futuros}
+
+\begin{itemize}
+    \item Integração com sistemas de transporte público
+    \item Expansão para detecção de barreiras em ambientes internos
+    \item Desenvolvimento de rotas acessíveis personalizadas
+    \item Implementação de realidade aumentada para navegação
+    \item Criação de índice de acessibilidade por cidade/bairro
+\end{itemize}
+
+\end{document}
