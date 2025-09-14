@@ -381,7 +381,7 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 ### 5.2 UML - Diagrama de Classe de Domínio
 
-![Diagrama de Classe](C:\Users\vinic\OneDrive\Documentos\ReposMackenzie\lab-enj-software\wiki\imgs\class-diagram.png)
+![Diagrama de Classe](\wiki\imgs\class-diagram.png)
 
 ### 5.3 UML - Diagrama de Sequência
 
@@ -391,7 +391,7 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 #### 5.4.3 - US03 - Atualizar status de problema
 
-![Diagrama de squencia](C:\Users\vinic\OneDrive\Documentos\ReposMackenzie\lab-enj-software\wiki\imgs\sequencia-atualizar-status.png)
+![Diagrama de squencia](\wiki\imgs\sequencia-atualizar-status.png)
 
 ## 6. Descrição da Arquitetura e Ferramentas Utilizadas
 
