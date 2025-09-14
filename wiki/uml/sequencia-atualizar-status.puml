@@ -1,0 +1,56 @@
+@startuml
+
+actor Administrador as Adm
+boundary Fronteira as Front
+control Controlador as Ctrl
+collections ListaProblemas as ListProb
+participant TicketReporte as Ticket
+collections ListaTransicoesStatus as ListTransStatus
+participant TransicaoStatus as TransStatus
+
+
+Adm -> Front : 1. consultarListaProblemas(estacaoMetro)
+activate Front
+
+Front -> Ctrl : 1.1 buscarListaProblemas(estacaoMetro)
+activate Ctrl
+
+Ctrl -> ListProb : 1.2 getListaProblemasAbertos(estacaoMetro)
+activate ListProb
+ListProb --> Ctrl : 1.2.1 Lista de Problemas Abertos
+deactivate ListProb
+
+Ctrl --> Front : 1.1.1 Lista de Problemas Abertos
+
+Adm -> Front : 2. selecionaProblema(problema)
+Front -> Ctrl : 2.1 buscarProblema(problema)
+Ctrl -> ListProb : 2.2 buscarProblema(problema)
+activate ListProb
+ListProb -> Ticket : 2.3 getProblema()
+activate Ticket
+Ticket --> ListProb : 2.3.1 Ticket problema selecionado
+deactivate Ticket
+ListProb --> Ctrl : 2.2.1 Problema selecionado
+deactivate ListProb
+Ctrl --> Front : 2.1.1 Problema selecionado
+
+Adm -> Front : 3. atualizarStatus(problema, novoStatus, comentario, arquivos)
+Front -> Ctrl : 3.1 atualizarStatus(problema, novoStatus, comentario, arquivos)
+Ctrl -> Ticket : 3.2 atualizarStatus(novoStatus, comentario, arquivos, admLogado)
+activate Ticket
+Ticket -> ListTransStatus : 3.3 registrarTransicao(novoStatus, comentario, arquivos, admLogado)
+activate ListTransStatus
+ListTransStatus -> TransStatus ** : 3.4 <<create>>
+activate TransStatus
+TransStatus --> ListTransStatus : 3.4.1 Transição criada
+deactivate TransStatus
+ListTransStatus --> Ticket : 3.3.1 Transição criada
+deactivate ListTransStatus
+Ticket -> Ticket : 3.5 atualizarStatus(transicao)
+Ticket --> Ctrl : 3.2.1 Transição finalizada
+deactivate Ticket
+Ctrl --> Front : 3.1.1 Transição finalizada
+deactivate Ctrl
+deactivate Front
+
+@enduml
