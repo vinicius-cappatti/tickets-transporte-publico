@@ -350,49 +350,48 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 | ---------------------- | ------------------------------------|
 | **Nome**               | Atualizar Status de Problema|
 | **Atores**             | Primário: Administrador (responsável por um ponto de transporte público). <br> Secundário: Pedestre autor do reporte.|
-| **Sumário**            | O administrador acessa o sistema para alterar o status de um problema reportado, e o pedestre autor do reporte deve confirmar a resolução antes do status ser consolidado como “Resolvido”.|
-| **Complexidade**       | Alta|
-| **Regras de Negócio**  | - RN012: Apenas administradores autenticados podem atualizar status.<br> - RN013: O status pode assumir: **Pendente**, **Em Análise**, **Resolvido Provisório**, **Resolvido Confirmado**, **Arquivado**.<br> - RN014: Toda atualização deve registrar data, hora e autor da alteração.<br> - RN015: Ao alterar para “Resolvido Provisório”, o sistema notifica o pedestre autor para validação.<br> - RN016: O pedestre tem um prazo (ex.: 7 dias) para confirmar a resolução; se não houver resposta, o sistema automaticamente consolida como “Resolvido Confirmado”.<br> - RN017: Caso o pedestre rejeite a resolução, o status volta para **Em Análise**. |
-| **Pré-condições**      | O administrador deve estar autenticado.<br> Deve existir pelo menos um problema reportado no ponto administrado.<br> O pedestre autor deve estar vinculado ao reporte.|
-| **Pós-condição**       | O status do problema será atualizado no sistema, refletindo tanto a ação do administrador quanto a validação do pedestre.|
+| **Sumário**            | O administrador acessa o sistema para alterar o status de um problema reportado|
+| **Complexidade**       | Média|
+| **Regras de Negócio**  | - RN012: Apenas administradores autenticados podem atualizar status.<br> - RN013: O status pode assumir: **Aguardando análise**, **Rejeitado**, **Aceito**, **Correção em andamento**, **Corrigido** e **Pausado**.<br> - RN014: Toda atualização deve registrar contagem de dias no status, data e hora da alteração, e administrador autor da alteração.<br> -RN015: O administrador pode inserir um comentário detalhando os motivos da mudança de status.<br> -RN016: O administrador pode anexar arquivos em .png, .jpg ou .jpeg no comentário da descrição|
+| **Pré-condições**      | O administrador deve estar autenticado.<br> Deve existir pelo menos um problema reportado no ponto administrado.|
+| **Pós-condição**       | O status do problema será atualizado no sistema, refletindo tanto a ação do administrador.|
 | **Pontos de Inclusão** | UC002 – Consultar Mapa de Problemas (para localizar o problema).|
-| **Pontos de Extensão** | UC006 – Visualizar Detalhes de Problema (para acompanhar histórico e status detalhado).|
+| **Pontos de Extensão** | N/A|
 
 #### Fluxo Principal
 
-| **Ações do Ator**                                                                   | **Ações do Sistema**                                                                             |
-| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| 1. O administrador acessa a lista/mapa de problemas reportados.                     | 2. O sistema exibe os problemas associados ao ponto.                                             |
-| 3. O administrador seleciona um problema específico.                                | 4. O sistema exibe detalhes do problema e status atual.                                          |
-| 5. O administrador escolhe a opção de atualizar status para “Resolvido Provisório”. | 6. O sistema registra a alteração e envia notificação ao pedestre autor.                         |
-| 7. O pedestre recebe a notificação e abre o problema.                               | 8. O sistema exibe detalhes da resolução e opções de confirmar ou rejeitar.                      |
-| 9. O pedestre confirma a resolução.                                                 | 10. O sistema altera o status para “Resolvido Confirmado”, registra histórico e atualiza o mapa. |
+| **Ações do Ator**                                                                   | **Ações do Sistema**                                                                              |
+| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------  |
+| 1. O administrador acessa a lista/mapa de problemas reportados.                     | 2. O sistema exibe os problemas associados ao ponto.                                              |
+| 3. O administrador seleciona um problema específico.                                | 4. O sistema exibe detalhes do problema e status atual.                                           |
+| 5. O administrador escolhe a opção de avançar o status do problema.                 | 6. O sistema exibe a tela para inserção de comentário sobre a mudança e anexar arquivos.          |
+| 7. O administrador faz comentários e anexa arquivos sobre sua ação e a confirma.    | 8. O sistema exibe uma mensagem de alteração concluída e altera o status do problema.             |
 
 #### Fluxo Alternativo - Pedestre rejeita a resolução
 
-| **Ações do Ator**                   | **Ações do Sistema**                                                                    |
-| ----------------------------------- | --------------------------------------------------------------------------------------- |
-| 9a. O pedestre rejeita a resolução. | 10a. O sistema altera o status de volta para **Em Análise** e notifica o administrador. |
-
-#### Fluxo Alternativo – Pedestre não responde
-
-| **Ações do Ator**                                          | **Ações do Sistema**                                                                                     |
-| ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| 9b. O pedestre não responde dentro do prazo (ex.: 7 dias). | 10b. O sistema consolida automaticamente o status como **Resolvido Confirmado** e registra no histórico. |
+| **Ações do Ator**                       | **Ações do Sistema**                                                                    |
+| -----------------------------------     | --------------------------------------------------------------------------------------- |
+| 9a. O administrador rejeita o problema. | 10a. O sistema altera o status para **Rejeitado**.                                      |
 
 #### Fluxo de Exceção
 
 | **Ações do Ator**                                                            | **Ações do Sistema**                                             |
 | ---------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| 1e. O administrador não está autenticado.                                    | 2e. O sistema bloqueia e redireciona para login.                 |
-| 2e. O pedestre não consegue abrir o reporte (erro técnico).                  | 3e. O sistema exibe mensagem de erro e orienta tentar novamente. |
-| 3e. O administrador tenta alterar status de problema fora de sua jurisdição. | 4e. O sistema impede a ação e informa falta de permissão.        |
+| 1e. O administrador não está autenticado.                                    | 2e. O sistema não exibe a opção de alterar status do problema.   |
 
 ### 5.2 UML - Diagrama de Classe de Domínio
 
 ![Diagrama de Classe](https://github.com/vinicius-cappatti/tickets-transporte-publico/blob/main/wiki/imgs/class-diagram.png)
 
 ### 5.3 UML - Diagrama de Sequência
+
+#### 5.4.1 
+
+#### 5.4.2
+
+#### 5.4.3 - US03 - Atualizar status de problema
+
+![Diagrama de sequencia](https://github.com/vinicius-cappatti/tickets-transporte-publico/blob/main/wiki/imgs/sequencia-atualizar-status.png)
 
 ## 6. Descrição da Arquitetura e Ferramentas Utilizadas
 
