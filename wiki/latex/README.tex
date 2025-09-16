@@ -131,7 +131,7 @@ Principais componentes:
 \subsection{Etapas de Desenvolvimento}
 \label{subsec:etapas-desenvolvimento}
 
-Visão geral: o semestre (≈16 semanas) será dividido em fases iterativas com entregáveis claros para garantir validação contínua e integração entre front, back e dados.
+Visão geral: o semestre (\(\approx\) 16 semanas) será dividido em fases iterativas com entregáveis claros para garantir validação contínua e integração entre front, back e dados.
 
 \begin{itemize}
     \item \textbf{Fase 0 — Preparação (Semana 1)}
@@ -352,7 +352,11 @@ Resumo inicial do sistema com estatísticas de locais, reports ativos e categori
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{../imgs/pagina_principal.png}
+\IfFileExists{../imgs/pagina_principal.png}{%
+    \includegraphics[width=0.8\textwidth]{../imgs/pagina_principal.png}
+}{%
+    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{pagina_principal.png} não encontrada}}
+}
 \caption{Página Principal}
 \end{figure}
 
@@ -361,7 +365,11 @@ Tela de acesso ao sistema, onde o usuário entra com nome e e-mail para começar
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{../imgs/area_cliente.png}
+\IfFileExists{../imgs/area_cliente.png}{%
+    \includegraphics[width=0.8\textwidth]{../imgs/area_cliente.png}
+}{%
+    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{area_cliente.png} não encontrada}}
+}
 \caption{Área do cliente}
 \end{figure}
 
@@ -370,7 +378,11 @@ Etapa onde o usuário escolhe o ponto de ônibus ou estação onde identificou o
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{../imgs/selecionar_local.png}
+\IfFileExists{../imgs/selecionar_local.png}{%
+    \includegraphics[width=0.8\textwidth]{../imgs/selecionar_local.png}
+    }{%
+    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{selecionar_local.png} não encontrada}}
+}
 \caption{Adicionar um reports}
 \end{figure}
 
@@ -379,7 +391,11 @@ Seleção da categoria do problema (rampa, piso tátil, elevador, etc.).
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{../imgs/reportar_tipo.png}
+\IfFileExists{../imgs/reportar_tipo.png}{%
+    \includegraphics[width=0.8\textwidth]{../imgs/reportar_tipo.png}
+}{%
+    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{reportar_tipo.png} não encontrada}}
+}
 \caption{Reportar problema}
 \end{figure}
 
@@ -388,7 +404,11 @@ Formulário para detalhar o problema, com título e descrição completa.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{../imgs/reportar_descricao.png}
+\IfFileExists{../imgs/reportar_descricao.png}{%
+    \includegraphics[width=0.8\textwidth]{../imgs/reportar_descricao.png}
+}{%
+    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{reportar_descricao.png} não encontrada}}
+}
 \caption{Descrição do report}
 \end{figure}
 
@@ -397,7 +417,11 @@ Painel com estatísticas globais: número de reports, status, categorias e taxa 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{../imgs/dashboard_geral.png}
+\IfFileExists{../imgs/dashboard_geral.png}{%
+    \includegraphics[width=0.8\textwidth]{../imgs/dashboard_geral.png}
+}{%
+    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{dashboard_geral.png} não encontrada}}
+}
 \caption{Dashboards}
 \end{figure}
 
@@ -406,7 +430,11 @@ Lista dos problemas reportados pelo próprio usuário, com seus status.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{../imgs/dashboard_meus.png}
+\IfFileExists{../imgs/dashboard_meus.png}{%
+    \includegraphics[width=0.8\textwidth]{../imgs/dashboard_meus.png}
+}{%
+    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{dashboard_meus.png} não encontrada}}
+}
 \caption{Dashboards - Meus reports}
 \end{figure}
 
@@ -415,18 +443,23 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{../imgs/dashboard_todos.png}
+\IfFileExists{../imgs/dashboard_todos.png}{%
+    \includegraphics[width=0.8\textwidth]{../imgs/dashboard_todos.png}
+}{%
+    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{dashboard_todos.png} não encontrada}}
+}
+ 
 \caption{Dashboards - All reports}
 \end{figure}
 
-\section{Modelagem "Leve do Sistema"}
+\section{Modelagem ``Leve do Sistema''}
 \label{sec:modelagem}
 
 \subsection{UML - Casos de Uso}
 
 \begin{figure}[H]
 \centering
-\input{wiki/uml/casos_uso.tex}
+\input{../uml/casos_uso.tex}
 \caption{Diagrama de Casos de Uso}
 \end{figure}
 
@@ -650,7 +683,11 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{../imgs/class_diagram.png}
+\IfFileExists{../imgs/class_diagram.png}{%
+    \includegraphics[width=\textwidth]{../imgs/class_diagram.png}
+}{%
+    \fbox{\parbox[c][6cm][c]{\textwidth}{\centering Imagem \texttt{class_diagram.png} não encontrada}}
+}
 \caption{Diagrama de Classes}
 \end{figure}
 
