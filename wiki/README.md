@@ -377,9 +377,12 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 ### 5.3 UML - Diagrama de Sequência
 
 #### 5.4.1 - US01 - Reportar Problema
+
 ![Diagrama de sequencia](https://github.com/user-attachments/assets/9afe2e64-63ba-4749-b60e-1cacdb43f956)
 
-#### 5.4.2
+#### 5.4.2 - US02 - Consultar mapa
+
+![Diagrama de sequencia](https://github.com/vinicius-cappatti/tickets-transporte-publico/blob/main/wiki/imgs/sequencia-consulta-mapa.png)
 
 #### 5.4.3 - US03 - Atualizar status de problema
 

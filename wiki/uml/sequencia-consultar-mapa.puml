@@ -1,0 +1,58 @@
+@startuml
+
+actor Pedestre as Ped
+boundary Fronteira as Front
+control Controlador as Ctrl
+participant Mapa
+collections ListaLocalizacao as ListLoc
+participant Localizacao as Loc
+collections ListaProblemas as ListPro
+participant TicketProblema as Ticket
+
+Ped -> Front : 1. acessarMapa()
+activate Front
+Front -> Ctrl : 1.1 carregarMapa()
+activate Ctrl
+Ctrl -> Mapa : 1.2 carregarMapa()
+activate Mapa
+Mapa -> ListLoc : 1.3 buscarLocalizacao()
+activate ListLoc
+ListLoc --> Mapa : 1.3.1 Lista de Localizações
+deactivate ListLoc
+Mapa --> Ctrl : 1.2.1 Mapa de Localizações
+deactivate Mapa
+Ctrl --> Front : 1.1.1 Mapa com localizações
+
+Ped -> Front : 2. selecionarLocalizacao(localizacao)
+Front -> Ctrl : 2.1 buscarLocalizacao(localizacao)
+Ctrl -> ListLoc : 2.2 buscarLocalizao(localizacao)
+activate ListLoc
+ListLoc -> Loc : 2.3 getTicketsAbertosLocalizacao(localizacao)
+activate Loc
+Loc -> ListPro : 2.4 filtrarTicketsAbertos(localizacao)
+activate ListPro
+ListPro --> Loc : 2.4.1 Tickets em aberto na localização
+deactivate ListPro
+Loc --> ListLoc : 2.3.1 Lista de tickets abertos
+deactivate Loc
+ListLoc --> Ctrl : 2.2.1 Localização selecionada
+ListLoc --> Ctrl : 2.2.2 Lista de problemas na localização
+deactivate ListLoc
+Ctrl --> Front : 2.1.1 Lista de problemas da localização
+
+Ped -> Front : 3. selecionarProblema(ticket)
+Front -> Ctrl : 3.1 buscarTicket(ticket)
+Ctrl -> ListPro : 3.2 buscarTicket(ticket)
+activate ListPro
+ListPro -> Ticket : 3.3 getDetalhesTicket()
+activate Ticket
+Ticket --> ListPro : 3.3.1 Detalhes do ticket (descrição, status...)
+deactivate Ticket
+ListPro --> Ctrl : 3.2.1 Ticket detalhado
+deactivate ListPro
+Ctrl --> Front : 3.1.1 Detalhes do problema selecionado
+
+deactivate Ctrl
+deactivate Front
+
+@enduml
