@@ -64,7 +64,6 @@ A solução proposta é uma plataforma open-source que utiliza tecnologias acess
 
 Principais componentes:  
 - **Sistema de Coleta Colaborativa:** cidadãos reportam problemas com fotos e geolocalização.  
-- **Plataforma de Dados Abertos:** disponibilização pública dos dados.  
 - **Mapa Interativo:** visualização em tempo real das barreiras.  
 - **Painel de Gestão:** dashboard para gestores públicos e sociedade civil acompanharem indicadores.  
 
@@ -180,32 +179,24 @@ Observações operacionais:
 | ID   | Tipo | Prioridade | Descrição do Requisito |
 |------|------|------------|-------------------------|
 | RF01 | RF   | Alta       | O sistema deve permitir visualizar mapa com geolocalização de problemas de acessibilidade |
-| RF02 | RF   | Alta       | O usuário deve gerar relatório com foto e descrição de novo problema |
-| RF03 | RF   | Alta       | O problema deve aparecer no mapa após criação do relatório |
-| RF04 | RF   | Alta       | O sistema deve notificar entidade responsável quando marcada |
-| RF05 | RF   | Alta       | O sistema não deve permitir relatórios duplicados |
-| RF06 | RF   | Alta       | O sistema deve usar IA para validar relatórios |
-| RF07 | RF   | Média      | O usuário pode filtrar região específica no mapa |
-| RF08 | RF   | Média      | O usuário deve marcar entidade responsável |
-| RF09 | RF   | Alta       | Permitir cadastro com diferentes perfis (cidadão, gestor, validador) |
-| RF10 | RF   | Média      | Gerar relatórios analíticos para gestores |
-| RF11 | RF   | Média      | Permitir validação manual das classificações automáticas |
-| RF12 | RF   | Baixa      | Exportar dados em formatos padrão (CSV, GeoJSON) |
+| RF02 | RF   | Alta       | O usuário deve gerar relatório com descrição de novo problema |
+| RF03 | RF   | Alta       | O problema deve aparecer no mapa após criação e aprovação do relatório |
+| RF04 | RF   | Alta       | O administrador deve poder atualizar status do problema e comentar sobre esse status|
+| RF06 | RF   | Média      | O usuário pode filtrar região específica no mapa |
+| RF07 | RF   | Média      | Permitir validação manual das classificações automáticas |
 
 ### Requisitos Não-Funcionais
 
 | ID    | Tipo | Prioridade | Descrição do Requisito |
 |-------|------|------------|-------------------------|
 | RNF01 | RNF  | Alta       | Tempo de resposta <2s para carregar mapa |
-| RNF02 | RNF  | Alta       | Processar e validar até 1000 relatórios/hora via IA |
-| RNF03 | RNF  | Média      | Compatível com iOS e Android recentes |
+| RNF02 | RNF  | Média      | Compatível com Chrome, Edge e Firefox |
 | RNF04 | RNF  | Média      | Disponibilidade 99% do tempo |
 | RNF05 | RNF  | Média      | Escalável para 50% aumento de usuários |
-| RNF06 | RNF  | Média      | Notificações em tempo real |
-| RNF07 | RNF  | Baixa      | Segurança e proteção de dados |
-| RNF08 | RNF  | Baixa      | Interface intuitiva e acessível |
-| RNF09 | RNF  | Alta       | Conformidade WCAG 2.1 AA |
-| RNF10 | RNF  | Alta       | Conformidade LGPD |
+| RNF06 | RNF  | Baixa      | Segurança e proteção de dados |
+| RNF07 | RNF  | Baixa      | Interface intuitiva e acessível |
+| RNF08 | RNF  | Alta       | Conformidade WCAG 2.1 AA |
+| RNF09 | RNF  | Alta       | Conformidade LGPD |
 
 ### Categorias de Barreiras Detectáveis
 
@@ -316,7 +307,7 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 | **Atores**             | Primário: Pedestre (usuário do sistema). <br> Secundário: Administrador (para análise de ocorrências).|
 | **Sumário**            | O pedestre acessa o sistema para visualizar, no mapa, os problemas de acessibilidade reportados em pontos de transporte público.|
 | **Complexidade**       | Baixa|
-| **Regras de Negócio**  | - RN007: O mapa deve exibir apenas problemas confirmados e devidamente registrados.<br> - RN008: O usuário pode aplicar filtros (categoria, data, status).<br> - RN009: Cada problema deve estar associado a uma localização válida.<br> - RN010: O sistema deve mostrar a data de registro e a situação do problema (pendente, em análise, resolvido).<br> - RN011: Problemas com mais de 1 ano podem ser arquivados, mas ainda disponíveis mediante filtro avançado. |
+| **Regras de Negócio**  | - RN007: O mapa deve exibir apenas problemas confirmados e devidamente  em status "Aceito" ou posterior.<br> - RN008: O usuário pode aplicar filtros (categoria, data, status).<br> - RN009: Cada problema deve estar associado a uma localização válida.<br> - RN010: O sistema deve mostrar a data de registro e a situação do problema (pendente, em análise, resolvido).<br> - RN011: Problemas com mais de 1 ano podem ser arquivados, mas ainda disponíveis mediante filtro avançado.<br> -RN012: Não devem ser exibidos os problemas em status "Rejeitado" |
 | **Pré-condições**      | O sistema deve conter reportes cadastrados.<br> O pedestre precisa ter acesso à plataforma (não é obrigatório login apenas para consulta).|
 | **Pós-condição**       | O usuário terá acesso visual aos problemas existentes no mapa e poderá selecionar pontos para ver detalhes.|
 | **Pontos de Inclusão** | UC006 – Visualizar Detalhes de Problema (quando o usuário seleciona um ponto específico).|
@@ -352,7 +343,7 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 | **Atores**             | Primário: Administrador (responsável por um ponto de transporte público). <br> Secundário: Pedestre autor do reporte.|
 | **Sumário**            | O administrador acessa o sistema para alterar o status de um problema reportado|
 | **Complexidade**       | Média|
-| **Regras de Negócio**  | - RN012: Apenas administradores autenticados podem atualizar status.<br> - RN013: O status pode assumir: **Aguardando análise**, **Rejeitado**, **Aceito**, **Correção em andamento**, **Corrigido** e **Pausado**.<br> - RN014: Toda atualização deve registrar contagem de dias no status, data e hora da alteração, e administrador autor da alteração.<br> -RN015: O administrador pode inserir um comentário detalhando os motivos da mudança de status.<br> -RN016: O administrador pode anexar arquivos em .png, .jpg ou .jpeg no comentário da descrição|
+| **Regras de Negócio**  | - RN013: Apenas administradores autenticados podem atualizar status.<br> - RN014: O status pode assumir: **Aguardando análise**, **Rejeitado**, **Aceito**, **Correção em andamento**, **Corrigido** e **Pausado**.<br> - RN015: Toda atualização deve registrar contagem de dias no status, data e hora da alteração, e administrador autor da alteração.<br> -RN016: O administrador pode inserir um comentário detalhando os motivos da mudança de status.<br> -RN017: O administrador pode anexar arquivos em .png, .jpg ou .jpeg no comentário da descrição|
 | **Pré-condições**      | O administrador deve estar autenticado.<br> Deve existir pelo menos um problema reportado no ponto administrado.|
 | **Pós-condição**       | O status do problema será atualizado no sistema, refletindo tanto a ação do administrador.|
 | **Pontos de Inclusão** | UC002 – Consultar Mapa de Problemas (para localizar o problema).|
