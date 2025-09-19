@@ -1,0 +1,7 @@
+FROM postgres:latest
+
+ENV POSTGRES_DB=tickets
+ENV POSTGRES_USER=admin
+ENV POSTGRES_PASSWORD=admin123
+
+EXPOSE 5432

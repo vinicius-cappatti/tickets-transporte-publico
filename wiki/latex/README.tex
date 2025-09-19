@@ -10,6 +10,7 @@
 \usepackage{enumitem}
 \usepackage{float}
 \usepackage{tikz}
+\usepackage{microtype}
 
 \geometry{
     left=3cm,
@@ -23,8 +24,13 @@
     linkcolor=black,
     filecolor=magenta,      
     urlcolor=cyan,
-    citecolor=black
+    citecolor=black,
+    hypertexnames=false
 }
+
+% Aumenta tolerância a quebras de linha longas e reduz overfull/underfull boxes
+\emergencystretch=1em
+\sloppy
 
 \begin{document}
 
@@ -201,7 +207,7 @@ Visão geral: o semestre (\(\approx\) 16 semanas) será dividido em fases iterat
 \textbf{Confiabilidade:}
 \begin{itemize}
     \item Detecção de barreiras com acurácia superior a 85\% e menos de 5\% de falsos positivos
-    \item Disponibilidade do sistema $>$ 99\%
+    \item Disponibilidade do sistema \textgreater{} 99\%
 \end{itemize}
 
 \textbf{Usabilidade:}
@@ -214,7 +220,7 @@ Visão geral: o semestre (\(\approx\) 16 semanas) será dividido em fases iterat
 
 \textbf{Performance:}
 \begin{itemize}
-    \item Tempo de resposta da API $<$ 2 segundos
+    \item Tempo de resposta da API \textless{} 2 segundos
     \item Sistema deve processar e validar, via IA, até 1000 relatórios por hora
 \end{itemize}
 
@@ -245,7 +251,8 @@ Visão geral: o semestre (\(\approx\) 16 semanas) será dividido em fases iterat
 
 \subsection{Requisitos Funcionais}
 
-\begin{longtable}{|p{1cm}|p{1cm}|p{2cm}|p{8cm}|}
+% Ajuste: aumentar um pouco as colunas de ID/Tipo/Prioridade para evitar overfulls
+\begin{longtable}{|>{\raggedright\arraybackslash}p{1.2cm}|>{\raggedright\arraybackslash}p{1.1cm}|>{\centering\arraybackslash}p{2.2cm}|>{\raggedright\arraybackslash}p{7.6cm}|}
 \hline
 \textbf{ID} & \textbf{Tipo} & \textbf{Prioridade} & \textbf{Descrição do Requisito} \\
 \hline
@@ -284,7 +291,8 @@ RF12 & RF & Baixa & Exportar dados em formatos padrão (CSV, GeoJSON) \\
 
 \subsection{Requisitos Não-Funcionais}
 
-\begin{longtable}{|p{1.2cm}|p{1cm}|p{2cm}|p{7.8cm}|}
+% Ajuste RNF: usar raggedright nas colunas iniciais e ajustar larguras para reduzir overfulls
+\begin{longtable}{|>{\raggedright\arraybackslash}p{1.4cm}|>{\raggedright\arraybackslash}p{1.1cm}|>{\centering\arraybackslash}p{2.4cm}|>{\raggedright\arraybackslash}p{6.8cm}|}
 \hline
 \textbf{ID} & \textbf{Tipo} & \textbf{Prioridade} & \textbf{Descrição do Requisito} \\
 \hline
@@ -295,7 +303,7 @@ RF12 & RF & Baixa & Exportar dados em formatos padrão (CSV, GeoJSON) \\
 \hline
 \endhead
 
-RNF01 & RNF & Alta & Tempo de resposta $<$2s para carregar mapa \\
+RNF01 & RNF & Alta & Tempo de resposta \textless{}2s para carregar mapa \\
 \hline
 RNF02 & RNF & Alta & Processar e validar até 1000 relatórios/hora via IA \\
 \hline
@@ -323,8 +331,8 @@ RNF10 & RNF & Alta & Conformidade LGPD \\
     \item \textbf{Infraestrutura Física}
     \begin{itemize}
         \item Escadas sem alternativa acessível
-        \item Rampas fora de norma ($>$8,33\% inclinação)
-        \item Calçadas danificadas ou estreitas ($<$1,20m)
+    \item Rampas fora de norma (\textgreater{}8,33\% inclinação)
+    \item Calçadas danificadas ou estreitas (\textless{}1,20m)
         \item Desníveis e buracos
     \end{itemize}
     
@@ -355,7 +363,7 @@ Resumo inicial do sistema com estatísticas de locais, reports ativos e categori
 \IfFileExists{../imgs/pagina_principal.png}{%
     \includegraphics[width=0.8\textwidth]{../imgs/pagina_principal.png}
 }{%
-    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{pagina_principal.png} não encontrada}}
+    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{pagina\_principal.png} não encontrada}}
 }
 \caption{Página Principal}
 \end{figure}
@@ -368,7 +376,7 @@ Tela de acesso ao sistema, onde o usuário entra com nome e e-mail para começar
 \IfFileExists{../imgs/area_cliente.png}{%
     \includegraphics[width=0.8\textwidth]{../imgs/area_cliente.png}
 }{%
-    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{area_cliente.png} não encontrada}}
+    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{area\_cliente.png} não encontrada}}
 }
 \caption{Área do cliente}
 \end{figure}
@@ -381,7 +389,7 @@ Etapa onde o usuário escolhe o ponto de ônibus ou estação onde identificou o
 \IfFileExists{../imgs/selecionar_local.png}{%
     \includegraphics[width=0.8\textwidth]{../imgs/selecionar_local.png}
     }{%
-    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{selecionar_local.png} não encontrada}}
+    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{selecionar\_local.png} não encontrada}}
 }
 \caption{Adicionar um reports}
 \end{figure}
@@ -394,7 +402,7 @@ Seleção da categoria do problema (rampa, piso tátil, elevador, etc.).
 \IfFileExists{../imgs/reportar_tipo.png}{%
     \includegraphics[width=0.8\textwidth]{../imgs/reportar_tipo.png}
 }{%
-    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{reportar_tipo.png} não encontrada}}
+    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{reportar\_tipo.png} não encontrada}}
 }
 \caption{Reportar problema}
 \end{figure}
@@ -407,7 +415,7 @@ Formulário para detalhar o problema, com título e descrição completa.
 \IfFileExists{../imgs/reportar_descricao.png}{%
     \includegraphics[width=0.8\textwidth]{../imgs/reportar_descricao.png}
 }{%
-    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{reportar_descricao.png} não encontrada}}
+    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{reportar\_descricao.png} não encontrada}}
 }
 \caption{Descrição do report}
 \end{figure}
@@ -420,7 +428,7 @@ Painel com estatísticas globais: número de reports, status, categorias e taxa 
 \IfFileExists{../imgs/dashboard_geral.png}{%
     \includegraphics[width=0.8\textwidth]{../imgs/dashboard_geral.png}
 }{%
-    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{dashboard_geral.png} não encontrada}}
+    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{dashboard\_geral.png} não encontrada}}
 }
 \caption{Dashboards}
 \end{figure}
@@ -433,7 +441,7 @@ Lista dos problemas reportados pelo próprio usuário, com seus status.
 \IfFileExists{../imgs/dashboard_meus.png}{%
     \includegraphics[width=0.8\textwidth]{../imgs/dashboard_meus.png}
 }{%
-    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{dashboard_meus.png} não encontrada}}
+    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{dashboard\_meus.png} não encontrada}}
 }
 \caption{Dashboards - Meus reports}
 \end{figure}
@@ -446,7 +454,7 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 \IfFileExists{../imgs/dashboard_todos.png}{%
     \includegraphics[width=0.8\textwidth]{../imgs/dashboard_todos.png}
 }{%
-    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{dashboard_todos.png} não encontrada}}
+    \fbox{\parbox[c][3cm][c]{0.8\textwidth}{\centering Imagem \texttt{dashboard\_todos.png} não encontrada}}
 }
  
 \caption{Dashboards - All reports}
@@ -467,7 +475,7 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 \paragraph{5.1.1.1 Reportar Problema}
 
-\begin{longtable}{|p{3.5cm}|p{10cm}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{10cm}|}
 \hline
 \textbf{Identificador} & UC001 – Reportar Problema \\
 \hline
@@ -493,7 +501,7 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 \textbf{Fluxo Principal}
 
-\begin{longtable}{|p{7cm}|p{7cm}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{7cm}|>{\raggedright\arraybackslash}p{7cm}|}
 \hline
 \textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
 \hline
@@ -511,7 +519,7 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 \textbf{Fluxo Alternativo – Pedestre não está logado no sistema}
 
-\begin{longtable}{|p{7cm}|p{7cm}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{7cm}|>{\raggedright\arraybackslash}p{7cm}|}
 \hline
 \textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
 \hline
@@ -523,7 +531,7 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 \textbf{Fluxos de Exceção}
 
-\begin{longtable}{|p{7cm}|p{7cm}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{7cm}|>{\raggedright\arraybackslash}p{7cm}|}
 \hline
 \textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
 \hline
@@ -565,7 +573,7 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 \textbf{Fluxo Principal}
 
-\begin{longtable}{|p{7cm}|p{7cm}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{7cm}|>{\raggedright\arraybackslash}p{7cm}|}
 \hline
 \textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
 \hline
@@ -579,7 +587,7 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 \textbf{Fluxo Alternativo – Sem problemas cadastrados}
 
-\begin{longtable}{|p{7cm}|p{7cm}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{7cm}|>{\raggedright\arraybackslash}p{7cm}|}
 \hline
 \textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
 \hline
@@ -589,7 +597,7 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 \textbf{Fluxos de Exceção}
 
-\begin{longtable}{|p{7cm}|p{7cm}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{7cm}|>{\raggedright\arraybackslash}p{7cm}|}
 \hline
 \textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
 \hline
@@ -629,7 +637,7 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 \textbf{Fluxo Principal}
 
-\begin{longtable}{|p{7cm}|p{7cm}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{7cm}|>{\raggedright\arraybackslash}p{7cm}|}
 \hline
 \textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
 \hline
@@ -647,7 +655,7 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 \textbf{Fluxo Alternativo - Pedestre rejeita a resolução}
 
-\begin{longtable}{|p{7cm}|p{7cm}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{7cm}|>{\raggedright\arraybackslash}p{7cm}|}
 \hline
 \textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
 \hline
@@ -657,7 +665,7 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 \textbf{Fluxo Alternativo – Pedestre não responde}
 
-\begin{longtable}{|p{7cm}|p{7cm}|}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{7cm}|>{\raggedright\arraybackslash}p{7cm}|}
 \hline
 \textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
 \hline
@@ -667,7 +675,8 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 \textbf{Fluxo de Exceção}
 
-\begin{longtable}{|p{7cm}|p{7cm}|}
+% Ajuste: usar raggedright nas colunas desta longtable de exceção
+\begin{longtable}{|>{\raggedright\arraybackslash}p{7cm}|>{\raggedright\arraybackslash}p{7cm}|}
 \hline
 \textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
 \hline
@@ -686,7 +695,7 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 \IfFileExists{../imgs/class_diagram.png}{%
     \includegraphics[width=\textwidth]{../imgs/class_diagram.png}
 }{%
-    \fbox{\parbox[c][6cm][c]{\textwidth}{\centering Imagem \texttt{class_diagram.png} não encontrada}}
+    \fbox{\parbox[c][6cm][c]{\textwidth}{\centering Imagem \texttt{class\_diagram.png} não encontrada}}
 }
 \caption{Diagrama de Classes}
 \end{figure}

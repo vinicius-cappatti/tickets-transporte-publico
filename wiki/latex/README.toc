@@ -1,41 +1,41 @@
 \babel@toc {portuguese}{}\relax 
-\contentsline {section}{\numberline {1}Introdução}{2}{section.1}%
-\contentsline {section}{\numberline {2}Definição da Demanda}{2}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Problema/Oportunidade Percebida}{2}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Razão/Justificativa da Demanda}{2}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Descrição do Produto de Software}{3}{subsection.2.3}%
-\contentsline {subsection}{\numberline {2.4}Clientes, Usuários e Demais Grupos de Interesse}{3}{subsection.2.4}%
-\contentsline {subsection}{\numberline {2.5}Etapas de Desenvolvimento}{4}{subsection.2.5}%
-\contentsline {subsection}{\numberline {2.6}Critérios de Qualidade}{5}{subsection.2.6}%
-\contentsline {section}{\numberline {3}Requisitos do Produto}{6}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Requisitos Funcionais}{6}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Requisitos Não-Funcionais}{6}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Categorias de Barreiras Detectáveis}{7}{subsection.3.3}%
-\contentsline {section}{\numberline {4}Wireframes}{7}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Página Principal}{7}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Área do Cliente (Login/Cadastro)}{8}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Selecionar Local}{8}{subsection.4.3}%
-\contentsline {subsection}{\numberline {4.4}Reportar Problema – Tipo}{9}{subsection.4.4}%
-\contentsline {subsection}{\numberline {4.5}Reportar Problema – Descrição}{9}{subsection.4.5}%
-\contentsline {subsection}{\numberline {4.6}Dashboard – Visão Geral}{10}{subsection.4.6}%
-\contentsline {subsection}{\numberline {4.7}Dashboard – Meus Reports}{10}{subsection.4.7}%
-\contentsline {subsection}{\numberline {4.8}Dashboard – Todos os Reports}{11}{subsection.4.8}%
-\contentsline {section}{\numberline {5}Modelagem ``Leve do Sistema''}{12}{section.5}%
-\contentsline {subsection}{\numberline {5.1}UML - Casos de Uso}{12}{subsection.5.1}%
-\contentsline {subsubsection}{\numberline {5.1.1}Especificações dos Casos de Uso}{12}{subsubsection.5.1.1}%
-\contentsline {paragraph}{5.1.1.1 Reportar Problema}{12}{section*.2}%
-\contentsline {paragraph}{5.1.1.2 Consultar o Mapa de Problemas}{14}{section*.3}%
-\contentsline {paragraph}{5.1.1.3 Atualizar Status de Problema}{16}{section*.4}%
-\contentsline {subsection}{\numberline {5.2}UML - Diagrama de Classe de Domínio}{18}{subsection.5.2}%
-\contentsline {subsection}{\numberline {5.3}UML - Diagrama de Sequência}{18}{subsection.5.3}%
-\contentsline {section}{\numberline {6}Descrição da Arquitetura e Ferramentas Utilizadas}{18}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Stack Tecnológico}{18}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Padrões e Princípios}{18}{subsection.6.2}%
-\contentsline {section}{\numberline {7}Plano de Desenvolvimento}{19}{section.7}%
-\contentsline {subsection}{\numberline {7.1}Cronograma Detalhado (16 semanas)}{19}{subsection.7.1}%
-\contentsline {subsection}{\numberline {7.2}Métricas de Sucesso}{20}{subsection.7.2}%
-\contentsline {section}{\numberline {8}Resultados}{20}{section.8}%
-\contentsline {section}{\numberline {9}Conclusão e Trabalhos Futuros}{20}{section.9}%
-\contentsline {subsection}{\numberline {9.1}Conclusão Preliminar}{20}{subsection.9.1}%
-\contentsline {subsection}{\numberline {9.2}Próximos Passos}{20}{subsection.9.2}%
-\contentsline {subsection}{\numberline {9.3}Trabalhos Futuros}{20}{subsection.9.3}%
+\contentsline {section}{\numberline {1}Introdução}{2}{section.2}%
+\contentsline {section}{\numberline {2}Definição da Demanda}{2}{section.3}%
+\contentsline {subsection}{\numberline {2.1}Problema/Oportunidade Percebida}{2}{subsection.4}%
+\contentsline {subsection}{\numberline {2.2}Razão/Justificativa da Demanda}{2}{subsection.5}%
+\contentsline {subsection}{\numberline {2.3}Descrição do Produto de Software}{3}{subsection.6}%
+\contentsline {subsection}{\numberline {2.4}Clientes, Usuários e Demais Grupos de Interesse}{3}{subsection.7}%
+\contentsline {subsection}{\numberline {2.5}Etapas de Desenvolvimento}{4}{subsection.8}%
+\contentsline {subsection}{\numberline {2.6}Critérios de Qualidade}{5}{subsection.9}%
+\contentsline {section}{\numberline {3}Requisitos do Produto}{6}{section.10}%
+\contentsline {subsection}{\numberline {3.1}Requisitos Funcionais}{6}{subsection.11}%
+\contentsline {subsection}{\numberline {3.2}Requisitos Não-Funcionais}{6}{subsection.13}%
+\contentsline {subsection}{\numberline {3.3}Categorias de Barreiras Detectáveis}{7}{subsection.15}%
+\contentsline {section}{\numberline {4}Wireframes}{7}{section.19}%
+\contentsline {subsection}{\numberline {4.1}Página Principal}{7}{subsection.20}%
+\contentsline {subsection}{\numberline {4.2}Área do Cliente (Login/Cadastro)}{8}{subsection.23}%
+\contentsline {subsection}{\numberline {4.3}Selecionar Local}{8}{subsection.26}%
+\contentsline {subsection}{\numberline {4.4}Reportar Problema – Tipo}{9}{subsection.29}%
+\contentsline {subsection}{\numberline {4.5}Reportar Problema – Descrição}{9}{subsection.32}%
+\contentsline {subsection}{\numberline {4.6}Dashboard – Visão Geral}{10}{subsection.35}%
+\contentsline {subsection}{\numberline {4.7}Dashboard – Meus Reports}{10}{subsection.38}%
+\contentsline {subsection}{\numberline {4.8}Dashboard – Todos os Reports}{11}{subsection.41}%
+\contentsline {section}{\numberline {5}Modelagem ``Leve do Sistema''}{12}{section.44}%
+\contentsline {subsection}{\numberline {5.1}UML - Casos de Uso}{12}{subsection.45}%
+\contentsline {subsubsection}{\numberline {5.1.1}Especificações dos Casos de Uso}{12}{subsubsection.48}%
+\contentsline {paragraph}{5.1.1.1 Reportar Problema}{12}{section*.49}%
+\contentsline {paragraph}{5.1.1.2 Consultar o Mapa de Problemas}{14}{section*.54}%
+\contentsline {paragraph}{5.1.1.3 Atualizar Status de Problema}{16}{section*.59}%
+\contentsline {subsection}{\numberline {5.2}UML - Diagrama de Classe de Domínio}{18}{subsection.65}%
+\contentsline {subsection}{\numberline {5.3}UML - Diagrama de Sequência}{18}{subsection.68}%
+\contentsline {section}{\numberline {6}Descrição da Arquitetura e Ferramentas Utilizadas}{18}{section.69}%
+\contentsline {subsection}{\numberline {6.1}Stack Tecnológico}{18}{subsection.70}%
+\contentsline {subsection}{\numberline {6.2}Padrões e Princípios}{18}{subsection.71}%
+\contentsline {section}{\numberline {7}Plano de Desenvolvimento}{19}{section.72}%
+\contentsline {subsection}{\numberline {7.1}Cronograma Detalhado (16 semanas)}{19}{subsection.73}%
+\contentsline {subsection}{\numberline {7.2}Métricas de Sucesso}{20}{subsection.74}%
+\contentsline {section}{\numberline {8}Resultados}{20}{section.75}%
+\contentsline {section}{\numberline {9}Conclusão e Trabalhos Futuros}{20}{section.76}%
+\contentsline {subsection}{\numberline {9.1}Conclusão Preliminar}{20}{subsection.77}%
+\contentsline {subsection}{\numberline {9.2}Próximos Passos}{20}{subsection.78}%
+\contentsline {subsection}{\numberline {9.3}Trabalhos Futuros}{20}{subsection.84}%
