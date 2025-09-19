@@ -1,0 +1,107 @@
+@startuml
+' UC001 – Reportar Problema (ajustado: sem mensagens diretas para ator)
+autonumber
+skinparam ParticipantPadding 15
+skinparam BoxPadding 10
+skinparam Shadowing false
+
+actor Pedestre
+participant Fronteira
+participant Controlador
+
+' Camada de domínio/infra
+collections ListaLocais
+collections MapaProblemas
+entity      TicketReporte
+database    RepositorioReports
+participant AuthService
+participant MediaService
+participant DedupService
+participant ValidacaoIA
+participant Notificacao
+
+' 1) Descoberta/seleção do local (RN002)
+Pedestre -> Fronteira : 1. iniciarReporteProblema()
+Fronteira -> Controlador : 1.1 buscarLocais(criteriosBusca)
+Controlador -> ListaLocais : 1.2 getLocais(criteriosBusca)
+ListaLocais --> Controlador : 1.2.1 Lista de Locais
+Controlador --> Fronteira : 1.1.1 Lista de Locais (nome/endereço/coords)
+
+' 2) Seleção de local e categoria
+Pedestre -> Fronteira : 2. selecionarLocalECategoria(local, categoria)
+Fronteira -> Controlador : 2.1 validarVinculoLocal(local)  ' RN002
+Controlador -> ListaLocais : 2.2 existeLocal(local)
+ListaLocais --> Controlador : 2.2.1 Local válido
+Controlador --> Fronteira : 2.1.1 Validação OK
+
+' 2.a) Autenticação quando necessário (UC004) – RN001
+Fronteira -> Controlador : 2.a checarAutenticacao()
+alt usuário NÃO autenticado
+  Controlador -> AuthService : 2.a.1 autenticar(credenciais)
+  AuthService --> Controlador : 2.a.1.1 jwtEmitido
+  Controlador --> Fronteira : 2.a.2 usuárioAutenticado(jwt)
+else já autenticado
+  Controlador --> Fronteira : 2.a.2 usuárioAutenticado(jwt)
+end
+
+' 3) Preenchimento de dados (RN003, RN006) e mídia opcional (RN005)
+Pedestre -> Fronteira : 3. preencher(titulo, descricao, midia?, geo)
+... validações de front ...
+Fronteira -> Fronteira : 3.1 avisoCamposObrigatorios/limites (mensagem de UI)
+
+' 3.2) Upload de mídia (opcional)
+opt midia presente
+  Fronteira -> MediaService : 3.2 uploadMidia(arquivo)
+  MediaService --> Fronteira : 3.2.1 urlMidia
+end
+
+' 3.3) Criação do reporte
+Fronteira -> Controlador : 3.3 criarReporte(local, categoria, titulo, descricao, urlsMidia, geo, usuario)
+
+' 3.3.1) Revalida local (RN002)
+Controlador -> ListaLocais : 3.3.1 validarLocal(localId/geo)
+ListaLocais --> Controlador : 3.3.1.1 OK
+
+' 3.3.2) Duplicidade (RF05)
+Controlador -> DedupService : 3.3.2 checarDuplicidade(features)
+DedupService --> Controlador : 3.3.2.1 resultado(score)
+
+alt duplicado (score acima do threshold)
+  Controlador --> Fronteira : 3.3.3 409 Conflict + referenciaReporteExistente
+  Fronteira -> Fronteira : 3.3.3.1 informarDuplicidade na tela
+else não duplicado
+  ' 3.3.3) Validação/rotulagem por IA (RF06)
+  Controlador -> ValidacaoIA : 3.3.3 validarIA(campos)
+  ValidacaoIA --> Controlador : 3.3.3.1 labels+confiancas
+
+  ' 3.3.4) Persistência com auditoria (RN004)
+  Controlador -> RepositorioReports : 3.3.4 salvar(ticket: ... )
+  RepositorioReports --> Controlador : 3.3.4.1 reportId
+
+  ' 3.3.5) Atualizar mapa
+  Controlador -> MapaProblemas : 3.3.5 incluirMarcador(reportId, coords)
+  MapaProblemas --> Controlador : 3.3.5.1 OK
+
+  ' 3.3.6) Notificação (UC005 – extensão)
+  opt ponto monitorado / entidade marcada
+    Controlador -> Notificacao : 3.3.6 notificarEntidade(reportId, ponto)
+    Notificacao --> Controlador : 3.3.6.1 notificado
+  end
+
+  ' 3.3.7) Retorno para a fronteira
+  Controlador --> Fronteira : 3.3.7 201 Created {reportId, status}
+  Fronteira -> Fronteira : 3.3.7.1 exibirConfirmacaoEnvio + "ver no mapa"
+end
+
+' --- Exceções ---
+' Falha de rede/5xx ao criar
+Fronteira -> Controlador : 4. enviarReporte()
+Controlador -x Fronteira : 4.1 erro(Timeout/5xx)
+Fronteira -> Fronteira : 4.1.1 oferecerSalvarRascunho na tela
+
+' Mídia inválida
+Pedestre -> Fronteira : 5. anexarMidia(invalida)
+Fronteira -> MediaService : 5.1 uploadMidia()
+MediaService --> Fronteira : 5.1.1 rejeicaoFormato/tamanho
+Fronteira -> Fronteira : 5.1.2 informarFormatosPermitidos
+@enduml

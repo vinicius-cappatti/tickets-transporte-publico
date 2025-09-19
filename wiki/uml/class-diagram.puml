@@ -1,5 +1,6 @@
 @startuml
-class Usuario {
+
+abstract class Usuario {
   +id: int
   +nome: string
   +email: string
@@ -25,6 +26,11 @@ class TicketReporte {
   +data: Date
   +status: string
 }
+
+abstract class Localizacao {
+   +id: int
+   +coordenadas: string
+} 
 
 class PontoDeOnibus {
   +id: int
@@ -59,6 +65,8 @@ Administrador "1" -- "0..*" TicketReporte : gerencia
 Administrador "1" -- "0..*" TransicaoStatus : realiza
 TransicaoStatus "*" -- "*" TicketReporte : atualiza 
 TicketReporte "1" -- "1" ProblemaDeAcessibilidade : descreve
-TicketReporte "1" -- "0..1" PontoDeOnibus : referencia
-TicketReporte "1" -- "0..1" EstacaoDeMetro : referencia
+TicketReporte "1" -- "1" Localizacao: referencia
+EstacaoDeMetro --|> Localizacao
+PontoDeOnibus --|> Localizacao
+
 @enduml
