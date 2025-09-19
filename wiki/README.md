@@ -378,7 +378,7 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 #### 5.4.1 - US01 - Reportar Problema
 
-![Diagrama de sequencia](https://github.com/user-attachments/assets/9afe2e64-63ba-4749-b60e-1cacdb43f956)
+![Diagrama de sequencia](https://github.com/user-attachments/assets/12d24d3b-81a3-4a8b-81dd-f2abeac3009e)
 
 #### 5.4.2 - US02 - Consultar mapa
 
