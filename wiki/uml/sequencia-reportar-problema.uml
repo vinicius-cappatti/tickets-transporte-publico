@@ -1,5 +1,5 @@
 @startuml
-' UC001 – Reportar Problema (seguindo padrão do diagrama de Atualizar Status)
+' UC001 – Reportar Problema (ajustado: sem mensagens diretas para ator)
 autonumber
 skinparam ParticipantPadding 15
 skinparam BoxPadding 10
@@ -9,7 +9,7 @@ actor Pedestre
 participant Fronteira
 participant Controlador
 
-' Camada de domínio/infra como lifelines separadas (mesmo padrão do seu diagrama)
+' Camada de domínio/infra
 collections ListaLocais
 collections MapaProblemas
 entity      TicketReporte
@@ -47,7 +47,7 @@ end
 ' 3) Preenchimento de dados (RN003, RN006) e mídia opcional (RN005)
 Pedestre -> Fronteira : 3. preencher(titulo, descricao, midia?, geo)
 ... validações de front ...
-Fronteira --> Pedestre : 3.1 avisoCamposObrigatorios/limites (se faltar título/descrição ou exceder limite)
+Fronteira -> Fronteira : 3.1 avisoCamposObrigatorios/limites (mensagem de UI)
 
 ' 3.2) Upload de mídia (opcional)
 opt midia presente
@@ -63,26 +63,26 @@ Controlador -> ListaLocais : 3.3.1 validarLocal(localId/geo)
 ListaLocais --> Controlador : 3.3.1.1 OK
 
 ' 3.3.2) Duplicidade (RF05)
-Controlador -> DedupService : 3.3.2 checarDuplicidade(features: geohash, texto, imagem)
+Controlador -> DedupService : 3.3.2 checarDuplicidade(features)
 DedupService --> Controlador : 3.3.2.1 resultado(score)
 
 alt duplicado (score acima do threshold)
   Controlador --> Fronteira : 3.3.3 409 Conflict + referenciaReporteExistente
-  Fronteira --> Pedestre : 3.3.3.1 informarDuplicidade(existente)
+  Fronteira -> Fronteira : 3.3.3.1 informarDuplicidade na tela
 else não duplicado
   ' 3.3.3) Validação/rotulagem por IA (RF06)
   Controlador -> ValidacaoIA : 3.3.3 validarIA(campos)
   ValidacaoIA --> Controlador : 3.3.3.1 labels+confiancas
 
   ' 3.3.4) Persistência com auditoria (RN004)
-  Controlador -> RepositorioReports : 3.3.4 salvar(ticket: titulo, descricao, local, coords, urlsMidia, usuarioId, createdAt, auditLog, labelsIA, status="Aguardando análise")
+  Controlador -> RepositorioReports : 3.3.4 salvar(ticket: ... )
   RepositorioReports --> Controlador : 3.3.4.1 reportId
 
   ' 3.3.5) Atualizar mapa
   Controlador -> MapaProblemas : 3.3.5 incluirMarcador(reportId, coords)
   MapaProblemas --> Controlador : 3.3.5.1 OK
 
-  ' 3.3.6) Notificação (UC005 – extensão, se entidade marcada)
+  ' 3.3.6) Notificação (UC005 – extensão)
   opt ponto monitorado / entidade marcada
     Controlador -> Notificacao : 3.3.6 notificarEntidade(reportId, ponto)
     Notificacao --> Controlador : 3.3.6.1 notificado
@@ -90,18 +90,18 @@ else não duplicado
 
   ' 3.3.7) Retorno para a fronteira
   Controlador --> Fronteira : 3.3.7 201 Created {reportId, status}
-  Fronteira --> Pedestre : 3.3.7.1 confirmacaoEnvio + "ver no mapa"
+  Fronteira -> Fronteira : 3.3.7.1 exibirConfirmacaoEnvio + "ver no mapa"
 end
 
-' --- Exceções principais coerentes com o padrão ---
+' --- Exceções ---
 ' Falha de rede/5xx ao criar
 Fronteira -> Controlador : 4. enviarReporte()
 Controlador -x Fronteira : 4.1 erro(Timeout/5xx)
-Fronteira --> Pedestre : 4.1.1 oferecerSalvarRascunho e re-tentar
+Fronteira -> Fronteira : 4.1.1 oferecerSalvarRascunho na tela
 
 ' Mídia inválida
 Pedestre -> Fronteira : 5. anexarMidia(invalida)
 Fronteira -> MediaService : 5.1 uploadMidia()
 MediaService --> Fronteira : 5.1.1 rejeicaoFormato/tamanho
-Fronteira --> Pedestre : 5.1.2 informarFormatosPermitidos
+Fronteira -> Fronteira : 5.1.2 informarFormatosPermitidos
 @enduml
