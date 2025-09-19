@@ -692,10 +692,8 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 \begin{figure}[H]
 \centering
-\IfFileExists{../imgs/class_diagram.png}{%
-    \includegraphics[width=\textwidth]{../imgs/class_diagram.png}
-}{%
-    \fbox{\parbox[c][6cm][c]{\textwidth}{\centering Imagem \texttt{class\_diagram.png} não encontrada}}
+\resizebox{0.95\textwidth}{!}{%
+    \input{../uml/class-diagram.tex}
 }
 \caption{Diagrama de Classes}
 \end{figure}

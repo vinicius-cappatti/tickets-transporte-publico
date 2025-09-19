@@ -26,16 +26,16 @@
 \contentsline {paragraph}{5.1.1.1 Reportar Problema}{12}{section*.49}%
 \contentsline {paragraph}{5.1.1.2 Consultar o Mapa de Problemas}{14}{section*.54}%
 \contentsline {paragraph}{5.1.1.3 Atualizar Status de Problema}{16}{section*.59}%
-\contentsline {subsection}{\numberline {5.2}UML - Diagrama de Classe de Domínio}{18}{subsection.65}%
-\contentsline {subsection}{\numberline {5.3}UML - Diagrama de Sequência}{18}{subsection.68}%
-\contentsline {section}{\numberline {6}Descrição da Arquitetura e Ferramentas Utilizadas}{18}{section.69}%
-\contentsline {subsection}{\numberline {6.1}Stack Tecnológico}{18}{subsection.70}%
-\contentsline {subsection}{\numberline {6.2}Padrões e Princípios}{18}{subsection.71}%
-\contentsline {section}{\numberline {7}Plano de Desenvolvimento}{19}{section.72}%
-\contentsline {subsection}{\numberline {7.1}Cronograma Detalhado (16 semanas)}{19}{subsection.73}%
-\contentsline {subsection}{\numberline {7.2}Métricas de Sucesso}{20}{subsection.74}%
-\contentsline {section}{\numberline {8}Resultados}{20}{section.75}%
-\contentsline {section}{\numberline {9}Conclusão e Trabalhos Futuros}{20}{section.76}%
-\contentsline {subsection}{\numberline {9.1}Conclusão Preliminar}{20}{subsection.77}%
-\contentsline {subsection}{\numberline {9.2}Próximos Passos}{20}{subsection.78}%
-\contentsline {subsection}{\numberline {9.3}Trabalhos Futuros}{20}{subsection.84}%
+\contentsline {subsection}{\numberline {5.2}UML - Diagrama de Classe de Domínio}{19}{subsection.65}%
+\contentsline {subsection}{\numberline {5.3}UML - Diagrama de Sequência}{20}{subsection.68}%
+\contentsline {section}{\numberline {6}Descrição da Arquitetura e Ferramentas Utilizadas}{20}{section.69}%
+\contentsline {subsection}{\numberline {6.1}Stack Tecnológico}{20}{subsection.70}%
+\contentsline {subsection}{\numberline {6.2}Padrões e Princípios}{20}{subsection.71}%
+\contentsline {section}{\numberline {7}Plano de Desenvolvimento}{20}{section.72}%
+\contentsline {subsection}{\numberline {7.1}Cronograma Detalhado (16 semanas)}{20}{subsection.73}%
+\contentsline {subsection}{\numberline {7.2}Métricas de Sucesso}{21}{subsection.74}%
+\contentsline {section}{\numberline {8}Resultados}{21}{section.75}%
+\contentsline {section}{\numberline {9}Conclusão e Trabalhos Futuros}{22}{section.76}%
+\contentsline {subsection}{\numberline {9.1}Conclusão Preliminar}{22}{subsection.77}%
+\contentsline {subsection}{\numberline {9.2}Próximos Passos}{22}{subsection.78}%
+\contentsline {subsection}{\numberline {9.3}Trabalhos Futuros}{22}{subsection.84}%
