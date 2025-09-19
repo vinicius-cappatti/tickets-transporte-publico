@@ -2,6 +2,13 @@
 
 **Projeto: Plataforma de Acessibilidade Urbana com IA**
 
+**Alunos:**
+* Felipe Gasparino
+* Gustavo Siqueira
+* Thomaz Scopel
+* Tiago Teraoka
+* Vinícius Cappatti
+
 ---
 
 **São Paulo**  
