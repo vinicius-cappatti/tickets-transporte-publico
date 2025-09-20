@@ -471,15 +471,15 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 \hline
 \textbf{Complexidade} & Média \\
 \hline
-\textbf{Regras de Negócio} & - RN001: Apenas usuários autenticados podem registrar reportes. \newline - RN002: Todo reporte deve estar vinculado a um local existente no sistema. \newline - RN003: O reporte deve conter obrigatoriamente um título e uma descrição mínima. \newline - RN004: O sistema deve registrar data, hora e usuário responsável pelo reporte. \newline - RN005: O reporte pode conter evidências (foto ou vídeo), mas estas não são obrigatórias. \newline - RN006: O reporte não pode exceder o limite máximo de caracteres definidos pelo sistema (para título e descrição). \\
+\textbf{Regras de Negócio} & - RN001: Todo reporte deve estar vinculado a um local existente no sistema. \newline - RN002: O reporte deve conter obrigatoriamente um título e uma descrição mínima. \newline - RN003: O sistema deve registrar data, hora e usuário responsável pelo reporte. \newline - RN004: O reporte pode conter evidências (foto ou vídeo), mas estas não são obrigatórias. \newline - RN005: O reporte não pode exceder o limite máximo de caracteres definidos pelo sistema (para título e descrição). \\
 \hline
 \textbf{Pré-condições} & O pedestre deve possuir informações do problema (foto, vídeo). \newline O pedestre deverá disponibiliza sua localização. \newline O pedestre deve ter um cadastro para registrar um reporte. \\
 \hline
 \textbf{Pós-condição} & O Sistema terá um reporte com todas as informações do problema registrado em seu banco de dados \newline O Sistema registrará o reporte e atualizará o mapa para que o reporte conste para a localização \\
 \hline
-\textbf{Pontos de Inclusão} & UC004 – Autenticar Usuário (quando necessário). \\
+\textbf{Pontos de Inclusão} & N/A \\
 \hline
-\textbf{Pontos de Extensão} & UC005 – Notificar Administrador (para pontos monitorados). \\
+\textbf{Pontos de Extensão} & N/A \\
 \hline
 \end{longtable}
 
@@ -498,18 +498,6 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 7. O pedestre confirma a seleção da categoria e local & 8. O Sistema solicita informações sobre o problema e oferece dicas para que o reporte tenha boa qualidade \\
 \hline
 9. O Pedestre registra um título para o problema e uma descrição que dê mais detalhes sobre a natureza dele e ao checar as informações envia o reporte & 10. O Sistema informa o envio do reporte e solicita se o pedestre deseja criar um novo reporte ou visualizar o reporte publicado. \\
-\hline
-\end{longtable}
-
-\textbf{Fluxo Alternativo – Pedestre não está logado no sistema}
-
-\begin{longtable}{|>{\raggedright\arraybackslash}p{7cm}|>{\raggedright\arraybackslash}p{7cm}|}
-\hline
-\textbf{Ações do Ator} & \textbf{Ações do Sistema} \\
-\hline
-1a. O pedestre seleciona a opção de reportar sem estar logado & 2a. O Sistema redireciona para a tela de login/cadastro (UC004 – Autenticar Usuário). \\
-\hline
-3a. Após login/cadastro concluído & 4a. O Sistema retorna ao ponto em que o fluxo principal estava, permitindo prosseguir do passo 3. \\
 \hline
 \end{longtable}
 
@@ -543,15 +531,15 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 \hline
 \textbf{Complexidade} & Baixa \\
 \hline
-\textbf{Regras de Negócio} & - RN007: O mapa deve exibir apenas problemas confirmados e devidamente registrados.\newline - RN008: O usuário pode aplicar filtros (categoria, data, status).\newline - RN009: Cada problema deve estar associado a uma localização válida.\newline - RN010: O sistema deve mostrar a data de registro e a situação do problema (pendente, em análise, resolvido).\newline - RN011: Problemas com mais de 1 ano podem ser arquivados, mas ainda disponíveis mediante filtro avançado. \\
+\textbf{Regras de Negócio} & - RN006: O mapa deve exibir apenas problemas confirmados e devidamente registrados.\newline - RN007: O usuário pode aplicar filtros (categoria, data, status).\newline - RN008: Cada problema deve estar associado a uma localização válida.\newline - RN009: O sistema deve mostrar a data de registro e a situação do problema (pendente, em análise, resolvido).\newline - RN010: Problemas com mais de 1 ano podem ser arquivados, mas ainda disponíveis mediante filtro avançado. \\
 \hline
 \textbf{Pré-condições} & O sistema deve conter reportes cadastrados.\newline O pedestre precisa ter acesso à plataforma (não é obrigatório login apenas para consulta). \\
 \hline
 \textbf{Pós-condição} & O usuário terá acesso visual aos problemas existentes no mapa e poderá selecionar pontos para ver detalhes. \\
 \hline
-\textbf{Pontos de Inclusão} & UC006 – Visualizar Detalhes de Problema (quando o usuário seleciona um ponto específico). \\
+\textbf{Pontos de Inclusão} & N/A \\
 \hline
-\textbf{Pontos de Extensão} & UC001 – Reportar Problema (usuário pode criar um novo reporte a partir do mapa). \\
+\textbf{Pontos de Extensão} & N/A \\
 \hline
 \end{longtable}
 
@@ -676,7 +664,7 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 \begin{figure}[H]
 \centering
-\input{../uml/class-diagram.tex}
+\resizebox{\textwidth}{!}{\input{../uml/class-diagram.tex}}
 \caption{Diagrama de Classes}
 \end{figure}
 
