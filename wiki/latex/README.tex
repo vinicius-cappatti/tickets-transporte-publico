@@ -265,27 +265,15 @@ Visão geral: o semestre (\(\approx\) 16 semanas) será dividido em fases iterat
 
 RF01 & RF & Alta & O sistema deve permitir visualizar mapa com geolocalização de problemas de acessibilidade \\
 \hline
-RF02 & RF & Alta & O usuário deve gerar relatório com foto e descrição de novo problema \\
+RF02 & RF & Alta & O usuário deve gerar relatório com descrição de novo problema \\
 \hline
-RF03 & RF & Alta & O problema deve aparecer no mapa após criação do relatório \\
+RF03 & RF & Alta & O problema deve aparecer no mapa após criação e aprovação do relatório \\
 \hline
-RF04 & RF & Alta & O sistema deve notificar entidade responsável quando marcada \\
+RF04 & RF & Alta & O administrador deve poder atualizar status do problema e comentar sobre esse status \\
 \hline
-RF05 & RF & Alta & O sistema não deve permitir relatórios duplicados \\
+RF05 & RF & Média & O usuário pode filtrar região específica no mapa \\
 \hline
-RF06 & RF & Alta & O sistema deve usar IA para validar relatórios \\
-\hline
-RF07 & RF & Média & O usuário pode filtrar região específica no mapa \\
-\hline
-RF08 & RF & Média & O usuário deve marcar entidade responsável \\
-\hline
-RF09 & RF & Alta & Permitir cadastro com diferentes perfis (cidadão, gestor, validador) \\
-\hline
-RF10 & RF & Média & Gerar relatórios analíticos para gestores \\
-\hline
-RF11 & RF & Média & Permitir validação manual das classificações automáticas \\
-\hline
-RF12 & RF & Baixa & Exportar dados em formatos padrão (CSV, GeoJSON) \\
+RF06 & RF & Média & Permitir validação manual das classificações automáticas \\
 \hline
 \end{longtable}
 
@@ -305,23 +293,19 @@ RF12 & RF & Baixa & Exportar dados em formatos padrão (CSV, GeoJSON) \\
 
 RNF01 & RNF & Alta & Tempo de resposta \textless{}2s para carregar mapa \\
 \hline
-RNF02 & RNF & Alta & Processar e validar até 1000 relatórios/hora via IA \\
+RNF02 & RNF & Média & Compatível com Chrome, Edge e Firefox \\
 \hline
-RNF03 & RNF & Média & Compatível com iOS e Android recentes \\
+RNF03 & RNF & Média & Disponibilidade 99\% do tempo \\
 \hline
-RNF04 & RNF & Média & Disponibilidade 99\% do tempo \\
+RNF04 & RNF & Média & Escalável para 50\% aumento de usuários \\
 \hline
-RNF05 & RNF & Média & Escalável para 50\% aumento de usuários \\
+RNF05 & RNF & Baixa & Segurança e proteção de dados \\
 \hline
-RNF06 & RNF & Média & Notificações em tempo real \\
+RNF06 & RNF & Baixa & Interface intuitiva e acessível \\
 \hline
-RNF07 & RNF & Baixa & Segurança e proteção de dados \\
+RNF07 & RNF & Alta & Conformidade WCAG 2.1 AA \\
 \hline
-RNF08 & RNF & Baixa & Interface intuitiva e acessível \\
-\hline
-RNF09 & RNF & Alta & Conformidade WCAG 2.1 AA \\
-\hline
-RNF10 & RNF & Alta & Conformidade LGPD \\
+RNF08 & RNF & Alta & Conformidade LGPD \\
 \hline
 \end{longtable}
 
@@ -692,8 +676,10 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 \begin{figure}[H]
 \centering
-\resizebox{0.95\textwidth}{!}{%
-    \input{../uml/class-diagram.tex}
+\IfFileExists{../imgs/class_diagram.png}{%
+    \includegraphics[width=\textwidth]{../imgs/class_diagram.png}
+}{%
+    \fbox{\parbox[c][6cm][c]{\textwidth}{\centering Imagem \texttt{class\_diagram.png} não encontrada}}
 }
 \caption{Diagrama de Classes}
 \end{figure}
