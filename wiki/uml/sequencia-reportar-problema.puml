@@ -90,7 +90,7 @@ else não duplicado
 
   ' 3.3.7) Retorno para a fronteira
   Controlador --> Fronteira : 3.3.7 201 Created {reportId, status}
-  Fronteira -> Fronteira : 3.3.7.1 exibirConfirmacaoEnvio + "ver no mapa"
+  Fronteira -> Fronteira : 3.3.7.1 exibirConfirmacaoEnvio + ``ver no mapa''
 end
 
 ' --- Exceções ---
