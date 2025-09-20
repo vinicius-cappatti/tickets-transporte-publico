@@ -682,6 +682,56 @@ Exibe todos os reports do sistema, permitindo visualizar detalhes e acompanhar p
 
 \subsection{UML - Diagrama de Sequência}
 
+\subsubsection{5.4.1 – US01: Reportar Problema}
+
+\begin{figure}[H]
+    \centering
+    \input{../uml/sequencia-reportar-problema.tex}
+    \caption{Diagrama de Sequência – Reportar Problema}
+\end{figure}
+
+Fluxo resumido:
+\begin{itemize}
+    \item Usuário acessa a plataforma e seleciona a opção de reportar problema.
+    \item Sistema solicita autenticação (se necessário).
+    \item Usuário informa localização, categoria, título, descrição e evidências.
+    \item Sistema valida dados, registra o reporte e atualiza o mapa.
+    \item Notificação de sucesso é exibida ao usuário.
+\end{itemize}
+
+\subsubsection{5.4.2 – US02: Consultar Mapa}
+
+\begin{figure}[H]
+    \centering
+    \input{../uml/sequencia-consultar-mapa.tex}
+    \caption{Diagrama de Sequência – Consultar Mapa}
+\end{figure}
+
+Fluxo resumido:
+\begin{itemize}
+    \item Usuário acessa a opção de consultar mapa.
+    \item Sistema carrega dados de problemas registrados.
+    \item Usuário aplica filtros e navega pelo mapa.
+    \item Sistema exibe detalhes ao selecionar um marcador.
+\end{itemize}
+
+\subsubsection{5.4.3 – US03: Atualizar Status de Problema}
+
+\begin{figure}[H]
+    \centering
+    \input{../uml/sequencia-atualizar-status.tex}
+    \caption{Diagrama de Sequência – Atualizar Status de Problema}
+\end{figure}
+
+Fluxo resumido:
+\begin{itemize}
+    \item Administrador acessa lista de problemas e seleciona um reporte.
+    \item Sistema exibe detalhes e permite atualização de status.
+    \item Administrador altera status para "Resolvido Provisório".
+    \item Sistema notifica o autor do reporte para validação.
+    \item Autor confirma ou rejeita resolução; sistema atualiza status conforme resposta.
+\end{itemize}
+
 \section{Descrição da Arquitetura e Ferramentas Utilizadas}
 \label{sec:arquitetura}
 
