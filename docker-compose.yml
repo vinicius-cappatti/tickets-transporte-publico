@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:alpine
+    container_name: tickets-postgres
+    environment:
+      POSTGRES_USER: tickets
+      POSTGRES_PASSWORD: tickets123
+      POSTGRES_DB: tickets
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tickets"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # API (NestJS)
+  api:
+    build:
+      context: .
+      dockerfile: docker/app-sql/Dockerfile
+    container_name: tickets-api
+    environment:
+      DATABASE_URL: postgresql://tickets:tickets123@postgres:5432/tickets
+      NODE_ENV: development
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./apps/api:/app/apps/api
+      - ./packages:/app/packages
+      - /app/node_modules
+      - /app/apps/api/node_modules
+    command: pnpm --filter nest dev
+
+  # Web (Next.js)
+  web:
+    build:
+      context: .
+      dockerfile: docker/web/Dockerfile
+    container_name: tickets-web
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:3000
+      NODE_ENV: development
+    ports:
+      - "3001:3001"
+    depends_on:
+      - api
+    volumes:
+      - ./apps/web:/app/apps/web
+      - ./packages:/app/packages
+      - /app/node_modules
+      - /app/apps/web/node_modules
+      - /app/apps/web/.next
+    command: pnpm --filter web dev
+
+volumes:
+  postgres_data:
+
+networks:
+  default:
+    name: tickets-network

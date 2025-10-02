@@ -1,72 +1,148 @@
 @startuml
+skinparam classAttributeIconSize 0
+skinparam linetype polyline
 
 abstract class Usuario {
-  +id: int
+  +id: UUID
   +nome: string
   +email: string
+  +senhaHash: string
+  +ultimoLogin: DateTime
 }
 
 class Passageiro {
   +cpf: string
+  +telefone?: string
 }
 
 class Administrador {
   +cargo: string
+  +ativo: boolean
 }
 
-class Empresa {
-  +id: int
+class OrganizacaoResponsavel {
+  +id: UUID
   +nome: string
   +cnpj: string
-}
-
-class TicketReporte {
-  +id: int
-  +descricao: string
-  +data: Date
-  +status: string
+  +tipo: string
+  +contatoPrincipal: string
 }
 
 abstract class Localizacao {
-   +id: int
-   +coordenadas: string
-} 
-
-class PontoDeOnibus {
-  +id: int
-  +localizacao: string
-}
-
-class EstacaoDeMetro {
-  +id: int
+  +id: UUID
   +nome: string
-  +linha: string
-}
-
-class ProblemaDeAcessibilidade {
-  +id: int
   +descricao: string
-  +gravidade: string
+  +endereco: string
+  +latitude: decimal
+  +longitude: decimal
 }
 
-class TransicaoStatus {
-   +id: int
-   +String: statusInicial
-   +String: statusAtualizado
-   +TicketReporte: ticketAtualizado
-   +Admnistrador: admAtualizacao
+class PontoOnibus {
+  +codigoMunicipal: string
+  +sentido: string
+}
+
+class EstacaoMetro {
+  +linha: string
+  +plataforma: string
+  +acessibilidadeDisponivel: boolean
+}
+
+class TicketReporte {
+  +id: UUID
+  +titulo: string
+  +descricao: string
+  +dataCriacao: DateTime
+  +dataFechamento?: DateTime
+  +statusAtual: Status
+  +gravidade: Gravidade
+  +ultimaAtualizacao: DateTime
+  +qtdConfirmacoes: int
+}
+
+class CategoriaProblema {
+  +id: UUID
+  +nome: string
+  +descricao: string
+  +exigeEvidencia: boolean
+}
+
+class Evidencia {
+  +id: UUID
+  +tipo: MediaTipo
+  +url: string
+  +tamanhoKB: int
+}
+
+class Comentario {
+  +id: UUID
+  +conteudo: string
+  +dataCriacao: DateTime
+  +privado: boolean
+}
+
+class HistoricoStatus {
+  +id: UUID
+  +dataHora: DateTime
+  +statusAnterior: Status
+  +statusAtual: Status
+  +justificativa: string
+}
+
+class Notificacao {
+  +id: UUID
+  +mensagem: string
+  +dataEnvio: DateTime
+  +lida: boolean
+  +canal: CanalNotificacao
 }
 
 Usuario <|-- Passageiro
 Usuario <|-- Administrador
-Empresa "1" -- "0..*" Usuario : contém
-Passageiro "1" -- "0..*" TicketReporte : cria
-Administrador "1" -- "0..*" TicketReporte : gerencia
-Administrador "1" -- "0..*" TransicaoStatus : realiza
-TransicaoStatus "*" -- "*" TicketReporte : atualiza 
-TicketReporte "1" -- "1" ProblemaDeAcessibilidade : descreve
-TicketReporte "1" -- "1" Localizacao: referencia
-EstacaoDeMetro --|> Localizacao
-PontoDeOnibus --|> Localizacao
 
+OrganizacaoResponsavel "1" -- "0..*" Administrador : emprega
+OrganizacaoResponsavel "1" -- "0..*" Localizacao : mantém
+Passageiro "1" -- "0..*" TicketReporte : cria
+Administrador "1" -- "0..*" HistoricoStatus : registra
+TicketReporte "1" -- "1" Localizacao : referencia
+TicketReporte "1" -- "1" CategoriaProblema : classifica
+TicketReporte "1" -- "0..*" Evidencia : agrega
+TicketReporte "1" -- "0..*" Comentario : possui
+TicketReporte "1" -- "0..*" HistoricoStatus : auditado por
+Comentario "0..*" -- "1" Usuario : autor
+Notificacao "0..*" -- "1" Usuario : destinatario
+
+EstacaoMetro --|> Localizacao
+PontoOnibus --|> Localizacao
+
+enum Status {
+  RASCUNHO
+  AGUARDANDO_ANALISE
+  REJEITADO
+  ACEITO
+  CORRECAO_EM_ANDAMENTO
+  CORRIGIDO
+  PAUSADO
+  ARQUIVADO
+}
+
+enum Gravidade {
+  BAIXA
+  MEDIA
+  ALTA
+  CRITICA
+}
+
+enum MediaTipo {
+  FOTO
+  VIDEO
+  AUDIO
+  DOCUMENTO
+}
+
+enum CanalNotificacao {
+  EMAIL
+  PUSH
+  SMS
+}
 @enduml

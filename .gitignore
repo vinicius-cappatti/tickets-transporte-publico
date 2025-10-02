@@ -27,6 +27,11 @@ out/
 build
 dist
 
+#LATEX
+README.*
+!README.tex
+!README.pdf
+!README.md
 
 # Debug
 npm-debug.log*
