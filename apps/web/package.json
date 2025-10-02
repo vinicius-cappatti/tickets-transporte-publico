@@ -6,6 +6,8 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
+    "check-types": "tsc --noEmit",
+    "test": "echo \"No tests configured for web app yet\"",
     "start": "next start"
   },
   "dependencies": {

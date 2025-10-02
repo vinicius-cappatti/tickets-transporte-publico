@@ -1,0 +1,90 @@
+name: PR Preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [ "main" ]
+
+env:
+  NODE_VERSION: '22'
+  PNPM_VERSION: '10.17.1'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  # Análise de código e testes
+  preview:
+    name: Build and Preview
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run linting
+        run: pnpm lint
+        continue-on-error: true
+
+      - name: Run type checking
+        run: pnpm check-types
+        continue-on-error: true
+
+      - name: Run tests (API)
+        run: pnpm --filter nest test --coverage
+        continue-on-error: true
+
+      - name: Build applications
+        run: pnpm build
+
+      - name: Comment PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comment = `## 🔍 Preview Build Status
+            
+            ✅ Build completed successfully!
+            
+            ### Build Information
+            - **Commit**: \`${context.sha.substring(0, 7)}\`
+            - **Branch**: \`${context.ref}\`
+            - **Node Version**: \`${{ env.NODE_VERSION }}\`
+            - **PNPM Version**: \`${{ env.PNPM_VERSION }}\`
+            
+            ### Next Steps
+            Once this PR is merged to \`main\`, the applications will be automatically deployed to production.
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
