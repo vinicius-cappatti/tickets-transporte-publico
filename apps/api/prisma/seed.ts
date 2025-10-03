@@ -1,19 +1,24 @@
-import { PrismaClient, CategoryType, UserRole, ReportStatus } from '@prisma/client'
+import {
+  PrismaClient,
+  CategoryType,
+  UserRole,
+  ReportStatus,
+} from '@prisma/client';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Iniciando seed do banco de dados...')
+  console.log('🌱 Iniciando seed do banco de dados...');
 
   // Limpar dados existentes
-  await prisma.comment.deleteMany()
-  await prisma.statusHistory.deleteMany()
-  await prisma.report.deleteMany()
-  await prisma.category.deleteMany()
-  await prisma.location.deleteMany()
-  await prisma.user.deleteMany()
+  await prisma.comment.deleteMany();
+  await prisma.statusHistory.deleteMany();
+  await prisma.report.deleteMany();
+  await prisma.category.deleteMany();
+  await prisma.location.deleteMany();
+  await prisma.user.deleteMany();
 
-  console.log('✅ Dados existentes removidos')
+  console.log('✅ Dados existentes removidos');
 
   // Criar usuários
   const pedestrian1 = await prisma.user.create({
@@ -22,7 +27,7 @@ async function main() {
       name: 'Maria Silva',
       role: UserRole.PEDESTRIAN,
     },
-  })
+  });
 
   const pedestrian2 = await prisma.user.create({
     data: {
@@ -30,7 +35,7 @@ async function main() {
       name: 'João Santos',
       role: UserRole.PEDESTRIAN,
     },
-  })
+  });
 
   const admin1 = await prisma.user.create({
     data: {
@@ -38,7 +43,7 @@ async function main() {
       name: 'Administrador Metrô',
       role: UserRole.ADMIN,
     },
-  })
+  });
 
   const admin2 = await prisma.user.create({
     data: {
@@ -46,9 +51,9 @@ async function main() {
       name: 'Administrador SPTrans',
       role: UserRole.ADMIN,
     },
-  })
+  });
 
-  console.log('✅ 4 usuários criados')
+  console.log('✅ 4 usuários criados');
 
   // Criar categorias
   const categories = await Promise.all([
@@ -56,7 +61,8 @@ async function main() {
       data: {
         name: 'Rampa de Acesso',
         type: CategoryType.RAMP,
-        description: 'Problemas relacionados a rampas de acesso para cadeirantes e pessoas com mobilidade reduzida',
+        description:
+          'Problemas relacionados a rampas de acesso para cadeirantes e pessoas com mobilidade reduzida',
       },
     }),
     prisma.category.create({
@@ -84,7 +90,8 @@ async function main() {
       data: {
         name: 'Infraestrutura Geral',
         type: CategoryType.INFRASTRUCTURE,
-        description: 'Problemas gerais de infraestrutura que afetam acessibilidade',
+        description:
+          'Problemas gerais de infraestrutura que afetam acessibilidade',
       },
     }),
     prisma.category.create({
@@ -94,9 +101,9 @@ async function main() {
         description: 'Outros problemas de acessibilidade não categorizados',
       },
     }),
-  ])
+  ]);
 
-  console.log('✅ 6 categorias criadas')
+  console.log('✅ 6 categorias criadas');
 
   // Criar localizações (pontos de transporte)
   const locations = await Promise.all([
@@ -155,56 +162,60 @@ async function main() {
         adminId: admin1.id,
       },
     }),
-  ])
+  ]);
 
-  console.log('✅ 5 localizações criadas')
+  console.log('✅ 5 localizações criadas');
 
   // Criar reports
   const report1 = await prisma.report.create({
     data: {
       title: 'Rampa de acesso danificada',
-      description: 'A rampa de acesso ao metrô está com buracos e rachaduras, dificultando o acesso de cadeirantes.',
+      description:
+        'A rampa de acesso ao metrô está com buracos e rachaduras, dificultando o acesso de cadeirantes.',
       status: ReportStatus.PENDING,
       authorId: pedestrian1.id,
       locationId: locations[0].id,
       categoryId: categories[0].id,
     },
-  })
+  });
 
   const report2 = await prisma.report.create({
     data: {
       title: 'Piso tátil desgastado',
-      description: 'O piso tátil da plataforma está muito desgastado e praticamente invisível, comprometendo a orientação de deficientes visuais.',
+      description:
+        'O piso tátil da plataforma está muito desgastado e praticamente invisível, comprometendo a orientação de deficientes visuais.',
       status: ReportStatus.IN_ANALYSIS,
       authorId: pedestrian2.id,
       locationId: locations[1].id,
       categoryId: categories[1].id,
     },
-  })
+  });
 
   const report3 = await prisma.report.create({
     data: {
       title: 'Elevador fora de serviço',
-      description: 'O elevador está fora de serviço há mais de uma semana, forçando pessoas com mobilidade reduzida a usar as escadas.',
+      description:
+        'O elevador está fora de serviço há mais de uma semana, forçando pessoas com mobilidade reduzida a usar as escadas.',
       status: ReportStatus.RESOLVED_PROVISIONAL,
       authorId: pedestrian1.id,
       locationId: locations[4].id,
       categoryId: categories[2].id,
     },
-  })
+  });
 
   const report4 = await prisma.report.create({
     data: {
       title: 'Falta de sinalização sonora',
-      description: 'O ponto de ônibus não possui sinalização sonora para anúncio das linhas.',
+      description:
+        'O ponto de ônibus não possui sinalização sonora para anúncio das linhas.',
       status: ReportStatus.PENDING,
       authorId: pedestrian2.id,
       locationId: locations[2].id,
       categoryId: categories[3].id,
     },
-  })
+  });
 
-  console.log('✅ 4 reports criados')
+  console.log('✅ 4 reports criados');
 
   // Criar histórico de status
   await prisma.statusHistory.create({
@@ -214,7 +225,7 @@ async function main() {
       reportId: report1.id,
       updatedBy: pedestrian1.id,
     },
-  })
+  });
 
   await prisma.statusHistory.create({
     data: {
@@ -223,7 +234,7 @@ async function main() {
       reportId: report2.id,
       updatedBy: pedestrian2.id,
     },
-  })
+  });
 
   await prisma.statusHistory.create({
     data: {
@@ -232,7 +243,7 @@ async function main() {
       reportId: report2.id,
       updatedBy: admin1.id,
     },
-  })
+  });
 
   await prisma.statusHistory.create({
     data: {
@@ -241,7 +252,7 @@ async function main() {
       reportId: report3.id,
       updatedBy: pedestrian1.id,
     },
-  })
+  });
 
   await prisma.statusHistory.create({
     data: {
@@ -250,9 +261,9 @@ async function main() {
       reportId: report3.id,
       updatedBy: admin1.id,
     },
-  })
+  });
 
-  console.log('✅ 5 históricos de status criados')
+  console.log('✅ 5 históricos de status criados');
 
   // Criar comentários
   await prisma.comment.create({
@@ -261,7 +272,7 @@ async function main() {
       reportId: report1.id,
       authorId: pedestrian2.id,
     },
-  })
+  });
 
   await prisma.comment.create({
     data: {
@@ -269,7 +280,7 @@ async function main() {
       reportId: report2.id,
       authorId: admin1.id,
     },
-  })
+  });
 
   await prisma.comment.create({
     data: {
@@ -277,18 +288,18 @@ async function main() {
       reportId: report3.id,
       authorId: pedestrian1.id,
     },
-  })
+  });
 
-  console.log('✅ 3 comentários criados')
+  console.log('✅ 3 comentários criados');
 
-  console.log('🎉 Seed concluído com sucesso!')
+  console.log('🎉 Seed concluído com sucesso!');
 }
 
 main()
   .catch((e) => {
-    console.error('❌ Erro ao executar seed:', e)
-    process.exit(1)
+    console.error('❌ Erro ao executar seed:', e);
+    process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect()
-  })
+    await prisma.$disconnect();
+  });
