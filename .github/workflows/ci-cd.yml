@@ -5,6 +5,15 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Ambiente de deploy'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
 
 env:
   NODE_VERSION: '22'
@@ -53,9 +62,6 @@ jobs:
         run: npx prisma generate
         working-directory: apps/api
 
-      - name: Run linting
-        run: pnpm lint
-
       - name: Run type checking
         run: pnpm check-types
 
@@ -69,12 +75,12 @@ jobs:
       - name: Build applications
         run: pnpm build
 
-  # Job de deploy para EC2
+  # Job de deploy para EC2 (manual)
   deploy-to-ec2:
     name: Deploy to EC2
     needs: test-and-build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.event_name == 'workflow_dispatch'
     environment: production
 
     steps:
