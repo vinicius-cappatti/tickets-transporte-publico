@@ -7,21 +7,153 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+// Enumerações
+enum UserRole {
+  PEDESTRIAN    // Pedestre que reporta problemas
+  ADMIN         // Administrador de um ponto/estação
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
+enum ReportStatus {
+  PENDING              // Pendente de análise
+  IN_ANALYSIS          // Em análise pelo administrador
+  RESOLVED_PROVISIONAL // Resolvido provisoriamente (aguardando confirmação)
+  RESOLVED_CONFIRMED   // Resolvido e confirmado pelo autor
+  ARCHIVED             // Arquivado
+}
+
+enum CategoryType {
+  RAMP              // Rampas de acesso
+  TACTILE_FLOOR     // Piso tátil
+  ELEVATOR          // Elevadores
+  SIGNAGE           // Sinalização
+  ACCESSIBILITY     // Acessibilidade geral
+  INFRASTRUCTURE    // Infraestrutura física
+  OTHER             // Outros
+}
+
+// Modelo de Usuário
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  role      UserRole @default(PEDESTRIAN)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  viewCount Int      @default(0)
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  Int?
+
+  // Relações
+  reports           Report[]        @relation("UserReports")
+  managedLocations  Location[]      @relation("LocationAdmin")
+  statusUpdates     StatusHistory[]
+  comments          Comment[]
+
+  @@index([email])
+  @@map("users")
+}
+
+// Modelo de Localização (Ponto de Transporte)
+model Location {
+  id          String   @id @default(cuid())
+  name        String
+  address     String
+  latitude    Float
+  longitude   Float
+  type        String   // Ex: "Ponto de Ônibus", "Estação de Metrô", etc.
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relações
+  reports  Report[]
+  adminId  String?
+  admin    User?    @relation("LocationAdmin", fields: [adminId], references: [id])
+
+  @@index([latitude, longitude])
+  @@index([name])
+  @@map("locations")
+}
+
+// Modelo de Categoria de Problema
+model Category {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  type        CategoryType
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  // Relações
+  reports Report[]
+
+  @@map("categories")
+}
+
+// Modelo de Report (Problema reportado)
+model Report {
+  id          String       @id @default(cuid())
+  title       String
+  description String
+  status      ReportStatus @default(PENDING)
+  imageUrl    String?      // URL da imagem ou vídeo anexado
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  // Chaves estrangeiras
+  authorId   String
+  locationId String
+  categoryId String
+
+  // Relações
+  author   User     @relation("UserReports", fields: [authorId], references: [id])
+  location Location @relation(fields: [locationId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  statusHistory StatusHistory[]
+  comments      Comment[]
+
+  @@index([authorId])
+  @@index([locationId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("reports")
+}
+
+// Modelo de Histórico de Status
+model StatusHistory {
+  id        String       @id @default(cuid())
+  status    ReportStatus
+  comment   String?      // Comentário opcional sobre a mudança de status
+  createdAt DateTime     @default(now())
+
+  // Chaves estrangeiras
+  reportId String
+  updatedBy String
+
+  // Relações
+  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [updatedBy], references: [id])
+
+  @@index([reportId])
+  @@index([createdAt])
+  @@map("status_history")
+}
+
+// Modelo de Comentário
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Chaves estrangeiras
+  reportId String
+  authorId String
+
+  // Relações
+  report Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  author User   @relation(fields: [authorId], references: [id])
+
+  @@index([reportId])
+  @@index([authorId])
+  @@map("comments")
 }

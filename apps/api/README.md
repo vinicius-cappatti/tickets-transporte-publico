@@ -1,443 +1,131 @@
+# API - Plataforma de Acessibilidade Urbana
 
+API REST desenvolvida com NestJS e Prisma para o sistema de mapeamento colaborativo de barreiras de acessibilidade urbana.
 
-### 2. Create and seed the database
+## 🚀 Tecnologias
 
-Create a new [Prisma Postgres](https://www.prisma.io/docs/postgres/overview) database by executing:
+- **NestJS** - Framework Node.js para aplicações escaláveis
+- **Prisma** - ORM moderno para TypeScript
+- **PostgreSQL** - Banco de dados relacional
+- **TypeScript** - Superset JavaScript com tipagem estática
+- **Jest** - Framework de testes
+- **Class Validator** - Validação de DTOs
 
-```terminal
-npx prisma init --db
-```
+## 📋 Pré-requisitos
 
-Locate and copy the database URL provided in the CLI output. Then, create a `.env` file in the project root:
+- Node.js >= 18
+- PostgreSQL >= 14
+- pnpm (ou npm/yarn)
 
+## 🔧 Instalação
+
+1. Instale as dependências:
 ```bash
-touch .env
+pnpm install
 ```
 
-Now, paste the URL into it as a value for the `DATABASE_URL` environment variable. For example:
-
+2. Configure as variáveis de ambiente:
 ```bash
-# .env
-DATABASE_URL=prisma+postgres://accelerate.prisma-data.net/?api_key=ey...
+cp .env.example .env
 ```
 
-Run the following command to create tables in your database. This creates the `User` and `Post` tables that are defined in [`prisma/schema.prisma`](./prisma/schema.prisma):
+Edite o arquivo `.env` com suas configurações:
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/accessibility_db?schema=public"
+PORT=3000
+```
 
-```terminal
+3. Execute as migrações do banco de dados:
+```bash
 npx prisma migrate dev --name init
 ```
 
-Execute the seed file in [`prisma/seed.ts`](./prisma/seed.ts) to populate your database with some sample data, by running:
-
-```terminal
+4. Popule o banco com dados iniciais:
+```bash
 npx prisma db seed
 ```
 
-### 3. Start the REST API server
+## 🏃 Executando a aplicação
 
-```
-npm run dev
-```
+```bash
+# Desenvolvimento
+pnpm run dev
 
-The server is now running on `http://localhost:3000`. You can now run the API requests, e.g. [`http://localhost:3000/feed`](http://localhost:3000/feed).
-
-## Using the REST API
-
-### Testing with `curl`
-
-You can run these `curl` commands to test all API endpoints:
-
-#### `GET`
-
-##### Fetch a single post by its ID
-
-```sh
-curl -X GET http://localhost:3000/post/1
+# Produção
+pnpm run build
+pnpm run start:prod
 ```
 
-##### Fetch all published posts (with optional query parameters)
+A API estará disponível em `http://localhost:3000`
 
-```sh
-curl -X GET "http://localhost:3000/feed?searchString=prisma&take=2&orderBy=desc"
+## 🧪 Testes
+
+```bash
+# Testes unitários
+pnpm run test
+
+# Testes E2E
+pnpm run test:e2e
+
+# Cobertura de testes
+pnpm run test:cov
 ```
 
-##### Fetch a user's drafts by their ID
-
-```sh
-curl -X GET http://localhost:3000/user/3/drafts
-```
-
-##### Fetch all users
-
-```sh
-curl -X GET http://localhost:3000/users
-```
-
-#### `POST`
-
-##### Create a new post
-
-```sh
-curl -X POST http://localhost:3000/post \
-     -H "Content-Type: application/json" \
-     -d '{
-           "title": "My New Post",
-           "content": "This is an example post.",
-           "authorEmail": "mahmoud@prisma.io"
-         }'
-```
-
-##### Create a new user
-
-```sh
-curl -X POST http://localhost:3000/signup \
-     -H "Content-Type: application/json" \
-     -d '{
-           "email": "ankur@prisma.io",
-           "name": "Ankur Datta",
-           "postData": [
-             {
-               "title": "Hello World",
-               "content": "This is the content of the post"
-             }
-           ]
-         }'
-```
-
-#### `PUT`
-
-##### Toggle the publish status of a post
-
-```sh
-curl -X PUT http://localhost:3000/publish/4
-```
-
-##### Increase the view count of a post
-
-```sh
-curl -X PUT http://localhost:3000/post/2/views
-```
-
-#### `DELETE`
-
-##### Delete a post by its ID
-
-```sh
-curl -X DELETE http://localhost:3000/post/1
-```
-
-### API endpoints
-
-<details><summary>Expand to see all API endpoints</summary>
-
-### `GET`
-
-- `/post/:id`: Fetch a single post by its `id`
-- `/feed?searchString={searchString}&take={take}&skip={skip}&orderBy={orderBy}`: Fetch all _published_ posts
-  - Query Parameters
-    - `searchString` (optional): This filters posts by `title` or `content`
-    - `take` (optional): This specifies how many objects should be returned in the list
-    - `skip` (optional): This specifies how many of the returned objects in the list should be skipped
-    - `orderBy` (optional): The sort order for posts in either ascending or descending order. The value can either `asc` or `desc`
-- `/user/:id/drafts`: Fetch user's drafts by their `id`
-- `/users`: Fetch all users
-
-### `POST`
-
-- `/post`: Create a new post
-  - Body:
-    - `title: String` (required): The title of the post
-    - `content: String` (optional): The content of the post
-    - `authorEmail: String` (required): The email of the user that creates the post
-- `/signup`: Create a new user
-  - Body:
-    - `email: String` (required): The email address of the user
-    - `name: String` (optional): The name of the user
-    - `postData: PostCreateInput[]` (optional): The posts of the user
-
-### `PUT`
-
-- `/publish/:id`: Toggle the publish value of a post by its `id`
-- `/post/:id/views`: Increases the `viewCount` of a `Post` by one `id`
-
-### `DELETE`
-
-- `/post/:id`: Delete a post by its `id`
-
-</details>
-
-
-## Evolving the app
-
-Evolving the application typically requires two steps:
-
-1. Migrate your database using Prisma Migrate
-1. Update your application code
-
-For the following example scenario, assume you want to add a "profile" feature to the app where users can create a profile and write a short bio about themselves.
-
-### 1. Migrate your database using Prisma Migrate
-
-The first step is to add a new table, e.g. called `Profile`, to the database. You can do this by adding a new model to your [Prisma schema file](./prisma/schema.prisma) file and then running a migration afterwards:
-
-```diff
-// ./prisma/schema.prisma
-
-model User {
-  id      Int      @default(autoincrement()) @id
-  name    String?
-  email   String   @unique
-  posts   Post[]
-+ profile Profile?
-}
-
-model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  viewCount Int      @default(0)
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  Int?
-}
-
-+model Profile {
-+  id     Int     @default(autoincrement()) @id
-+  bio    String?
-+  user   User    @relation(fields: [userId], references: [id])
-+  userId Int     @unique
-+}
-```
-
-Once you've updated your data model, you can execute the changes against your database with the following command:
-
-```
-npx prisma migrate dev --name add-profile
-```
-
-This adds another migration to the `prisma/migrations` directory and creates the new `Profile` table in the database.
-
-### 2. Update your application code
-
-You can now use your `PrismaClient` instance to perform operations against the new `Profile` table. Those operations can be used to implement API endpoints in the REST API.
-
-#### 2.1 Add the API endpoint to your app
-
-Update your `AppController` class inside `app.controller.ts` file by adding a new endpoint to your API:
-
-```ts
-@Post('user/:id/profile')
-async createUserProfile(
-  @Param('id') id: string,
-  @Body() userBio: { bio: string }
-): Promise<Profile> {
-  return this.prismaService.profile.create({
-    data: {
-      bio: userBio.bio,
-      user: {
-        connect: {
-          id: Number(id)
-        }
-      }
-    }
-  })
-}
-```
-
-At the top of `app.controller.ts`, update your imports to include `Profile` from `@prisma/client` as follows:
-
-```ts
-import {
-  User as UserModel,
-  Post as PostModel,
-  Prisma,
-  Profile,
-} from '@prisma/client';
-```
-
-#### 2.2 Testing out your new endpoint
-
-Restart your application server and test out your new endpoint.
-
-##### `POST`
-
-- `/user/:id/profile`: Create a new profile based on the user id
-  - Body:
-    - `bio: String` : The bio of the user
-
-<details><summary>Expand to view more sample Prisma Client queries on <code>Profile</code></summary>
-
-Here are some more sample Prisma Client queries on the new <code>Profile</code> model:
-
-##### Create a new profile for an existing user
-
-```ts
-const profile = await prisma.profile.create({
-  data: {
-    bio: 'Hello World',
-    user: {
-      connect: { email: 'alice@prisma.io' },
-    },
-  },
-});
-```
-
-##### Create a new user with a new profile
-
-```ts
-const user = await prisma.user.create({
-  data: {
-    email: 'john@prisma.io',
-    name: 'John',
-    profile: {
-      create: {
-        bio: 'Hello World',
-      },
-    },
-  },
-});
-```
-
-##### Update the profile of an existing user
-
-```ts
-const userWithUpdatedProfile = await prisma.user.update({
-  where: { email: 'alice@prisma.io' },
-  data: {
-    profile: {
-      update: {
-        bio: 'Hello Friends',
-      },
-    },
-  },
-});
-```
-
-</details>
-
-## Switch to another database (e.g. SQLite, MySQL, SQL Server, MongoDB)
-
-If you want to try this example with another database than Postgres, you can adjust the the database connection in [`prisma/schema.prisma`](./prisma/schema.prisma) by reconfiguring the `datasource` block.
-
-Learn more about the different connection configurations in the [docs](https://www.prisma.io/docs/reference/database-reference/connection-urls).
-
-<details><summary>Expand for an overview of example configurations with different databases</summary>
-
-### Remove the Prisma Client extension
-
-Before you proceed to use your own database, you should remove the Prisma client extension required for Prisma Postgres:
-
-```terminal
-npm uninstall @prisma/extension-accelerate
-```
-
-Remove the client extension from your `PrismaClient` instance from the [seeder file](/prisma/seed.ts.):
-
-```diff
-- const prisma = new PrismaClient().$extends(withAccelerate())
-+ const prisma = new PrismaClient()
-```
-
-In your `PrismaService` class, remove the method that extends the Prisma Client. For example, remove the following method:
-
-```diff
-- extendedPrismaClient() {
--    return this.$extends(withAccelerate());
-- }
-```
-
-Lastly, update the application code wherever `extendedPrismaClient()` is used. For example, change:
-
-```diff
-- this.prismaService.extendedPrismaClient().user.findMany();
-+ this.prismaService.user.findMany();
-```
-
-### Your own PostgreSQL database
-
-To use your own PostgreSQL database remove the `@prisma/extension-accelerate` package and remove the Prisma client extension.
-
-### SQLite
-
-Modify the `provider` value in the `datasource` block in the [`prisma.schema`](./prisma/schema.prisma) file:
-
-```prisma
-datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
-}
-```
-
-Create an `.env` file and add the SQLite database connection string in it. For example:
-
-```terminal
-DATABASE_URL="file:./dev.db""
-```
-
-### MySQL
-
-Modify the `provider` value in the `datasource` block in the [`prisma.schema`](./prisma/schema.prisma) file:
-
-```prisma
-datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
-}
-```
-
-Create an `.env` file and add a MySQL database connection string in it. For example:
-
-```terminal
-## This is a placeholder url
-DATABASE_URL="mysql://janedoe:mypassword@localhost:3306/notesapi"
-```
-
-### Microsoft SQL Server
-
-Modify the `provider` value in the `datasource` block in the [`prisma.schema`](./prisma/schema.prisma) file:
-
-```prisma
-datasource db {
-  provider = "sqlserver"
-  url      = env("DATABASE_URL")
-}
-```
-
-Create an `.env` file and add a Microsoft SQL Server database connection string in it. For example:
-
-```terminal
-## This is a placeholder url
-DATABASE_URL="sqlserver://localhost:1433;initial catalog=sample;user=sa;password=mypassword;"
-```
-
-### MongoDB
-
-Modify the `provider` value in the `datasource` block in the [`prisma.schema`](./prisma/schema.prisma) file:
-
-```prisma
-datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
-}
-```
-
-Create an `.env` file and add a local MongoDB database connection string in it. For example:
-
-```terminal
-## This is a placeholder url
-DATABASE_URL="mongodb://USERNAME:PASSWORD@HOST/DATABASE?authSource=admin&retryWrites=true&w=majority"
-```
-
-</details>
-
-## Next steps
-
-- Check out the [Prisma docs](https://www.prisma.io/docs)
-- [Join our community on Discord](https://pris.ly/discord?utm_source=github&utm_medium=prisma_examples&utm_content=next_steps_section) to share feedback and interact with other users.
-- [Subscribe to our YouTube channel](https://pris.ly/youtube?utm_source=github&utm_medium=prisma_examples&utm_content=next_steps_section) for live demos and video tutorials.
-- [Follow us on X](https://pris.ly/x?utm_source=github&utm_medium=prisma_examples&utm_content=next_steps_section) for the latest updates.
-- Report issues or ask [questions on GitHub](https://pris.ly/github?utm_source=github&utm_medium=prisma_examples&utm_content=next_steps_section).
-
-
+## 📚 Documentação da API
+
+### Endpoints Principais
+
+#### Users (Usuários)
+- `POST /users` - Criar novo usuário
+- `GET /users` - Listar todos os usuários
+- `GET /users/:id` - Buscar usuário por ID
+- `PATCH /users/:id` - Atualizar usuário
+- `DELETE /users/:id` - Deletar usuário
+
+#### Categories (Categorias)
+- `POST /categories` - Criar nova categoria
+- `GET /categories` - Listar todas as categorias
+- `GET /categories/:id` - Buscar categoria por ID
+- `PATCH /categories/:id` - Atualizar categoria
+- `DELETE /categories/:id` - Deletar categoria
+
+#### Locations (Localizações)
+- `POST /locations` - Criar nova localização
+- `GET /locations` - Listar localizações (com paginação e filtros)
+- `GET /locations/:id` - Buscar localização por ID
+- `PATCH /locations/:id` - Atualizar localização
+- `DELETE /locations/:id` - Deletar localização
+
+#### Reports (Reportes)
+- `POST /reports` - Criar novo reporte
+- `GET /reports` - Listar reportes (com paginação e filtros)
+- `GET /reports/statistics` - Obter estatísticas dos reportes
+- `GET /reports/:id` - Buscar reporte por ID
+- `PATCH /reports/:id` - Atualizar reporte
+- `PATCH /reports/:id/status` - Atualizar status do reporte
+- `POST /reports/:id/comments` - Adicionar comentário ao reporte
+- `DELETE /reports/:id` - Deletar reporte
+
+## 🗃️ Estrutura do Banco de Dados
+
+O schema Prisma define os seguintes modelos:
+
+- **User** - Usuários do sistema (pedestres e administradores)
+- **Location** - Pontos de transporte público
+- **Category** - Categorias de problemas
+- **Report** - Reportes de problemas de acessibilidade
+- **StatusHistory** - Histórico de mudanças de status
+- **Comment** - Comentários nos reportes
+
+## 🏗️ Arquitetura
+
+Cada módulo segue o padrão:
+- **DTOs** - Validação e transferência de dados
+- **Service** - Lógica de negócio
+- **Controller** - Endpoints da API
+- **Module** - Configuração do módulo
+- **Spec** - Testes unitários
+
+## 📝 Licença
+
+Projeto desenvolvido como parte da disciplina de Laboratório de Engenharia de Software.
