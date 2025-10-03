@@ -64,12 +64,11 @@ A API estará disponível em `http://localhost:3000`
 # Testes unitários
 pnpm run test
 
-# Testes E2E
-pnpm run test:e2e
-
 # Cobertura de testes
 pnpm run test:cov
 ```
+
+> **Nota sobre testes E2E**: Os testes de integração (E2E) requerem um banco de dados PostgreSQL em execução. Para executá-los localmente, certifique-se de que o banco está rodando e execute: `pnpm run test:e2e`
 
 ## 📚 Documentação da API
 
