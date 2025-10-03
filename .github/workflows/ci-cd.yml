@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI/CD Pipeline - EC2 Deploy
 
 on:
   push:
@@ -7,7 +7,6 @@ on:
     branches: [ "main" ]
 
 env:
-  AWS_REGION: us-east-1                      # Altere para sua região AWS
   NODE_VERSION: '22'
   PNPM_VERSION: '10.17.1'
 
@@ -67,150 +66,88 @@ jobs:
       - name: Build applications
         run: pnpm build
 
-      - name: Upload API build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: api-build
-          path: |
-            apps/api/dist
-            apps/api/package.json
-            apps/api/prisma
-          retention-days: 1
-
-      - name: Upload Web build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: web-build
-          path: |
-            apps/web/.next
-            apps/web/package.json
-            apps/web/public
-          retention-days: 1
-
-  # Job de deploy da API para ECS
-  deploy-api:
-    name: Deploy API to ECS
+  # Job de deploy para EC2
+  deploy-to-ec2:
+    name: Deploy to EC2
     needs: test-and-build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     environment: production
 
-    env:
-      ECR_REPOSITORY_API: tickets-api              # Altere para o nome do seu repositório ECR
-      ECS_SERVICE_API: tickets-api-service         # Altere para o nome do seu serviço ECS
-      ECS_CLUSTER: tickets-cluster                 # Altere para o nome do seu cluster ECS
-      ECS_TASK_DEFINITION_API: .aws/task-definition-api.json  # Caminho para task definition
-      CONTAINER_NAME_API: tickets-api              # Nome do container na task definition
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Download API build artifacts
-        uses: actions/download-artifact@v4
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          name: api-build
-          path: apps/api
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: ${{ secrets.EC2_SSH_PORT || 22 }}
+          script: |
+            # Navegar para o diretório do projeto
+            cd /home/${{ secrets.EC2_USERNAME }}/tickets-transporte-publico
+            
+            # Fazer backup do .env
+            cp .env .env.backup
+            
+            # Atualizar código
+            git fetch origin
+            git reset --hard origin/main
+            
+            # Restaurar .env
+            cp .env.backup .env
+            
+            # Parar containers
+            docker-compose -f docker-compose.prod.yml down
+            
+            # Rebuild e reiniciar containers
+            docker-compose -f docker-compose.prod.yml up -d --build
+            
+            # Executar migrations
+            docker exec tickets-api npx prisma migrate deploy
+            
+            # Limpar recursos não utilizados
+            docker system prune -f
+            
+            # Verificar status
+            docker-compose -f docker-compose.prod.yml ps
+            
+            echo "✅ Deploy concluído com sucesso!"
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      - name: Verify deployment
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: ${{ secrets.EC2_SSH_PORT || 22 }}
+          script: |
+            # Esperar containers iniciarem
+            sleep 10
+            
+            # Verificar health da API
+            curl -f http://localhost:3000/health || exit 1
+            
+            # Verificar health do Web
+            curl -f http://localhost:3001 || exit 1
+            
+            echo "✅ Verificação de saúde concluída!"
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Build, tag, and push API image to Amazon ECR
-        id: build-image-api
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          docker build -f docker/app/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY_API:$IMAGE_TAG .
-          docker tag $ECR_REGISTRY/$ECR_REPOSITORY_API:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY_API:latest
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY_API:$IMAGE_TAG
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY_API:latest
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_API:$IMAGE_TAG" >> $GITHUB_OUTPUT
-
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def-api
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
+      - name: Notify deployment status
+        if: always()
+        uses: actions/github-script@v7
         with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION_API }}
-          container-name: ${{ env.CONTAINER_NAME_API }}
-          image: ${{ steps.build-image-api.outputs.image }}
-
-      - name: Deploy Amazon ECS task definition for API
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
-        with:
-          task-definition: ${{ steps.task-def-api.outputs.task-definition }}
-          service: ${{ env.ECS_SERVICE_API }}
-          cluster: ${{ env.ECS_CLUSTER }}
-          wait-for-service-stability: true
-
-  # Job de deploy do Web para ECS
-  deploy-web:
-    name: Deploy Web to ECS
-    needs: test-and-build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    environment: production
-
-    env:
-      ECR_REPOSITORY_WEB: tickets-web              # Altere para o nome do seu repositório ECR
-      ECS_SERVICE_WEB: tickets-web-service         # Altere para o nome do seu serviço ECS
-      ECS_CLUSTER: tickets-cluster                 # Altere para o nome do seu cluster ECS
-      ECS_TASK_DEFINITION_WEB: .aws/task-definition-web.json  # Caminho para task definition
-      CONTAINER_NAME_WEB: tickets-web              # Nome do container na task definition
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Download Web build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: web-build
-          path: apps/web
-
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Build, tag, and push Web image to Amazon ECR
-        id: build-image-web
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          docker build -f docker/web/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY_WEB:$IMAGE_TAG .
-          docker tag $ECR_REGISTRY/$ECR_REPOSITORY_WEB:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY_WEB:latest
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY_WEB:$IMAGE_TAG
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY_WEB:latest
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY_WEB:$IMAGE_TAG" >> $GITHUB_OUTPUT
-
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: task-def-web
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION_WEB }}
-          container-name: ${{ env.CONTAINER_NAME_WEB }}
-          image: ${{ steps.build-image-web.outputs.image }}
-
-      - name: Deploy Amazon ECS task definition for Web
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
-        with:
-          task-definition: ${{ steps.task-def-web.outputs.task-definition }}
-          service: ${{ env.ECS_SERVICE_WEB }}
-          cluster: ${{ env.ECS_CLUSTER }}
-          wait-for-service-stability: true
+          script: |
+            const status = '${{ job.status }}' === 'success' ? '✅ Sucesso' : '❌ Falhou';
+            const color = '${{ job.status }}' === 'success' ? '28a745' : 'dc3545';
+            
+            github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: '${{ job.status }}',
+              description: `Deploy para EC2 ${status}`,
+              context: 'Deploy EC2'
+            });

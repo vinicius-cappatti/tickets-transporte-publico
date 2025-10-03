@@ -1,3 +1,172 @@
+# 🎫 Sistema de Tickets de Transporte Público
+
+Sistema para reportar e gerenciar problemas de transporte público, desenvolvido com NestJS, Next.js e PostgreSQL.
+
+## 📚 Índice
+
+- [Deploy e CI/CD](#-deploy-e-cicd)
+- [Desenvolvimento Local](#-desenvolvimento-local)
+- [Documentação Técnica](#-documentação-técnica)
+- [Contribuindo](#-contribuindo)
+
+---
+
+## 🚀 Deploy e CI/CD
+
+### Deploy Automático com GitHub Actions
+
+Este projeto utiliza **GitHub Actions** para CI/CD (Continuous Integration / Continuous Deployment).
+
+**O que acontece automaticamente:**
+- ✅ **Pull Requests**: Roda testes e valida o código
+- ✅ **Push na `main`**: Testa + Deploy automático na EC2
+
+**Documentação completa:**
+- 📖 **[DEPLOY_EC2.md](./DEPLOY_EC2.md)** - Guia completo de deploy na AWS EC2
+  - Deploy manual passo a passo
+  - Script de setup automatizado
+  - Configuração de CI/CD com GitHub Actions
+  - Explicação didática sobre CI/CD e GitHub Actions
+  - Comparação GitHub Actions vs Jenkins
+  - Troubleshooting e comandos úteis
+
+### Quick Start - Deploy na EC2
+
+**Opção 1: Setup Automatizado (Recomendado)**
+
+```bash
+# Na sua instância EC2
+git clone https://github.com/vinicius-cappatti/tickets-transporte-publico.git
+cd tickets-transporte-publico
+chmod +x scripts/setup-ec2.sh
+./scripts/setup-ec2.sh
+```
+
+**Opção 2: Deploy Manual**
+
+Veja o guia completo em [DEPLOY_EC2.md](./DEPLOY_EC2.md)
+
+### Arquivos Importantes de Deploy
+
+- `.github/workflows/ci-cd.yml` - Pipeline de CI/CD
+- `.github/workflows/pr-preview.yml` - Validação de Pull Requests
+- `docker-compose.prod.yml` - Configuração de produção
+- `.env.production.example` - Template de variáveis de ambiente
+- `nginx/nginx.conf` - Configuração do reverse proxy
+
+---
+
+## 💻 Desenvolvimento Local
+
+### Pré-requisitos
+
+- Node.js 22+
+- pnpm 10.17.1+
+- Docker e Docker Compose
+- Git
+
+### Instalação
+
+```bash
+# Clonar repositório
+git clone https://github.com/vinicius-cappatti/tickets-transporte-publico.git
+cd tickets-transporte-publico
+
+# Instalar dependências
+pnpm install
+
+# Configurar variáveis de ambiente
+cp .env.example .env
+
+# Iniciar containers de desenvolvimento
+docker-compose up -d
+
+# Executar migrations
+docker exec tickets-api npx prisma migrate dev
+
+# Acessar aplicação
+# API: http://localhost:3000
+# Web: http://localhost:3001
+```
+
+### Scripts Disponíveis
+
+```bash
+# Desenvolvimento
+pnpm dev              # Inicia todos os apps em modo dev
+pnpm dev:api          # Inicia apenas a API
+pnpm dev:web          # Inicia apenas o Web
+
+# Build
+pnpm build            # Build de todos os apps
+pnpm build:api        # Build apenas da API
+pnpm build:web        # Build apenas do Web
+
+# Testes
+pnpm test             # Roda todos os testes
+pnpm test:api         # Testa apenas a API
+pnpm lint             # Roda linting
+pnpm check-types      # Verifica tipos TypeScript
+
+# Docker
+docker-compose up -d           # Desenvolvimento
+docker-compose -f docker-compose.prod.yml up -d  # Produção
+```
+
+---
+
+## 📖 Documentação Técnica
+
+### Estrutura do Projeto
+
+```text
+tickets-transporte-publico/
+├── apps/
+│   ├── api/          # Backend NestJS
+│   └── web/          # Frontend Next.js
+├── packages/         # Shared packages
+├── docker/           # Dockerfiles
+├── nginx/            # Nginx config
+├── scripts/          # Scripts de automação
+├── wiki/             # Documentação técnica e diagramas
+└── .github/          # GitHub Actions workflows
+```
+
+### Tecnologias Principais
+
+- **Backend**: NestJS, Prisma, PostgreSQL
+- **Frontend**: Next.js 15, React, Tailwind CSS, shadcn/ui
+- **Infraestrutura**: Docker, Nginx, AWS EC2
+- **CI/CD**: GitHub Actions
+- **Monorepo**: Turborepo, pnpm workspaces
+
+### Diagramas e Documentação
+
+A documentação técnica completa, incluindo diagramas UML e design do sistema, está disponível na pasta `wiki/`.
+
+---
+
+## 🤝 Contribuindo
+
+Veja [CONTRIBUTING.md](./CONTRIBUTING.md) para guidelines de contribuição.
+
+### Fluxo de Trabalho
+
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+**Pull Requests** disparam automaticamente:
+- Testes e validações
+- Comentário automático com status do build
+- Review automatizado
+
+---
+
+## 📝 Documentação LaTeX e PlantUML
+
 ## Como gerar e inserir diagramas PlantUML em LaTeX (TikZ)
 
 ### Pré-requisitos

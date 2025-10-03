@@ -1,0 +1,21 @@
+# Diretório para certificados SSL (opcional)
+
+Para usar HTTPS, coloque seus certificados aqui:
+- cert.pem (certificado)
+- key.pem (chave privada)
+
+## Como gerar certificado SSL gratuito com Let's Encrypt:
+
+```bash
+# Instalar certbot na EC2
+sudo apt update
+sudo apt install certbot python3-certbot-nginx -y
+
+# Gerar certificado (substitua seu-dominio.com)
+sudo certbot --nginx -d seu-dominio.com -d www.seu-dominio.com
+```
+
+O certbot irá:
+1. Gerar certificados automaticamente
+2. Configurar o Nginx para usar HTTPS
+3. Configurar renovação automática dos certificados
