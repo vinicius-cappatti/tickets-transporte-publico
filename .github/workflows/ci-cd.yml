@@ -14,6 +14,7 @@ env:
 permissions:
   contents: read
   packages: read
+  statuses: write
 
 jobs:
   # Job de testes e build usando imagem customizada
@@ -47,7 +48,7 @@ jobs:
         run: pnpm check-types
 
       - name: Run tests (API)
-        run: pnpm --filter nest test
+        run: pnpm --filter nest test:full
 
       # Nota: Testes E2E requerem PostgreSQL configurado
       # Execute localmente com: pnpm --filter nest test:e2e
