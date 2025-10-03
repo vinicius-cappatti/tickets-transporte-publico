@@ -9,6 +9,7 @@ on:
 env:
   NODE_VERSION: '22'
   PNPM_VERSION: '10.18'
+  REGISTRY: ghcr.io
 
 permissions:
   contents: read
@@ -21,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     # Usar imagem Docker customizada com dependências pré-instaladas
     container:
-      image: ghcr.io/${{ github.repository }}-ci:latest
+      image: ghcr.io/tickets-publicos/tickets-transporte-publico-ci:latest
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
