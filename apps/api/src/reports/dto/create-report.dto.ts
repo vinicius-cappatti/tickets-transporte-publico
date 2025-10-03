@@ -1,28 +1,27 @@
-import { IsString, IsEnum, IsNotEmpty, IsOptional, IsUrl } from 'class-validator'
-import { ReportStatus } from '@prisma/client'
+import { IsString, IsNotEmpty, IsOptional, IsUrl } from 'class-validator';
 
 export class CreateReportDto {
   @IsString()
   @IsNotEmpty()
-  title: string
+  title: string;
 
   @IsString()
   @IsNotEmpty()
-  description: string
+  description: string;
 
   @IsString()
   @IsNotEmpty()
-  authorId: string
+  authorId: string;
 
   @IsString()
   @IsNotEmpty()
-  locationId: string
+  locationId: string;
 
   @IsString()
   @IsNotEmpty()
-  categoryId: string
+  categoryId: string;
 
   @IsUrl()
   @IsOptional()
-  imageUrl?: string
+  imageUrl?: string;
 }
