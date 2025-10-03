@@ -1,0 +1,58 @@
+# Ignorar arquivos desnecessários no build da imagem CI
+
+# Git
+.git/
+.gitignore
+.github/workflows/
+
+# Node modules (será instalado durante o build)
+**/node_modules/
+**/.next/
+**/dist/
+**/build/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+.nyc_output/
+**/*.test.ts
+**/*.spec.ts
+**/test/
+**/tests/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Docker
+docker/
+docker-compose*.yml
+Dockerfile*
+.dockerignore
+
+# Documentation
+wiki/
+*.md
+!README.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+scripts/
+nginx/

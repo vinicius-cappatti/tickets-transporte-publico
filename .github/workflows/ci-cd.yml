@@ -1,4 +1,4 @@
-name: CI/CD Pipeline - EC2 Deploy
+name: CI/CD Pipeline - EC2 Deploy (Optimized with Custom Image)
 
 on:
   push:
@@ -8,47 +8,33 @@ on:
 
 env:
   NODE_VERSION: '22'
-  PNPM_VERSION: '10.17.1'
+  PNPM_VERSION: '10.18'
 
 permissions:
   contents: read
+  packages: read
 
 jobs:
-  # Job de testes e build
+  # Job de testes e build usando imagem customizada
   test-and-build:
     name: Test and Build
     runs-on: ubuntu-latest
+    # Usar imagem Docker customizada com dependências pré-instaladas
+    container:
+      image: ghcr.io/${{ github.repository }}-ci:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+      # Dependências já estão na imagem, apenas sincronizar se necessário
+      - name: Sync dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - name: Get pnpm store directory
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
+      # Prisma Client já foi gerado na imagem, mas regenerar se schema mudou
       - name: Generate Prisma Client
         run: npx prisma generate
         working-directory: apps/api
