@@ -59,7 +59,7 @@ jobs:
 
   # Job de deploy para EC2
   deploy:
-    needs: [test-api, test-web, build]
+    needs: [test-and-build]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     
