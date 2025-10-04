@@ -52,14 +52,14 @@ jobs:
             cd /home/${{ secrets.EC2_USERNAME }}/tickets-transporte-publico
             
             # Fazer backup do .env
-            cp .env .env.backup
+            #cp .env .env.backup
             
             # Atualizar código
-            git fetch origin
-            git reset --hard origin/main
+            #git fetch origin
+            #git reset --hard origin/main
             
             # Restaurar .env
-            cp .env.backup .env
+            #cp .env.backup .env
             
             # Parar containers
             docker-compose -f docker-compose.prod.yml down

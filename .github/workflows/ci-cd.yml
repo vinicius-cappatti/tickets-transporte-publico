@@ -58,87 +58,25 @@ jobs:
         run: pnpm build
 
   # Job de deploy para EC2
-  deploy-to-ec2:
-    name: Deploy to EC2
-    needs: test-and-build
+  deploy:
+    needs: [test-api, test-web, build]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    environment: production
-
+    if: github.ref == 'refs/heads/main'
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Deploy to EC2 via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          port: ${{ secrets.EC2_SSH_PORT || 22 }}
-          script: |
-            # Navegar para o diretório do projeto
-            cd /home/${{ secrets.EC2_USERNAME }}/tickets-transporte-publico
-            
-            # Fazer backup do .env
-            cp .env .env.backup
-            
-            # Atualizar código
-            git fetch origin
-            git reset --hard origin/main
-            
-            # Restaurar .env
-            cp .env.backup .env
-            
-            # Parar containers
-            docker-compose -f docker-compose.prod.yml down
-            
-            # Rebuild e reiniciar containers
-            docker-compose -f docker-compose.prod.yml up -d --build
-            
-            # Executar migrations
-            docker exec tickets-api npx prisma migrate deploy
-            
-            # Limpar recursos não utilizados
-            docker system prune -f
-            
-            # Verificar status
-            docker-compose -f docker-compose.prod.yml ps
-            
-            echo "✅ Deploy concluído com sucesso!"
-
-      - name: Verify deployment
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          port: ${{ secrets.EC2_SSH_PORT || 22 }}
-          script: |
-            # Esperar containers iniciarem
-            sleep 10
-            
-            # Verificar health da API
-            curl -f http://localhost:3000/health || exit 1
-            
-            # Verificar health do Web
-            curl -f http://localhost:3001 || exit 1
-            
-            echo "✅ Verificação de saúde concluída!"
-
-      - name: Notify deployment status
-        if: always()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const status = '${{ job.status }}' === 'success' ? '✅ Sucesso' : '❌ Falhou';
-            const color = '${{ job.status }}' === 'success' ? '28a745' : 'dc3545';
-            
-            github.rest.repos.createCommitStatus({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              sha: context.sha,
-              state: '${{ job.status }}',
-              description: `Deploy para EC2 ${status}`,
-              context: 'Deploy EC2'
-            });
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          SSH_HOST: ${{ secrets.EC2_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
+          
+      - name: Deploy to VM
+        env:
+          SSH_HOST: ${{ secrets.EC2_HOST }}
+          SSH_USER: ${{ secrets.EC2_USER }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 ${SSH_USER}@${SSH_HOST} "bash ~/tickets-transporte-publico/scripts/deploy-vm.sh"
