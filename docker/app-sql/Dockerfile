@@ -1,7 +1,7 @@
-FROM postgres:latest
+FROM postgres:16-alpine
 
 ENV POSTGRES_DB=tickets
-ENV POSTGRES_USER=admin
-ENV POSTGRES_PASSWORD=admin123
+ENV POSTGRES_USER=tickets
+ENV POSTGRES_PASSWORD=tickets123
 
 EXPOSE 5432

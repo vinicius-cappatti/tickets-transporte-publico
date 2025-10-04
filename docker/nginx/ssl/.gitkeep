@@ -1,21 +1,41 @@
-# Diretório para certificados SSL (opcional)
+# SSL Certificate Placeholder
 
-Para usar HTTPS, coloque seus certificados aqui:
-- cert.pem (certificado)
-- key.pem (chave privada)
+Esta pasta é para armazenar os certificados SSL quando você configurar HTTPS.
 
-## Como gerar certificado SSL gratuito com Let's Encrypt:
+## Como configurar HTTPS com Let's Encrypt:
 
-```bash
-# Instalar certbot na EC2
-sudo apt update
-sudo apt install certbot python3-certbot-nginx -y
+1. Parar o Nginx temporariamente:
+   ```bash
+   docker-compose -f docker-compose.prod.yml stop nginx
+   ```
 
-# Gerar certificado (substitua seu-dominio.com)
-sudo certbot --nginx -d seu-dominio.com -d www.seu-dominio.com
-```
+2. Instalar Certbot:
+   ```bash
+   sudo apt install -y certbot
+   ```
 
-O certbot irá:
-1. Gerar certificados automaticamente
-2. Configurar o Nginx para usar HTTPS
-3. Configurar renovação automática dos certificados
+3. Gerar certificado (substitua seu-dominio.com):
+   ```bash
+   sudo certbot certonly --standalone -d seu-dominio.com
+   ```
+
+4. Copiar certificados para esta pasta:
+   ```bash
+   sudo cp /etc/letsencrypt/live/seu-dominio.com/fullchain.pem ./cert.pem
+   sudo cp /etc/letsencrypt/live/seu-dominio.com/privkey.pem ./key.pem
+   sudo chown $USER:$USER ./*.pem
+   ```
+
+5. Descomentar a seção HTTPS no nginx.conf
+
+6. Reiniciar o Nginx:
+   ```bash
+   docker-compose -f docker-compose.prod.yml up -d --force-recreate nginx
+   ```
+
+## Arquivos necessários:
+
+- `cert.pem` - Certificado SSL
+- `key.pem` - Chave privada
+
+⚠️ **NUNCA commite certificados SSL no Git!**

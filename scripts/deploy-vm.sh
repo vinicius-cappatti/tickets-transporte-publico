@@ -18,56 +18,48 @@ echo -e "${BLUE}========================================${NC}"
 echo -e "${BLUE}  Deploy - Tickets Transporte Público${NC}"
 echo -e "${BLUE}========================================${NC}"
 
-# 1. Ir para o diretório do projeto
-echo -e "\n${YELLOW}[1/8] Navegando para o diretório do projeto...${NC}"
-cd ~/tickets-transporte-publico || {
-    echo -e "${RED}Erro: Diretório ~/tickets-transporte-publico não encontrado${NC}"
+# Verificar se estamos no diretório correto
+if [ ! -f "docker-compose.prod.yml" ]; then
+    echo -e "${RED}Erro: docker-compose.prod.yml não encontrado${NC}"
+    echo -e "${YELLOW}Execute este script do diretório raiz do projeto${NC}"
     exit 1
-}
-
-# 2. Fazer backup do .env se existir
-echo -e "\n${YELLOW}[2/8] Fazendo backup das configurações...${NC}"
-if [ -f apps/api/.env ]; then
-    cp apps/api/.env apps/api/.env.backup
-    echo -e "${GREEN}✓ Backup do .env criado${NC}"
 fi
 
-# 3. Atualizar código do repositório
-echo -e "\n${YELLOW}[3/8] Atualizando código do repositório...${NC}"
-git fetch origin
-git reset --hard origin/main
-echo -e "${GREEN}✓ Código atualizado para a versão mais recente${NC}"
-
-# 4. Restaurar .env se foi feito backup
-if [ -f apps/api/.env.backup ]; then
-    echo -e "\n${YELLOW}[4/8] Restaurando configurações...${NC}"
-    mv apps/api/.env.backup apps/api/.env
-    echo -e "${GREEN}✓ Arquivo .env restaurado${NC}"
-else
-    echo -e "\n${YELLOW}[4/8] Pulando restauração (sem backup)${NC}"
+# Verificar se .env existe
+if [ ! -f ".env" ]; then
+    echo -e "${RED}Erro: Arquivo .env não encontrado${NC}"
+    echo -e "${YELLOW}Crie o arquivo .env com as variáveis necessárias${NC}"
+    echo -e "${YELLOW}Use .env.production.example como referência${NC}"
+    exit 1
 fi
 
-# 5. Parar containers existentes
-echo -e "\n${YELLOW}[5/8] Parando containers existentes...${NC}"
+# 1. Parar containers existentes
+echo -e "\n${YELLOW}[1/6] Parando containers existentes...${NC}"
 docker compose -f docker-compose.prod.yml down || true
 echo -e "${GREEN}✓ Containers parados${NC}"
 
-# 6. Limpar recursos antigos (opcional - descomente se necessário)
-# echo -e "\n${YELLOW}Limpando imagens antigas...${NC}"
-# docker image prune -f
-# docker volume prune -f
+# 2. Puxar imagens mais recentes do GitHub Container Registry
+echo -e "\n${YELLOW}[2/6] Baixando imagens mais recentes do GitHub Container Registry...${NC}"
+docker compose -f docker-compose.prod.yml pull
+echo -e "${GREEN}✓ Imagens atualizadas${NC}"
 
-# 7. Rebuild e iniciar containers
-echo -e "\n${YELLOW}[6/8] Construindo e iniciando containers...${NC}"
-docker compose -f docker-compose.prod.yml up -d --build
+# 3. Remover imagens antigas (economizar espaço)
+echo -e "\n${YELLOW}[3/6] Limpando imagens antigas...${NC}"
+docker image prune -f
+echo -e "${GREEN}✓ Limpeza concluída${NC}"
 
-# Aguardar containers ficarem prontos
-echo -e "\n${YELLOW}[7/8] Aguardando containers ficarem prontos...${NC}"
-sleep 10
+# 4. Iniciar containers
+echo -e "\n${YELLOW}[4/6] Iniciando containers...${NC}"
+docker compose -f docker-compose.prod.yml up -d
+echo -e "${GREEN}✓ Containers iniciados${NC}"
 
-# 8. Executar migrações do banco de dados
-echo -e "\n${YELLOW}[8/8] Executando migrações do banco de dados...${NC}"
-docker compose -f docker-compose.prod.yml exec -T app pnpm --filter api prisma migrate deploy
+# 5. Aguardar containers ficarem prontos
+echo -e "\n${YELLOW}[5/6] Aguardando containers ficarem prontos...${NC}"
+sleep 20
+
+# 6. Executar migrações do banco de dados
+echo -e "\n${YELLOW}[6/6] Executando migrações do banco de dados...${NC}"
+docker compose -f docker-compose.prod.yml exec -T api pnpm --filter api prisma migrate deploy
 echo -e "${GREEN}✓ Migrações executadas${NC}"
 
 # Verificar status dos containers
@@ -78,9 +70,9 @@ docker compose -f docker-compose.prod.yml ps
 
 # Mostrar logs recentes
 echo -e "\n${BLUE}========================================${NC}"
-echo -e "${BLUE}  Últimos logs (app)${NC}"
+echo -e "${BLUE}  Últimos logs${NC}"
 echo -e "${BLUE}========================================${NC}"
-docker compose -f docker-compose.prod.yml logs --tail=20 app
+docker compose -f docker-compose.prod.yml logs --tail=10
 
 echo -e "\n${GREEN}========================================${NC}"
 echo -e "${GREEN}  ✓ Deploy concluído com sucesso!${NC}"
