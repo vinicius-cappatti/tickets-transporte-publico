@@ -1,11 +1,30 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "ui": "tui",
+  "globalEnv": [
+    "NODE_ENV",
+    "DATABASE_URL",
+    "POSTGRES_DB",
+    "POSTGRES_USER",
+    "POSTGRES_PASSWORD",
+    "SPRING_DATASOURCE_URL",
+    "SPRING_DATASOURCE_USERNAME",
+    "SPRING_DATASOURCE_PASSWORD",
+    "SPRING_JPA_HIBERNATE_DDL_AUTO",
+    "SPRING_JPA_SHOW_SQL",
+    "SPRING_PROFILES_ACTIVE",
+    "JAVA_OPTS"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**", "apps/api-java/target/**"],
+      "env": [
+        "NEXT_PUBLIC_API_URL",
+        "NEXTAUTH_SECRET",
+        "NEXTAUTH_URL"
+      ]
     },
     "lint": {
       "dependsOn": ["^lint"]
@@ -15,11 +34,24 @@
     },
     "test": {
       "dependsOn": ["^build"],
-      "outputs": ["coverage/**"]
+      "outputs": ["coverage/**", "apps/api-java/target/surefire-reports/**"],
+      "env": [
+        "DATABASE_URL",
+        "SPRING_DATASOURCE_URL",
+        "SPRING_DATASOURCE_USERNAME",
+        "SPRING_DATASOURCE_PASSWORD"
+      ]
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "env": [
+        "PORT",
+        "CORS_ORIGIN",
+        "NEXT_PUBLIC_API_URL",
+        "DATABASE_URL",
+        "SPRING_DATASOURCE_URL"
+      ]
     }
   }
 }

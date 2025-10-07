@@ -22,7 +22,7 @@ services:
 
   # API (NestJS) - Usando imagem do GHCR
   api:
-    image: ghcr.io/vinicius-cappatti/tickets-transporte-publico-api:latest
+    image: ${API_IMAGE:-ghcr.io/vinicius-cappatti/tickets-transporte-publico-api-java:latest}
     container_name: tickets-api
     restart: unless-stopped
     environment:
@@ -44,7 +44,7 @@ services:
 
   # Web (Next.js) - Usando imagem do GHCR
   web:
-    image: ghcr.io/vinicius-cappatti/tickets-transporte-publico-web:latest
+    image: ${WEB_IMAGE:-ghcr.io/vinicius-cappatti/tickets-transporte-publico-web:latest}
     container_name: tickets-web
     restart: unless-stopped
     environment:
@@ -64,7 +64,7 @@ services:
 
   # Nginx Reverse Proxy - Usando imagem customizada do GHCR
   nginx:
-    image: ghcr.io/vinicius-cappatti/tickets-transporte-publico-nginx:latest
+    image: ${NGINX_IMAGE:-ghcr.io/vinicius-cappatti/tickets-transporte-publico-nginx:latest}
     container_name: tickets-nginx
     restart: unless-stopped
     ports:

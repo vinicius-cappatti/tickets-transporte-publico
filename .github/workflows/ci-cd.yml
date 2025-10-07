@@ -1,169 +1,343 @@
-name: CI/CD Pipeline - Build and Deploy
+name: CI/CD Pipeline
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: 'Deploy to production'
+        required: true
+        type: boolean
+        default: false
 
 env:
   NODE_VERSION: '22'
   PNPM_VERSION: '10.18'
   REGISTRY: ghcr.io
-  IMAGE_NAME_API: ${{ github.repository }}-api
-  IMAGE_NAME_WEB: ${{ github.repository }}-web
-  IMAGE_NAME_NGINX: ${{ github.repository }}-nginx
+  REPO_OWNER: ${{ github.repository_owner }}
 
 permissions:
   contents: read
   packages: write
-  statuses: write
 
 jobs:
-  # Job de testes
+  # ============================================================================
+  # JOB 1: TESTES
+  # ============================================================================
   test:
-    name: Run Tests
+    name: Test All Projects
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/tickets-publicos/tickets-transporte-publico-ci:latest
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+    
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: tickets
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d tickets"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile --prefer-offline
+        run: pnpm install --frozen-lockfile
 
-      - name: Generate Prisma Client
-        run: npx prisma generate
-        working-directory: apps/api
-
-      - name: Run linting
+      - name: Lint
         run: pnpm lint
 
-      - name: Run type checking
+      - name: Type check
         run: pnpm check-types
 
-      - name: Run tests (API)
-        run: pnpm --filter nest test:full
+      - name: Test Web
+        run: pnpm --filter web test
 
-  # Job de build das imagens Docker
-  build:
-    name: Build Docker Images
+  test-java:
+    name: Test Java API
     runs-on: ubuntu-latest
-    needs: [test]
+    
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: tickets
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d tickets"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-m2-
+
+      - name: Test Java API
+        working-directory: apps/api-java
+        env:
+          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/tickets
+          SPRING_DATASOURCE_USERNAME: postgres
+          SPRING_DATASOURCE_PASSWORD: postgres
+          SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+        run: ./mvnw -B clean verify
+
+  # ============================================================================
+  # JOB 2: BUILD ARTIFACTS
+  # ============================================================================
+  build:
+    name: Build Artifacts
+    runs-on: ubuntu-latest
+    needs: [test, test-java]
     if: github.ref == 'refs/heads/main'
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Cache pnpm
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Web
+        run: pnpm --filter web build
+        env:
+          NEXT_PUBLIC_API_URL: /api
+
+      - name: Upload Web Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: apps/web/.next
+          retention-days: 1
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Build Java API
+        working-directory: apps/api-java
+        run: ./mvnw -B clean package -DskipTests
+
+      - name: Upload Java JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: java-jar
+          path: apps/api-java/target/*.jar
+          retention-days: 1
+
+  # ============================================================================
+  # JOB 3: BUILD & PUSH DOCKER IMAGES
+  # ============================================================================
+  docker:
+    name: Build & Push Docker Images
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.ref == 'refs/heads/main'
+    
+    strategy:
+      matrix:
+        service: [app, app-sql, web, nginx, api-java]
+        include:
+          - service: app
+            context: .
+            dockerfile: docker/app/Dockerfile
+            needs-artifact: false
+          - service: app-sql
+            context: .
+            dockerfile: docker/app-sql/Dockerfile
+            needs-artifact: false
+          - service: web
+            context: .
+            dockerfile: docker/web/Dockerfile
+            needs-artifact: true
+            artifact-name: web-build
+            artifact-path: apps/web/.next
+          - service: nginx
+            context: .
+            dockerfile: docker/nginx/Dockerfile
+            needs-artifact: false
+          - service: api-java
+            context: apps/api-java
+            dockerfile: apps/api-java/Dockerfile
+            needs-artifact: true
+            artifact-name: java-jar
+            artifact-path: apps/api-java/target
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download artifact (${{ matrix.service }})
+        if: matrix.needs-artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: ${{ matrix.artifact-path }}
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      
-      - name: Log in to GitHub Container Registry
+
+      - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Extract metadata for API
-        id: meta-api
+
+      - name: Extract metadata
+        id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_API }}
+          images: ${{ env.REGISTRY }}/${{ env.REPO_OWNER }}/tickets-${{ matrix.service }}
           tags: |
             type=sha,prefix={{branch}}-
             type=raw,value=latest,enable={{is_default_branch}}
-      
-      - name: Build and push API image
+            type=raw,value={{date 'YYYYMMDD-HHmmss'}}
+
+      - name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./docker/app/Dockerfile
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
           push: true
-          tags: ${{ steps.meta-api.outputs.tags }}
-          labels: ${{ steps.meta-api.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_API }}:buildcache
-          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_API }}:buildcache,mode=max
-      
-      - name: Extract metadata for Web
-        id: meta-web
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_WEB }}
-          tags: |
-            type=sha,prefix={{branch}}-
-            type=raw,value=latest,enable={{is_default_branch}}
-      
-      - name: Build and push Web image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./docker/web/Dockerfile
-          push: true
-          tags: ${{ steps.meta-web.outputs.tags }}
-          labels: ${{ steps.meta-web.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_WEB }}:buildcache
-          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_WEB }}:buildcache,mode=max
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.REPO_OWNER }}/tickets-${{ matrix.service }}:buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.REPO_OWNER }}/tickets-${{ matrix.service }}:buildcache,mode=max
           build-args: |
             NEXT_PUBLIC_API_URL=/api
-      
-      - name: Extract metadata for Nginx
-        id: meta-nginx
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_NGINX }}
-          tags: |
-            type=sha,prefix={{branch}}-
-            type=raw,value=latest,enable={{is_default_branch}}
-      
-      - name: Build and push Nginx image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./docker/nginx/Dockerfile
-          push: true
-          tags: ${{ steps.meta-nginx.outputs.tags }}
-          labels: ${{ steps.meta-nginx.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_NGINX }}:buildcache
-          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_NGINX }}:buildcache,mode=max
 
-  # Job de deploy para VM
+  # ============================================================================
+  # JOB 4: DEPLOY (MANUAL)
+  # ============================================================================
   deploy:
-    name: Deploy to VM
-    needs: [build]
+    name: Deploy to Production
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    needs: [docker]
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'true'
+    environment:
+      name: production
+      url: https://${{ secrets.DEPLOY_HOST }}
     
     steps:
-      - name: Configure SSH
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          SSH_HOST: ${{ secrets.EC2_HOST }}
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
-          
-      - name: Deploy to VM
+          ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy via SSH
         env:
-          SSH_HOST: ${{ secrets.EC2_HOST }}
-          SSH_USER: ${{ secrets.EC2_USER }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REGISTRY: ${{ env.REGISTRY }}
+          REPO_OWNER: ${{ env.REPO_OWNER }}
+          ENV_PRODUCTION: ${{ secrets.ENV_PRODUCTION }}
         run: |
-          ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 ${SSH_USER}@${SSH_HOST} << 'ENDSSH'
-            set -e
-            cd ~/tickets-transporte-publico
+          ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_HOST} << 'EOF'
+            set -euo pipefail
             
-            # Atualizar arquivos de configuração (docker-compose, scripts, etc)
-            git fetch origin
-            git checkout origin/main -- docker-compose.prod.yml docker/ scripts/
+            # Diretório do projeto
+            PROJECT_DIR="${HOME}/tickets-transporte-publico"
+            DEPLOY_SCRIPT="${PROJECT_DIR}/scripts/deploy.sh"
+            
+            # Criar diretório se não existir
+            mkdir -p ${PROJECT_DIR}
+            cd ${PROJECT_DIR}
+            
+            # Baixar script de deploy se não existir
+            if [ ! -f "${DEPLOY_SCRIPT}" ]; then
+              echo "📥 Downloading deploy script..."
+              mkdir -p scripts
+              curl -sS -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                -H "Accept: application/vnd.github.v3.raw" \
+                "https://api.github.com/repos/${{ github.repository }}/contents/scripts/deploy.sh" \
+                -o "${DEPLOY_SCRIPT}"
+              chmod +x "${DEPLOY_SCRIPT}"
+            fi
             
             # Executar deploy
-            bash scripts/deploy-vm.sh
-          ENDSSH
+            echo "🚀 Starting deployment..."
+            export REGISTRY="${REGISTRY}"
+            export REPO_OWNER="${REPO_OWNER}"
+            export GITHUB_TOKEN="${GITHUB_TOKEN}"
+            export ENV_PRODUCTION="${ENV_PRODUCTION}"
+            bash "${DEPLOY_SCRIPT}"
+          EOF

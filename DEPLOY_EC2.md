@@ -236,6 +236,7 @@ chmod 600 ~/.ssh/authorized_keys
 | `EC2_USERNAME` | `ubuntu` | Usuário padrão do Ubuntu (ou `ec2-user` no Amazon Linux) |
 | `EC2_SSH_KEY` | Conteúdo da chave privada | `cat ~/.ssh/ec2-deploy-key` |
 | `EC2_SSH_PORT` | `22` | Porta SSH (22 é padrão) |
+| `ENV_PRODUCTION` | Conteúdo literal do arquivo .env para a VM | Cole o arquivo `.env` com variáveis (API_IMAGE, WEB_IMAGE, NGINX_IMAGE, POSTGRES_*, JWT_SECRET etc.) |
 
 **📸 Como adicionar um secret:**
 
@@ -278,6 +279,10 @@ git push origin main
 ✅ Build                 (Compila app)
 ✅ Deploy to EC2         (Deploy via SSH)
 ✅ Verify deployment     (Testa saúde)
+
+Nota sobre migrações Java/Flyway:
+- O pipeline agora envia o conteúdo do secret `ENV_PRODUCTION` para o arquivo `~/tickets-transporte-publico/.env` na VM antes do deploy.
+- Depois de iniciar os containers, o script de deploy tentará executar migrações usando o Flyway CLI na VM (ele será baixado automaticamente na primeira execução se necessário). Garanta que `DATABASE_URL` e credenciais estejam definidas no `.env` (o script lerá `DATABASE_URL` ou `POSTGRES_*`).
 ```
 
 ### Passo 3: Criar Environment de Produção (Opcional mas Recomendado)

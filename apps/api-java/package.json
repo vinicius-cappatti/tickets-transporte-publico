@@ -1,0 +1,15 @@
+{
+  "name": "java",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "./mvnw clean package -DskipTests",
+    "dev": "./mvnw spring-boot:run",
+    "start": "java $JAVA_OPTS -jar target/api-java-1.0.0.jar",
+    "test": "./mvnw test",
+    "test:full": "./mvnw clean verify",
+    "docker:build": "docker build -t tickets-api-java:local .",
+    "lint": "echo 'Java linting with checkstyle/spotless not configured yet'",
+    "check-types": "echo 'Java type checking done during compile'"
+  }
+}

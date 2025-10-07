@@ -1,0 +1,56 @@
+# syntax=docker/dockerfile:1.6
+
+# ==============================================================================
+# MULTI-STAGE BUILD COMPLETO
+# Usa este Dockerfile quando NÃO tiver artefato pré-compilado
+# ==============================================================================
+
+# ==============================================================================
+# Etapa 1: Build
+# ==============================================================================
+FROM maven:3.9.11-eclipse-temurin-21-alpine AS build
+WORKDIR /workspace
+
+ENV MAVEN_CONFIG=""
+
+# Copia apenas arquivos de dependências primeiro (cache layer)
+COPY pom.xml .
+COPY .mvn .mvn
+COPY mvnw .
+
+# Baixa todas as dependências offline (cache otimizado)
+RUN ./mvnw -B -q -DskipTests dependency:go-offline
+
+# Copia o código-fonte e compila
+COPY src src
+RUN ./mvnw -B -q -DskipTests package
+
+# ==============================================================================
+# Etapa 2: Runtime
+# ==============================================================================
+FROM eclipse-temurin:21-jre-alpine AS runtime
+
+WORKDIR /app
+
+# Cria usuário não-root
+RUN addgroup -S spring && adduser -S spring -G spring
+
+# Copia JAR da etapa de build
+COPY --from=build --chown=spring:spring /workspace/target/api-java-*.jar app.jar
+
+# Muda para usuário não-root
+USER spring:spring
+
+# Expõe porta
+EXPOSE 3000
+
+# Configuração de ambiente
+ENV SPRING_PROFILES_ACTIVE=prod \
+    JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75 -XX:+UseG1GC -Djava.security.egd=file:/dev/./urandom"
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:3000/actuator/health || exit 1
+
+# Comando de inicialização
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

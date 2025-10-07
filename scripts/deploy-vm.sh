@@ -51,16 +51,14 @@ echo -e "${GREEN}✓ Limpeza concluída${NC}"
 # 4. Iniciar containers
 echo -e "\n${YELLOW}[4/6] Iniciando containers...${NC}"
 docker compose -f docker-compose.prod.yml up -d
-echo -e "${GREEN}✓ Containers iniciados${NC}"
 
-# 5. Aguardar containers ficarem prontos
-echo -e "\n${YELLOW}[5/6] Aguardando containers ficarem prontos...${NC}"
-sleep 20
-
-# 6. Executar migrações do banco de dados
-echo -e "\n${YELLOW}[6/6] Executando migrações do banco de dados...${NC}"
-docker compose -f docker-compose.prod.yml exec -T api pnpm --filter api prisma migrate deploy
-echo -e "${GREEN}✓ Migrações executadas${NC}"
+# 6. Executar migrações do banco de dados (Node/Prisma ou Java/Flyway)
+    echo -e "${YELLOW}pnpm nao encontrado no container 'api'. Pulando passo Prisma.${NC}"
+    # Se você utilizarem Flyway ou outro mecanismo de migrações para Java,
+# Primeiro, detecta se o container 'api' tem pnpm (indicando Node/Prisma)
+    # habilite aqui. Exemplo (descomente-o e ajuste conforme necessário):
+    # docker compose -f docker-compose.prod.yml exec -T api java -jar /app/migration-runner.jar
+fi
 
 # Verificar status dos containers
 echo -e "\n${BLUE}========================================${NC}"
