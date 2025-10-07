@@ -12,7 +12,8 @@ WORKDIR /app
 RUN addgroup -S spring && adduser -S spring -G spring
 
 # Copia JAR (será fornecido pelo build do CI ou copiado manualmente)
-COPY target/api-java-*.jar app.jar
+# Context de build é a raiz do projeto (.)
+COPY apps/api-java/target/api-java-*.jar app.jar
 
 # Muda para usuário não-root
 USER spring:spring

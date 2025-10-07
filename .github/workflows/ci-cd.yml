@@ -62,7 +62,8 @@ jobs:
 
       - name: Get pnpm store directory
         shell: bash
-        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
 
       - name: Setup pnpm cache
         uses: actions/cache@v4
@@ -206,12 +207,8 @@ jobs:
     
     strategy:
       matrix:
-        service: [app, app-sql, web, nginx, api-java]
+        service: [app-sql, web, nginx, api-java]
         include:
-          - service: app
-            context: .
-            dockerfile: docker/app/Dockerfile
-            needs-artifact: false
           - service: app-sql
             context: .
             dockerfile: docker/app-sql/Dockerfile
@@ -227,8 +224,8 @@ jobs:
             dockerfile: docker/nginx/Dockerfile
             needs-artifact: false
           - service: api-java
-            context: apps/api-java
-            dockerfile: apps/api-java/Dockerfile
+            context: .
+            dockerfile: docker/api-java/Dockerfile
             needs-artifact: true
             artifact-name: java-jar
             artifact-path: apps/api-java/target
@@ -285,20 +282,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: [docker]
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'true'
-    environment:
-      name: production
-      url: https://${{ secrets.DEPLOY_HOST }}
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Setup SSH
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
         run: |
           mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
 
@@ -311,33 +303,28 @@ jobs:
           REPO_OWNER: ${{ env.REPO_OWNER }}
           ENV_PRODUCTION: ${{ secrets.ENV_PRODUCTION }}
         run: |
-          ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_HOST} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_HOST} << 'ENDSSH'
             set -euo pipefail
             
-            # Diretório do projeto
             PROJECT_DIR="${HOME}/tickets-transporte-publico"
             DEPLOY_SCRIPT="${PROJECT_DIR}/scripts/deploy.sh"
             
-            # Criar diretório se não existir
-            mkdir -p ${PROJECT_DIR}
+            mkdir -p ${PROJECT_DIR}/scripts
             cd ${PROJECT_DIR}
             
-            # Baixar script de deploy se não existir
             if [ ! -f "${DEPLOY_SCRIPT}" ]; then
               echo "📥 Downloading deploy script..."
-              mkdir -p scripts
-              curl -sS -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              curl -fsSL -H "Authorization: token '"$GITHUB_TOKEN"'" \
                 -H "Accept: application/vnd.github.v3.raw" \
                 "https://api.github.com/repos/${{ github.repository }}/contents/scripts/deploy.sh" \
                 -o "${DEPLOY_SCRIPT}"
               chmod +x "${DEPLOY_SCRIPT}"
             fi
             
-            # Executar deploy
             echo "🚀 Starting deployment..."
-            export REGISTRY="${REGISTRY}"
-            export REPO_OWNER="${REPO_OWNER}"
-            export GITHUB_TOKEN="${GITHUB_TOKEN}"
-            export ENV_PRODUCTION="${ENV_PRODUCTION}"
+            export REGISTRY="'"${REGISTRY}"'"
+            export REPO_OWNER="'"${REPO_OWNER}"'"
+            export GITHUB_TOKEN="'"${GITHUB_TOKEN}"'"
+            export ENV_PRODUCTION="'"${ENV_PRODUCTION}"'"
             bash "${DEPLOY_SCRIPT}"
-          EOF
+          ENDSSH

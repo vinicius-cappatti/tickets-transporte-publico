@@ -22,7 +22,7 @@ REPO_OWNER="${REPO_OWNER}"
 IMAGE_TAG="${IMAGE_TAG:-latest}"
 
 # Serviços
-SERVICES=("app" "app-sql" "web" "nginx" "api-java")
+SERVICES=("app-sql" "web" "nginx" "api-java")
 
 # ==============================================================================
 # Funções
