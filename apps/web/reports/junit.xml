@@ -1,3 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="0" failures="0" errors="0" time="2.881">
+<testsuites name="jest tests" tests="6" failures="0" errors="0" time="1.538">
+  <testsuite name="LoginForm" errors="0" failures="0" skipped="0" timestamp="2025-10-16T19:44:36" time="0.698" tests="3">
+    <testcase classname="LoginForm renderiza campos e faz submit com sucesso" name="LoginForm renderiza campos e faz submit com sucesso" time="0.112">
+    </testcase>
+    <testcase classname="LoginForm mostra toast de erro quando campos estão vazios" name="LoginForm mostra toast de erro quando campos estão vazios" time="0.012">
+    </testcase>
+    <testcase classname="LoginForm mostra toast quando signIn falha" name="LoginForm mostra toast quando signIn falha" time="0.027">
+    </testcase>
+  </testsuite>
+  <testsuite name="Header" errors="0" failures="0" skipped="0" timestamp="2025-10-16T19:44:37" time="0.357" tests="3">
+    <testcase classname="Header mostra título e botão Entrar chama callback" name="Header mostra título e botão Entrar chama callback" time="0.041">
+    </testcase>
+    <testcase classname="Header mostra título e botão Entrar chama callback" name="Header mostra título e botão Entrar chama callback" time="0.017">
+    </testcase>
+    <testcase classname="Header não mostra botão Entrar quando usuário está logado" name="Header não mostra botão Entrar quando usuário está logado" time="0.029">
+    </testcase>
+  </testsuite>
 </testsuites>
