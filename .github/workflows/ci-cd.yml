@@ -293,13 +293,21 @@ jobs:
           echo "Listing apps/web content"
           ls -la apps/web || true
           echo "Listing apps/web/.next (if exists)"
-          ls -la apps/web/.next || true
+          if [ -d "apps/web/.next" ]; then
+            echo "Found .next"
+            find apps/web/.next -type f | wc -l || true
+            du -sh apps/web/.next || true
+            ls -la apps/web/.next || true
+          else
+            echo "No .next directory"
+          fi
 
       - name: Upload Web Build
         uses: actions/upload-artifact@v4
         with:
           name: web-build
-          path: apps/web/.next
+          path: apps/web/.next/**
+          if-no-files-found: error
           retention-days: 7  # ✨ Aumentado de 1 para 7 dias
 
       - name: Setup JDK 21
