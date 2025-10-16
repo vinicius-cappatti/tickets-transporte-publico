@@ -2,9 +2,14 @@ import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 
 // We'll override mocks in specific tests when needed
-const mockSignIn = jest.fn(async (email: string, name: string) => ({ success: true, user: { name } }))
+type AuthSuccess = { success: true; user: { name: string } }
+type AuthError = { success: false; error: string }
+
+const mockSignIn = jest.fn<Promise<AuthSuccess | AuthError>, [string, string]>(
+  async (email: string, name: string) => ({ success: true, user: { name } })
+)
 jest.mock('@/lib/auth', () => ({
-  signIn: (...args: any[]) => mockSignIn(...args),
+  signIn: (email: string, name: string) => mockSignIn(email, name),
 }))
 
 const mockToast = jest.fn()
