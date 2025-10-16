@@ -34,4 +34,9 @@ const config: Config = {
     collectCoverage: false
 }
 
-export default createJestConfig(config)
+// next/jest returns a config object that can include internal types which
+// leak into the module's exported type and cause `TS4082` during `tsc`.
+// Cast to `unknown` first to avoid leaking private Next.js types to the
+// TypeScript checker, then assert to `Config` so Jest still receives a
+// correctly-typed config at runtime.
+export default createJestConfig(config) as unknown as Config

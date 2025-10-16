@@ -84,21 +84,18 @@ jobs:
       - name: Type check
         run: pnpm check-types
 
-      - name: Run Tests with Coverage
+      - name: Run Tests with Coverage and JUnit
         run: |
-          pnpm --filter web test -- --coverage \
+          # Run the package test script (uses jest.config) and ask for coverage outputs.
+          # jest-junit reporter is configured in jest.config.ts, so we only need to
+          # pass coverage flags here. The JEST_JUNIT_* env vars instruct the reporter
+          # where to write the junit XML.
+          pnpm --filter web test -- --runInBand --coverage \
             --coverageReporters=cobertura \
             --coverageReporters=json-summary \
             --coverageReporters=lcov \
             --coverageReporters=text
-        continue-on-error: true
-
-      - name: Generate JUnit Report
-        if: always()
-        run: |
-          pnpm --filter web test -- --reporters=default --reporters=jest-junit
         env:
-          # ensure junit output is placed under apps/web/reports so publish step can find it
           JEST_JUNIT_OUTPUT_DIR: ./apps/web/reports
           JEST_JUNIT_OUTPUT_NAME: junit.xml
         continue-on-error: true
