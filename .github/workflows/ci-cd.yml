@@ -86,7 +86,11 @@ jobs:
 
       - name: Run Tests with Coverage
         run: |
-          pnpm --filter web test -- --coverage --coverageReporters=json-summary --coverageReporters=lcov --coverageReporters=text
+          pnpm --filter web test -- --coverage \
+            --coverageReporters=cobertura \
+            --coverageReporters=json-summary \
+            --coverageReporters=lcov \
+            --coverageReporters=text
         continue-on-error: true
 
       - name: Generate JUnit Report
@@ -94,7 +98,8 @@ jobs:
         run: |
           pnpm --filter web test -- --reporters=default --reporters=jest-junit
         env:
-          JEST_JUNIT_OUTPUT_DIR: ./test-results
+          # ensure junit output is placed under apps/web/reports so publish step can find it
+          JEST_JUNIT_OUTPUT_DIR: ./apps/web/reports
           JEST_JUNIT_OUTPUT_NAME: junit.xml
         continue-on-error: true
 
@@ -103,6 +108,8 @@ jobs:
         if: always()
         with:
           files: |
+            apps/web/reports/**/*.xml
+            apps/web/reports/junit.xml
             **/test-results/**/*.xml
             **/junit.xml
           check_name: 'Test Results (Node.js)'
@@ -136,8 +143,8 @@ jobs:
         with:
           name: coverage-reports
           path: |
-            **/coverage/
-            **/lcov.info
+            apps/web/coverage/**
+            apps/web/coverage/lcov.info
           retention-days: 30
 
       - name: Upload Test Results
@@ -146,6 +153,9 @@ jobs:
         with:
           name: test-results
           path: |
+            apps/web/reports/**/*.xml
+            apps/web/test-results/**/*.xml
+            apps/web/junit.xml
             **/test-results/
             **/junit.xml
           retention-days: 30
