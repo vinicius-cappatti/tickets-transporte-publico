@@ -17,7 +17,7 @@ env:
   NODE_VERSION: '22'
   PNPM_VERSION: '10.18.0'
   REGISTRY: ghcr.io
-  REPO_OWNER: ${{ github.repository_owner }}
+  REPO_OWNER: ${{ toLower(github.repository_owner) }}
 
 permissions:
   contents: read
